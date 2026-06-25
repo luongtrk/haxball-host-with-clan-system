@@ -132,10 +132,9 @@ pm2 startup
 
 **📌 Vài lệnh PM2 dắt túi cho anh em:**
 
+```bash
 - Lấy Link phòng (hoặc soi lỗi xem thằng nào phá): `pm2 logs Haxball-Room`
 - Dừng phòng: `pm2 stop Haxball-Room`
 - Chạy lại phòng: `pm2 restart Haxball-Room`
-
-```
 
 ```
