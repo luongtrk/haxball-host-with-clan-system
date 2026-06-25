@@ -6958,7 +6958,7 @@ try {
       }
     });
 
-    if (DISCORD_BOT_TOKEN && DISCORD_BOT_TOKEN !== "YOUR_BOT_TOKEN_HERE") {
+    if (DISCORD_BOT_TOKEN && DISCORD_BOT_TOKEN !== "") {
       discordClient.login(DISCORD_BOT_TOKEN).then(() => {
         console.log("✅ Đã kết nối Discord Bot (Nhận tin nhắn) thành công!");
       }).catch(err => {
