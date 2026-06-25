@@ -1,8 +1,8 @@
 const SUPER_ADMIN_PASSWORD = "noibuonchientranh";
 const ADMIN_PASSWORD = "traitimquacam";
-const SUPER_ADMIN_AUTHS = ["_uCVm_mwqFh_1jY5HGtq_gF_dyKKlbuOihsnlI59JOc", "0VUyR2va1wEUT0GV3CcvEWA2VE53gcLeNPk0Mo7Sq3I", "b5fjNdYS0O1v_4Uk9ypNCMURKcOkn5FR9eX8gZATGYY"];
-const MODE = "pick"; // can be "rand" or "pick"
-const ROOM_NAME = `⚽𝘼𝙪𝙩𝙤 𝙍𝙤𝙤𝙢 (ELO) | LỎ NHẤT VN`;
+const SUPER_ADMIN_AUTHS = [""];
+const MODE = "pick";
+const ROOM_NAME = `⚽𝘼𝙪𝙩𝙤 𝙍𝙤𝙤𝙢 (RANK & CLAN) | LỎ NHẤT VN`;
 const PUBLIC = true;
 const ACTIVITY_TIMEOUT = 10;
 const AFK_TIMEOUT = 10 * 60;
@@ -55,21 +55,21 @@ const PLAYER_SCORING_RULES = {
   touches: 0.05,           // ⬆️ TĂNG TỪ 0.01 LÊN 0.05 (Hậu vệ phá bóng, tranh chấp nhiều sẽ có điểm rất cao)
 };
 const EFFECT_NAMES = [
-  "To nhỏ thất thường",          // 0
-  "Attack On Titan",                 // 1
-  "Vòng tròn đồng đội",           // 2
-  "Bóng 7 sắc cầu vồng",          // 3
-  "Bom đẩy lùi đối thủ",          // 4
-  "Gôn nổ tùm lum",               // 5
-  "Vỡ bóng tùm lum",            // 6
-  "Pháo hoa di động",             // 7
-  "Súng máy (Machine Gun)",       // 8
-  "Hố đen vũ trụ",                // 9
-  "Vệ tinh hoàng kim",            // 10
-  "Phi lôi thần thuật",           // 11
-  "Quả Bom hẹn giờ",
-  "Mưa sao băng",
-  "Lốc xoáy cuồng phong"
+  "Hào Quang Super Saiyan",      // 0 (Đã nâng cấp bốc lửa)
+  "Động Đất Kinh Hoàng",         // 1 (Đã nâng cấp rung nảy sân)
+  "Vũ Điệu Chiến Thắng",         // 2 (Đã nâng cấp xếp vòng tròn)
+  "Sàn Nhảy Disco",              // 3 (Đổi từ Bóng 7 sắc)
+  "Thần La Thiên Chinh",         // 4 (Sóng xung kích Shinra Tensei)
+  "Khung Thành Bùng Nổ",         // 5 (Đổi từ Gôn nổ tùm lum)
+  "Mảnh Vỡ Hỗn Độn",             // 6 (Đổi từ Vỡ bóng tùm lum)
+  "Pháo Sáng Di Động",           // 7 (Nghe chuyên nghiệp hơn)
+  "Cơn Mưa Đạn Xuyên Thấu",
+  "Siêu Hố Đen Vũ Trụ",          // 9 (Nâng cấp Accretion Disk)
+  "Dải Ngân Hà Hoàng Kim",       // 10 (Nâng cấp 3 lớp quỹ đạo vệ tinh)
+  "Phi Lôi Thần Thuật",          // 11 (Tên này cực ngầu rồi, giữ nguyên)
+  "Bom Hạt Nhân (Nuke)",         // 12 (Đổi từ Bom hẹn giờ)
+  "Mưa Sao Băng Chói Lòa",       // 13 (Thêm tính từ cho ngầu)
+  "Bão Cuồng Phong Càn Quét"     // 14 (Đổi từ Lốc xoáy)
 ];
 // ===== HỆ THỐNG ANTI-TOXIC VOTEKICK =====
 const BAD_WORDS = ["chịch", "buòi", "buồi", "buoi", "đit", "fucking", "cunt", "dcmm", "đcmm", "me may", "con mẹ mày", "con me may", "loz", "lòn", "lon", "lồn", "cặc", "fuck", "bitch", "shit", "concac", "nigga", "địt", "con cac", "dit", "đmm", "ad ngu", "duma", "đụ", "backy", "namky", "bắc kỳ", "nam kỳ", "namki", "backi", "bac ky", "nam ky", "nam kì", "bắc kì"];
@@ -77,315 +77,344 @@ const MAX_BAD_WORDS = 4;
 let badWordCounts = {};
 let activeVoteKick = null;
 const TEAM_COLORS = [
-  [[60, 0xFFCC00, [0xE83030]], [60, 0xFFCC00, [0x004170]]],
-  [[60, 0xFFFFFF, [0xFF4A4A]], [60, 0xFFFFFF, [0x5ECFFF]]],
-  [[60, 0xFFFFFF, [0xD60419]], [60, 0xFFFFFF, [0x0099FF]]],
-  [[45, 0x000000, [0xFF2400, 0xFFFF00]], [45, 0x000000, [0x1F51FF, 0xFFFFFF]]],
-  [[0, 0xF7FFF2, [0xE00202, 0xB00101, 0x800000]], [0, 0xF7FFF2, [0x00F7FF, 0x00D1D1, 0x00A7AD]]],
-  [[90, 0xF7FFF2, [0xFF2121, 0xFF5757, 0xFC9595]], [90, 0xF7FFF2, [0x00C3FF, 0x45E0FF, 0xB5F5FC]]],
-  [[45, 0xFFFFFF, [0x000000, 0xFF0000, 0x000000]], [45, 0x808080, [0xFFFFFF, 0x0096FF, 0xFFFFFF]]],
-  [[45, 0xFFFFFF, [0xD60000, 0x000000, 0xD60000]], [45, 0xFFFFFF, [0x0058A3, 0x000000, 0x0058A3]]],
-  [[-45, 0xFFCC00, [0xD10000, 0x8C0000, 0xD10000]], [-45, 0xFFCC00, [0x00DDFF, 0x87E3FF, 0x00DDFF]]],
-  [[232, 0xFFFFFF, [0xFFCCFA, 0xFF99DD, 0xFF6176]], [129, 0xFFFFFF, [0x4D39CC, 0x7A70FF, 0x7DB1FF]]],
-  [[45, 0xFFFFFF, [0x00C950, 0x007830]], [45, 0xFFFFFF, [0x9B59B6, 0x5B2C6F]]],
-  [[90, 0x000000, [0xFFE600, 0xFFB300, 0xFF8000]], [90, 0x000000, [0x00FFFF, 0x00BFFF, 0x0080FF]]],
-  [[135, 0xFFFFFF, [0x434343, 0x000000]], [135, 0x000000, [0xE0E0E0, 0xFFFFFF]]],
-  [[60, 0xFFFFFF, [0xFF8C00, 0xFF4500]], [60, 0xFFFFFF, [0x000080, 0x0000CD]]],
-  [[90, 0x000000, [0x55FF55, 0x00AA00]], [90, 0x000000, [0x55FFFF, 0x00AAAA]]],
-  [[45, 0xFFFFFF, [0xFF00FF, 0x8A2BE2]], [45, 0xFFFFFF, [0x2E8B57, 0x006400]]],
-  [[0, 0x000000, [0x00FF41, 0x008F11]], [0, 0x000000, [0xFF0000, 0x8B0000]]],
-  [[60, 0x000000, [0xFCEE0A, 0x00FFFF]], [60, 0x000000, [0xFF003C, 0x0000FF]]],
-  [[120, 0xFFFFFF, [0xFFD1DC, 0xFFB6C1]], [120, 0xFFFFFF, [0xAEC6CF, 0x98FF98]]],
-  [[135, 0xFFFFFF, [0xFF512F, 0xDD2476, 0x900C3F]], [135, 0xFFFFFF, [0x1CB5E0, 0x000046, 0x000000]]],
-  [[45, 0x000000, [0xBF953F, 0xFCF6BA, 0xB38728]], [45, 0xFFFFFF, [0x4A00E0, 0x8E2DE2, 0x4A00E0]]],
-  [[90, 0xFFFFFF, [0xFF00A0, 0xFF8C00]], [90, 0xFFFFFF, [0x00E5FF, 0x001A98]]],
-  [[60, 0xFFFFFF, [0x4D0000, 0x800000, 0xFF7300]], [60, 0xFFFFFF, [0x2E8B57, 0x8B4513, 0x228B22]]],
-  [[0, 0xFFFFFF, [0x002B5B, 0xFFFFFF, 0x002B5B]], [0, 0x000000, [0xFFD700, 0xFFFFFF, 0xFFD700]]],
-  [[135, 0xFFFFFF, [0x330066, 0x1A1A1A]], [135, 0x000000, [0xCCFF00, 0x1A1A1A]]],
-  [[90, 0x000000, [0x75AADB, 0xFFFFFF, 0x75AADB]], [90, 0x000000, [0xFFD700, 0x009B3A, 0xFFD700]]],
-  [[-45, 0xFFFFFF, [0xE74C3C, 0xC0392B]], [-45, 0xFFFFFF, [0x2C3E50, 0x34495E]]],
-  [[45, 0xFFFFFF, [0xFF512F, 0xF09819, 0xFF512F]], [45, 0xFFFFFF, [0x0052D4, 0x4364F7, 0x6FB1FC]]],
-  [[0, 0xB8860B, [0xFFFFFF, 0xF8F8F8]], [0, 0xFFD700, [0x004D98, 0xA50044, 0x004D98]]],
-  [[0, 0xFFFFFF, [0xDA291C, 0xB50E12]], [0, 0xFFFFFF, [0x6CABDD, 0x98C5E9]]],
-  [[0, 0xFFFFFF, [0x000000, 0xFB090B, 0x000000]], [0, 0xFFD700, [0x000000, 0x001EA0, 0x000000]]],
-  [[0, 0xFFFFFF, [0xDC052D, 0x980000]], [0, 0x000000, [0xFDE100, 0x000000, 0xFDE100]]],
-  [[0, 0xFFFFFF, [0xEF0107, 0xEF0107]], [0, 0xFFFFFF, [0x034694, 0x034694]]],
-  [[0, 0xFFD700, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0xFFFFFF, [0x12A0D7, 0x12A0D7]]],
-  [[0, 0xFFD700, [0xAA0000, 0xFF0000, 0xAA0000]], [0, 0xFFFFFF, [0x000080, 0xFFFFFF, 0x000080]]],
-  [[135, 0xFFFFFF, [0x000000, 0x1A1A1A, 0x000000]], [135, 0xFFFFFF, [0x8E2DE2, 0x4A00E0, 0xFF0080]]],
-  [[0, 0xFFFF00, [0xDA251D, 0xDA251D]], [0, 0xFFFFFF, [0x0000FF, 0x00008B]]],
-  [[45, 0xFFFFFF, [0xFF9AA2, 0xFFB7B2, 0xFFDAC1]], [45, 0xFFFFFF, [0xB2CEFE, 0xC7CEEA, 0xBAEDF9]]],
-  [[90, 0x000000, [0xFF4500, 0x8B0000]], [90, 0xFFFFFF, [0x32CD32, 0x006400]]],
-  [[0, 0xD4AF37, [0x000000, 0x1A1A1A, 0x000000]], [0, 0x000000, [0xCFB53B, 0xFFD700, 0xCFB53B]]],
-  [[0, 0xFFFFFF, [0xFF4F00, 0xFF4F00]], [90, 0x0000FF, [0xFFFFFF, 0xFF0000, 0xFFFFFF]]],
-  [[0, 0x009B3A, [0xFFD700, 0xFFD700]], [0, 0x000000, [0x68A7D4, 0x68A7D4]]],
-  [[0, 0x003893, [0xFCD116, 0xFCD116]], [0, 0xFFFFFF, [0xD52B1E, 0x0039A6, 0xD52B1E]]],
-  [[0, 0xFFFFFF, [0x00008B, 0x0000CD]], [0, 0xFFFFFF, [0xED1C24, 0xED1C24]]],
-  [[0, 0xFFFFFF, [0x006C35, 0x006C35]], [0, 0x00843D, [0xFFCD00, 0xFFCD00]]],
-  [[60, 0xFFFFFF, [0xA29BFE, 0xCE9BFE]], [60, 0xA29BFE, [0xFFFFFF, 0xFFFFFF]]],
-  [[0, 0xFFFFFF, [0x81ECEC, 0x74B9FF]], [0, 0x000000, [0xFFD700, 0xFFE600]]],
-  [[45, 0xFFFFFF, [0xFFA502, 0xFFE066]], [45, 0x000000, [0x26DE81, 0x20BF6B]]],
-  [[45, 0xFFFFFF, [0xFF007F, 0xEE1C24]], [45, 0xFFFFFF, [0x00A0E9, 0x034694]]],
-  [[90, 0x000000, [0xFF00A0, 0xCCFF00]], [90, 0x000000, [0x00FFFF, 0x0080FF]]],
-  [[135, 0xFFFFFF, [0xFF512F, 0xDD2476, 0x900C3F]], [135, 0xFFFFFF, [0x1CB5E0, 0x000046]]],
-  [[45, 0x000000, [0xFCF6BA, 0xBF953F, 0xB38728]], [45, 0xFFFFFF, [0x7A2DE2, 0x4A00E0]]],
+  // [angle, avatarBgColor, [stripeColors]] — avatar phải tương phản với stripe chính
+  // Đỏ thuần vs Xanh Navy (avatar vàng nổi bật trên cả 2)
+  [[60, 0xFFFF00, [0xFF3030, 0xFF6060]], [60, 0xFFFF00, [0x003EA6, 0x0060D0]]],
+  // Đỏ rực vs Xanh Cyan (avatar trắng vs avatar đen, sọc tương phản rõ)
+  [[60, 0xFF0000, [0xFFFFFF, 0xFFE000]], [60, 0x000000, [0x00E5FF, 0x00BFFF]]],
+  // Đỏ Cam vs Xanh Lam (avatar đen vs avatar trắng)
+  [[45, 0x000000, [0xFF4500, 0xFFAA00, 0xFF4500]], [45, 0xFFFFFF, [0x0044CC, 0x00AAFF, 0x0044CC]]],
+  // Cam rực vs Xanh Navy (avatar đen vs avatar trắng)
+  [[0, 0x000000, [0xFF6600, 0xFFCC00]], [0, 0xFFFFFF, [0x000066, 0x0000CC]]],
+  // Đỏ Mận sọc vs Cyan Sọc (avatar trắng cho cả 2, sọc đối lập)
+  [[0, 0xFFFFFF, [0xCC0000, 0x880000, 0xCC0000]], [0, 0x000000, [0x00CCCC, 0x008888, 0x00CCCC]]],
+  // Hồng Đỏ vs Xanh Dương Đậm (avatar trắng vs avatar đen)
+  [[90, 0xFFFFFF, [0xFF0055, 0xFF5580, 0xFF0055]], [90, 0xFFFFFF, [0x0011CC, 0x4455FF, 0x0011CC]]],
+  // Đen Đỏ vs Trắng Xanh (avatar đỏ vs avatar xanh - tương phản tuyệt đối)
+  [[45, 0xFFFFFF, [0x000000, 0xFF0000, 0x000000]], [45, 0x000000, [0xFFFFFF, 0x00AAFF, 0xFFFFFF]]],
+  // Trắng sọc Đỏ vs Đen sọc Xanh (avatar đỏ vs avatar xanh)
+  [[45, 0x000000, [0xFFFFFF, 0xDD0000, 0xFFFFFF]], [45, 0xFFFFFF, [0x000000, 0x0066FF, 0x000000]]],
+  // Vàng Đỏ vs Đen Cyan (avatar đen vs avatar vàng)
+  [[-45, 0x000000, [0xFF2200, 0xFFDD00, 0xFF2200]], [-45, 0xFFDD00, [0x004466, 0x00BBEE, 0x004466]]],
+  // Hồng Tươi vs Tím Xanh (avatar trắng vs avatar đen)
+  [[232, 0xFFFFFF, [0xFF0077, 0xFF44AA, 0xFF0077]], [129, 0x000000, [0x5522CC, 0x8866FF, 0x5522CC]]],
+  // Xanh Lá Sáng vs Tím Đậm (avatar đen vs avatar trắng — tương phản cao)
+  [[45, 0x000000, [0x00FF44, 0x00BB33]], [45, 0xFFFFFF, [0x8800CC, 0x5500AA]]],
+  // Vàng Đen vs Xanh Trắng (avatar đen vs avatar trắng)
+  [[90, 0x000000, [0xFFDD00, 0xFF8800, 0xFFDD00]], [90, 0xFFFFFF, [0x002299, 0x0055CC, 0x002299]]],
+  // Xám Đen vs Trắng Vàng (avatar đỏ vs avatar xanh - highlight màu đối lập)
+  [[135, 0xFF2200, [0x222222, 0x000000, 0x222222]], [135, 0x0044FF, [0xEEEEEE, 0xFFFFFF, 0xEEEEEE]]],
+  // Cam Đỏ vs Xanh Navy (avatar đen vs avatar vàng)
+  [[60, 0x000000, [0xFF6600, 0xFF2200, 0xFF6600]], [60, 0xFFDD00, [0x000044, 0x0000AA, 0x000044]]],
+  // Xanh Lá Neon vs Đỏ (avatar đen cho cả 2, sọc đối nghịch hoàn toàn)
+  [[90, 0x000000, [0x00FF66, 0x00AA44]], [90, 0x000000, [0xFF2200, 0xAA0000]]],
+  // Hồng Tím vs Xanh Rêu (avatar trắng vs avatar đen)
+  [[45, 0xFFFFFF, [0xFF00CC, 0x9900CC]], [45, 0x000000, [0x006633, 0x003300]]],
+  // Xanh Lá Matrix vs Đỏ Lửa (avatar đen cho cả 2, cực kỳ tương phản)
+  [[0, 0x000000, [0x00FF44, 0x008822]], [0, 0x000000, [0xFF2200, 0x880000]]],
+  // Vàng Cyan vs Đỏ Tím (avatar đen vs avatar đen, sọc 2 màu đối nghịch)
+  [[60, 0x000000, [0xFFDD00, 0x00FFFF]], [60, 0x000000, [0xFF0033, 0x6600CC]]],
+  // Hồng Pastel vs Xanh Pastel (avatar tím vs avatar cam - tương phản ngầm)
+  [[120, 0xAA0055, [0xFFCCDD, 0xFFAABB]], [120, 0xFFFFFF, [0x004499, 0x002266]]],
+  // Hoàng Hôn Đỏ vs Đêm Tối (avatar trắng vs avatar trắng, sọc đối lập)
+  [[135, 0xFFFFFF, [0xFF4400, 0xCC0033, 0xFF4400]], [135, 0xFFFFFF, [0x001166, 0x003399, 0x001166]]],
+  // Vàng Hoàng Gia vs Tím Ngọc (avatar đen vs avatar vàng)
+  [[45, 0x000000, [0xFFCC00, 0xFFFF66, 0xFFCC00]], [45, 0xFFFF00, [0x5500AA, 0x8800DD, 0x5500AA]]],
+  // Hồng Neon vs Cyan Đậm (avatar trắng vs avatar đen)
+  [[90, 0xFFFFFF, [0xFF0077, 0xFF6600]], [90, 0x000000, [0x00CCEE, 0x001188]]],
+  // Đỏ Sẫm Cam vs Xanh Lá Thẫm (avatar vàng vs avatar tím)
+  [[60, 0xFFAA00, [0xFF0000, 0xAA0000, 0xFF5500]], [60, 0x9900CC, [0x003322, 0x006644, 0x00AA77]]],
+  // Navy vs Vàng (avatar trắng vs avatar đen — cổ điển tương phản)
+  [[0, 0xFFFFFF, [0x000055, 0x0000AA, 0x000055]], [0, 0x000000, [0xFFCC00, 0xFFFF44, 0xFFCC00]]],
+  // Tím Đêm vs Xanh Neon (avatar vàng vs avatar đen)
+  [[135, 0xFFCC00, [0x220044, 0x110022]], [135, 0x000000, [0x99FF00, 0x66CC00]]],
+  // Xanh Bầu Trời vs Vàng Kim (avatar đen vs avatar đen)
+  [[90, 0x000000, [0x88BBDD, 0xFFFFFF, 0x88BBDD]], [90, 0x000000, [0xFFDD00, 0xCC9900, 0xFFDD00]]],
+  // Đỏ Thẫm vs Xanh Thép (avatar trắng vs avatar trắng)
+  [[-45, 0xFFFFFF, [0xCC2200, 0x990000]], [-45, 0xFFFFFF, [0x223355, 0x445577]]],
+  // Cam Lửa vs Xanh Lam (avatar đen vs avatar trắng)
+  [[45, 0x000000, [0xFF5500, 0xFFAA00, 0xFF5500]], [45, 0xFFFFFF, [0x0033AA, 0x0066DD, 0x0033AA]]],
+  // Trắng Đỏ vs Xanh Vàng (Real Madrid vs Barcelona)
+  [[0, 0xAA8800, [0xFFFFFF, 0xEEEEEE]], [0, 0xFFDD00, [0x003366, 0x990033, 0x003366]]],
+  // Đỏ Đậm vs Xanh Nhạt (Man Utd vs Man City)
+  [[0, 0xFFFFFF, [0xBB0011, 0x880011]], [0, 0xFFFFFF, [0x55AADD, 0x7FCCEE]]],
+  // Đen Đỏ vs Đen Xanh (AC Milan vs Inter)
+  [[0, 0xFFFFFF, [0xDD0011, 0x000000, 0xDD0011]], [0, 0xFFEE00, [0x0022BB, 0x000000, 0x0022BB]]],
+  // Đỏ vs Vàng Đen (Bayern vs Dortmund)
+  [[0, 0xFFFFFF, [0xCC0022, 0x880011]], [0, 0xFFFFFF, [0xFFDD00, 0x000000, 0xFFDD00]]],
+  // Đỏ vs Xanh (Arsenal vs Chelsea)
+  [[0, 0xFFFFFF, [0xEE0000, 0xCC0000]], [0, 0xFFFFFF, [0x0033AA, 0x0033AA]]],
+  // Trắng Đen vs Xanh (Juventus vs Napoli)
+  [[0, 0xFFD700, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0x000000, [0x0099CC, 0x0099CC]]],
+  // Đỏ Trắng vs Xanh Trắng (Croatia vs England)
+  [[0, 0xFFDD00, [0xAA0000, 0xFF2200, 0xAA0000]], [0, 0xCC0000, [0x000066, 0xFFFFFF, 0x000066]]],
+  // Đen Tím vs Tím Hồng (Cyberpunk)
+  [[135, 0xFFFFFF, [0x000000, 0x111111, 0x000000]], [135, 0xFFFFFF, [0x9900CC, 0x5500AA, 0xFF0099]]],
+  // Đỏ Vàng vs Xanh (Việt Nam vs Thái Lan)
+  [[0, 0xFFFF00, [0xDD0000, 0xBB0000]], [0, 0xFFFFFF, [0x0000EE, 0x000099]]],
+  // Hồng Nhạt vs Xanh Da Trời (bé gái vs bé trai)
+  [[45, 0x990055, [0xFF99BB, 0xFFBBCC, 0xFFCCDD]], [45, 0xFFFFFF, [0x004499, 0x002266, 0x004499]]],
+  // Cam Lửa vs Xanh Lá Đậm (đối lập mạnh)
+  [[90, 0x000000, [0xFF4400, 0x882200]], [90, 0x000000, [0x00FF44, 0x008822]]],
+  // Đen Vàng vs Đen Vàng Xanh (Golden Night)
+  [[0, 0xBB8800, [0x000000, 0x111111, 0x000000]], [0, 0x000000, [0xBBAA00, 0xFFDD00, 0xBBAA00]]],
+  // Cam Hà Lan vs Xanh Croatia (quốc kỳ)
+  [[0, 0xFFFFFF, [0xFF5500, 0xFF5500]], [90, 0x0000BB, [0xFFFFFF, 0xFF2200, 0xFFFFFF]]],
+  // Vàng Lá vs Đen Xanh (Brazil vs Argentina)
+  [[0, 0x006622, [0xFFCC00, 0xFFCC00]], [0, 0x000000, [0x5588BB, 0x5588BB]]],
+  // Vàng Colombia vs Đỏ Chile
+  [[0, 0x003399, [0xFFCC00, 0xFFCC00]], [0, 0xFFFFFF, [0xCC0011, 0x002288, 0xCC0011]]],
+  // Xanh Nhật vs Đỏ Hàn
+  [[0, 0xFFFFFF, [0x000066, 0x0000AA]], [0, 0xFFFFFF, [0xCC0011, 0xCC0011]]],
+  // Xanh Ả Rập vs Vàng Úc
+  [[0, 0xFFFFFF, [0x006633, 0x006633]], [0, 0x00AA44, [0xFFCC00, 0xFFCC00]]],
+  // Tím Lavender vs Xanh Navy (avatar đen vs avatar tím)
+  [[60, 0x000033, [0x9988EE, 0xBBAEFF]], [60, 0x5500AA, [0xFFFFFF, 0xFFFFFF]]],
+  // Cyan vs Vàng (biển vs cát)
+  [[0, 0xFFFFFF, [0x00AAAA, 0x0088BB]], [0, 0x000000, [0xFFDD00, 0xFFBB00]]],
+  // Cam Chanh vs Xanh Bạc Hà (avatar đen vs avatar trắng)
+  [[45, 0x000000, [0xFFAA00, 0xFFEE44]], [45, 0xFFFFFF, [0x00AA55, 0x008844]]],
+  // Hồng Dạ Quang vs Xanh Đậm (avatar trắng vs avatar trắng)
+  [[45, 0xFFFFFF, [0xFF0077, 0xDD0022]], [45, 0x000000, [0x00FFFF, 0x0088FF]]],
+  // Hoàng Hôn vs Đêm Sâu (avatar trắng vs avatar trắng)
+  [[135, 0xFFFFFF, [0xFF0000, 0x880000, 0xCC2266]], [135, 0xFFFFFF, [0x000044, 0x000088, 0x000044]]],
   // --- THÊM CÁC CÂU LẠC BỘ CHÂU ÂU ---
-  [[0, 0x0000FF, [0xFFFFFF, 0xCB3524, 0xFFFFFF]], [0, 0x000000, [0xFFFFFF, 0xFFFFFF]]], // Atletico vs Valencia
-  [[0, 0xFFFFFF, [0x004170, 0xE30613, 0x004170]], [45, 0xFFFFFF, [0xFFFFFF, 0xED1C24]]], // PSG vs Monaco
-  [[0, 0x000000, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0xFFFFFF, [0x87CEEB, 0x87CEEB]]], // Juventus vs Lazio
-  [[0, 0xFFD700, [0x8E1F2F, 0x8E1F2F]], [0, 0xFFFFFF, [0x12A0D7, 0x12A0D7]]], // AS Roma vs Napoli
-  [[0, 0xFFFFFF, [0xA32638, 0xF2A900]], [0, 0x002395, [0xFEDD00, 0x002395, 0xFEDD00]]], // Galatasaray vs Fenerbahce
-  [[0, 0xFFFFFF, [0x6CABDD, 0x6CABDD]], [0, 0xD4AF37, [0x000000, 0xFFFFFF, 0x000000]]], // Man City vs Newcastle
-  [[0, 0x000000, [0xFDE100, 0xFDE100]], [0, 0xDD013F, [0xFFFFFF, 0xFFFFFF]]], // Dortmund vs RB Leipzig
+  [[0, 0x0000FF, [0xCB3524, 0xFFFFFF, 0xCB3524]], [0, 0x000000, [0xFFFFFF, 0xFFFFFF]]],
+  [[0, 0xFFFFFF, [0x004170, 0xE30613, 0x004170]], [45, 0x000000, [0xFFFFFF, 0xED1C24]]],
+  [[0, 0xFFD700, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0x000000, [0x87CEEB, 0x87CEEB]]],
+  [[0, 0xFFD700, [0x8E1F2F, 0x8E1F2F]], [0, 0xFFFFFF, [0x12A0D7, 0x12A0D7]]],
+  [[0, 0xFFFFFF, [0xA32638, 0xF2A900]], [0, 0xFFFFFF, [0xFEDD00, 0x002395, 0xFEDD00]]],
+  [[0, 0xFFFFFF, [0x6CABDD, 0x6CABDD]], [0, 0xD4AF37, [0x000000, 0xFFFFFF, 0x000000]]],
+  [[0, 0x000000, [0xFDE100, 0xFDE100]], [0, 0x000000, [0xDD013F, 0xFFFFFF, 0xDD013F]]],
 ];
 let colorHistory = []; // Lưu trữ chỉ số (index) của các màu đã dùng gần đây
 const HISTORY_LIMIT = 20; // Số trận tối đa không được lặp lại màu (bạn có thể tăng lên 5 nếu TEAM_COLORS nhiều)
 // Tạo một danh sách các trận đấu đặc biệt.
 // Để so sánh mảng trong Javascript khá phức tạp, ta dùng thủ thuật chuyển mảng thành chuỗi JSON để so sánh cho nhanh.
 const SPECIAL_MATCHES = {
-  // 🏆 CÂU LẠC BỘ - NGOẠI HẠNG ANH & CHÂU ÂU
-  [JSON.stringify([[0, 0xB8860B, [0xFFFFFF, 0xF8F8F8]], [0, 0xFFD700, [0x004D98, 0xA50044, 0x004D98]]])]: {
-    name: "EL CLÁSICO: REAL MADRID vs BARCELONA", color: 0xFFD700, icon: "🔥"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0xDA291C, 0xB50E12]], [0, 0xFFFFFF, [0x6CABDD, 0x98C5E9]]])]: {
-    name: "DERBY MANCHESTER: MAN UTD vs MAN CITY", color: 0xDA291C, icon: "⚔️"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0xEF0107, 0xEF0107]], [0, 0xFFFFFF, [0x034694, 0x034694]]])]: {
-    name: "ĐẠI CHIẾN LONDON: ARSENAL vs CHELSEA", color: 0xEF0107, icon: "🛡️"
-  },
-  [JSON.stringify([[0, 0xFFFF00, [0xD00027, 0xA50022]], [0, 0xFFFFFF, [0x003399, 0x002060]]])]: {
-    name: "MERSEYSIDE DERBY: LIVERPOOL vs EVERTON", color: 0xD00027, icon: "🔴"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0x004170, 0xE30613, 0x004170]], [0, 0x2FAEE0, [0xFFFFFF, 0xFFFFFF]]])]: {
-    name: "LE CLASSIQUE: PSG vs MARSEILLE", color: 0x004170, icon: "🗼"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0x000000, 0xFB090B, 0x000000]], [0, 0xFFD700, [0x000000, 0x001EA0, 0x000000]]])]: {
-    name: "DERBY DELLA MADONNINA: AC MILAN vs INTER MILAN", color: 0xFFFFFF, icon: "🏟️"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0xDC052D, 0x980000]], [0, 0x000000, [0xFDE100, 0x000000, 0xFDE100]]])]: {
-    name: "DER KLASSIKER: BAYERN MUNICH vs DORTMUND", color: 0xFDE100, icon: "⚡"
-  },
-  [JSON.stringify([[0, 0xFFD700, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0xFFFFFF, [0x12A0D7, 0x12A0D7]]])]: {
-    name: "ĐẠI CHIẾN NƯỚC Ý: JUVENTUS vs NAPOLI", color: 0x12A0D7, icon: "🍕"
-  },
+  // 🏆 CÂU LẠC BỘ CHÂU ÂU - khớp với TEAM_COLORS index 50-56
 
-  // 🌍 ĐỘI TUYỂN QUỐC GIA - WORLD CUP & EURO
-  [JSON.stringify([[0, 0xFFFFFF, [0x002395, 0x002395]], [90, 0x000000, [0x75AADB, 0xFFFFFF, 0x75AADB]]])]: {
-    name: "CHUNG KẾT TRONG MƠ: PHÁP vs ARGENTINA", color: 0x75AADB, icon: "🏆"
+  [JSON.stringify([[0, 0x0000FF, [0xCB3524, 0xFFFFFF, 0xCB3524]], [0, 0x000000, [0xFFFFFF, 0xFFFFFF]]])]: {
+    name: "⚔️ LA LIGA: ATLETICO MADRID vs VALENCIA", color: 0xCB3524, icon: "🛡️"
   },
-  [JSON.stringify([[90, 0x000000, [0x75AADB, 0xFFFFFF, 0x75AADB]], [90, 0x000000, [0xFFD700, 0x009B3A, 0xFFD700]]])]: {
-    name: "SIÊU KINH ĐIỂN NAM MỸ: ARGENTINA vs BRAZIL", color: 0x009B3A, icon: "🌞"
+  [JSON.stringify([[0, 0xFFFFFF, [0x004170, 0xE30613, 0x004170]], [45, 0x000000, [0xFFFFFF, 0xED1C24]]])]: {
+    name: "🗼 LIGUE 1: PSG vs AS MONACO", color: 0x004170, icon: "🗼"
   },
-  [JSON.stringify([[0, 0x000000, [0xFFFFFF, 0xFFFFFF]], [0, 0xFFFFFF, [0x004D98, 0x004D98]]])]: {
-    name: "KINH ĐIỂN CHÂU ÂU: ĐỨC vs Ý", color: 0xFFFFFF, icon: "🦅"
-  },
-  [JSON.stringify([[0, 0x000080, [0xFFFFFF, 0xFFFFFF]], [0, 0xFFFFFF, [0xFF4F00, 0xFF4F00]]])]: {
-    name: "ĐẠI CHIẾN CHÂU ÂU: ANH vs HÀ LAN", color: 0xFF4F00, icon: "🦁"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0x00008B, 0x0000CD]], [0, 0xFFFFFF, [0xED1C24, 0xED1C24]]])]: {
-    name: "DERBY ĐÔNG Á: NHẬT BẢN vs HÀN QUỐC", color: 0x0000CD, icon: "⛩️"
-  },
-  [JSON.stringify([[0, 0xFFFF00, [0xDA251D, 0xDA251D]], [0, 0xFFFFFF, [0x0000FF, 0x00008B]]])]: {
-    name: "DERBY ĐÔNG NAM Á: VIỆT NAM vs THÁI LAN", color: 0xFFFF00, icon: "⭐"
-  },
-
-  // 🚀 CÁC CHỦ ĐỀ GIẢ TRÍ ĐẶC BIỆT
-  [JSON.stringify([[0, 0xFFD700, [0xAA0000, 0xFF0000, 0xAA0000]], [0, 0xFFFFFF, [0x000080, 0xFFFFFF, 0x000080]]])]: {
-    name: "MARVEL CIVIL WAR: IRON MAN vs CAPTAIN AMERICA", color: 0xFF0000, icon: "🦸‍♂️"
-  },
-  [JSON.stringify([[60, 0x000000, [0xFCEE0A, 0x00FFFF]], [60, 0x000000, [0xFF003C, 0x0000FF]]])]: {
-    name: "CHẾ ĐỘ CYBERPUNK 2077 KÍCH HOẠT", color: 0x00FFFF, icon: "🤖"
-  },
-  [JSON.stringify([[0, 0xD4AF37, [0x000000, 0x1A1A1A, 0x000000]], [0, 0x000000, [0xCFB53B, 0xFFD700, 0xCFB53B]]])]: {
-    name: "SỰ KIỆN VIP: ĐÊM HOÀNG KIM (GOLDEN NIGHT)", color: 0xFFD700, icon: "👑"
-  },
-  // 🌍 CÁC ĐỘI TUYỂN QUỐC GIA (Phần còn lại)
-  [JSON.stringify([[0, 0xFFFFFF, [0xFF4F00, 0xFF4F00]], [90, 0x0000FF, [0xFFFFFF, 0xFF0000, 0xFFFFFF]]])]: {
-    name: "ĐẠI CHIẾN CHÂU ÂU: HÀ LAN vs CROATIA", color: 0xFF4F00, icon: "🌪️"
-  },
-  [JSON.stringify([[0, 0x003893, [0xFCD116, 0xFCD116]], [0, 0xFFFFFF, [0xD52B1E, 0x0039A6, 0xD52B1E]]])]: {
-    name: "RỰC LỬA NAM MỸ: COLOMBIA vs CHILE", color: 0xFCD116, icon: "☕"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0x006C35, 0x006C35]], [0, 0x00843D, [0xFFCD00, 0xFFCD00]]])]: {
-    name: "CHÂU Á TRANH BÁ: Ả RẬP XÊ ÚT vs AUSTRALIA", color: 0x00843D, icon: "🐪"
-  },
-
-  // 🏆 CÁC CÂU LẠC BỘ (Phần còn lại)
-  [JSON.stringify([[0, 0x132257, [0xFFFFFF, 0xFFFFFF]], [0, 0x95BFEA, [0x670E36, 0x670E36]]])]: {
-    name: "NGOẠI HẠNG ANH: TOTTENHAM vs ASTON VILLA", color: 0xFFFFFF, icon: "🐓"
-  },
-  [JSON.stringify([[90, 0xFFFFFF, [0xFFFFFF, 0xD00027, 0xFFFFFF]], [0, 0xFFFFFF, [0xE30613, 0xB00010]]])]: {
-    name: "CÚP CHÂU ÂU: AJAX AMSTERDAM vs BENFICA", color: 0xD00027, icon: "⭐"
-  },
-
-  // 🎮 CÁC CHỦ ĐỀ GAME & KỸ THUẬT (Ánh xạ từ các màu Gradient)
-  [JSON.stringify([[0, 0xFFFFFF, [0x002B5B, 0xFFFFFF, 0x002B5B]], [0, 0x000000, [0xFFD700, 0xFFFFFF, 0xFFD700]]])]: {
-    name: "DERBY HÀNG HẢI: ĐÔ ĐỐC HẢI QUÂN vs THỦY THỦ ĐOÀN", color: 0x002B5B, icon: "⚓"
-  },
-  [JSON.stringify([[0, 0x000000, [0x00FF41, 0x008F11]], [0, 0x000000, [0xFF0000, 0x8B0000]]])]: {
-    name: "TRẬN CHIẾN LẬP TRÌNH: HACKER vs FIREWALL HỆ THỐNG", color: 0x00FF41, icon: "💻"
-  },
-  [JSON.stringify([[90, 0x000000, [0x55FF55, 0x00AA00]], [90, 0x000000, [0x55FFFF, 0x00AAAA]]])]: {
-    name: "SINH TỒN THẾ GIỚI KHỐI: LỤC BẢO vs KIM CƯƠNG", color: 0x55FF55, icon: "⛏️"
-  },
-  [JSON.stringify([[90, 0xFFFFFF, [0xFF00A0, 0xFF8C00]], [90, 0xFFFFFF, [0x00E5FF, 0x001A98]]])]: {
-    name: "THÀNH PHỐ NGẦM VICE CITY: BĂNG ĐẢNG ĐƯỜNG PHỐ", color: 0xFF00A0, icon: "🌴"
-  },
-
-  // 🌌 CÁC SỰ KIỆN VIỄN TƯỞNG / FANTASY KHÁC
-  [JSON.stringify([[135, 0xFFFFFF, [0x000000, 0x1A1A1A, 0x000000]], [135, 0xFFFFFF, [0x8E2DE2, 0x4A00E0, 0xFF0080]]])]: {
-    name: "SỰ KIỆN VŨ TRỤ: HỐ ĐEN vs TINH VÂN", color: 0x8E2DE2, icon: "🌌"
-  },
-  [JSON.stringify([[90, 0x000000, [0xFF4500, 0x8B0000]], [90, 0xFFFFFF, [0x32CD32, 0x006400]]])]: {
-    name: "TRẬN CHIẾN QUÁI THÚ: RỒNG LỬA vs RỒNG ĐỘC", color: 0xFF4500, icon: "🐉"
-  },
-  [JSON.stringify([[45, 0xFFFFFF, [0xFF9AA2, 0xFFB7B2, 0xFFDAC1]], [45, 0xFFFFFF, [0xB2CEFE, 0xC7CEEA, 0xBAEDF9]]])]: {
-    name: "SỰ KIỆN GIẢI TRÍ: KẸO BÔNG GÒN", color: 0xFF9AA2, icon: "🍭"
-  },
-  // 🏆 BỔ SUNG CÁC CÂU LẠC BỘ CHÂU ÂU
-  [JSON.stringify([[0, 0x0000FF, [0xFFFFFF, 0xCB3524, 0xFFFFFF]], [0, 0x000000, [0xFFFFFF, 0xFFFFFF]]])]: {
-    name: "LA LIGA: ATLETICO MADRID vs VALENCIA", color: 0xCB3524, icon: "🛡️"
-  },
-  [JSON.stringify([[0, 0xFFFFFF, [0x004170, 0xE30613, 0x004170]], [45, 0xFFFFFF, [0xFFFFFF, 0xED1C24]]])]: {
-    name: "LIGUE 1: PSG vs AS MONACO", color: 0x004170, icon: "🗼"
-  },
-  [JSON.stringify([[0, 0x000000, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0xFFFFFF, [0x87CEEB, 0x87CEEB]]])]: {
-    name: "SERIE A: JUVENTUS vs LAZIO", color: 0xFFFFFF, icon: "🦓"
+  [JSON.stringify([[0, 0xFFD700, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0x000000, [0x87CEEB, 0x87CEEB]]])]: {
+    name: "🦓 SERIE A: JUVENTUS vs LAZIO", color: 0xFFFFFF, icon: "🦓"
   },
   [JSON.stringify([[0, 0xFFD700, [0x8E1F2F, 0x8E1F2F]], [0, 0xFFFFFF, [0x12A0D7, 0x12A0D7]]])]: {
-    name: "DERBY DEL SOLE: AS ROMA vs NAPOLI", color: 0x8E1F2F, icon: "☀️"
+    name: "☀️ DERBY DEL SOLE: AS ROMA vs NAPOLI", color: 0x8E1F2F, icon: "☀️"
   },
-  [JSON.stringify([[0, 0xFFFFFF, [0xA32638, 0xF2A900]], [0, 0x002395, [0xFEDD00, 0x002395, 0xFEDD00]]])]: {
-    name: "KITALARARASI DERBI: GALATASARAY vs FENERBAHCE", color: 0xA32638, icon: "🔥"
+  [JSON.stringify([[0, 0xFFFFFF, [0xA32638, 0xF2A900]], [0, 0xFFFFFF, [0xFEDD00, 0x002395, 0xFEDD00]]])]: {
+    name: "🔥 KITALARARASI DERBI: GALATASARAY vs FENERBAHCE", color: 0xA32638, icon: "🔥"
   },
   [JSON.stringify([[0, 0xFFFFFF, [0x6CABDD, 0x6CABDD]], [0, 0xD4AF37, [0x000000, 0xFFFFFF, 0x000000]]])]: {
-    name: "NGOẠI HẠNG ANH: MAN CITY vs NEWCASTLE", color: 0x6CABDD, icon: "🦅"
+    name: "🦅 NGOẠI HẠNG ANH: MAN CITY vs NEWCASTLE", color: 0x6CABDD, icon: "🦅"
   },
-  [JSON.stringify([[0, 0x000000, [0xFDE100, 0xFDE100]], [0, 0xDD013F, [0xFFFFFF, 0xFFFFFF]]])]: {
-    name: "BUNDESLIGA: DORTMUND vs RB LEIPZIG", color: 0xFDE100, icon: "🐝"
+  [JSON.stringify([[0, 0x000000, [0xFDE100, 0xFDE100]], [0, 0x000000, [0xDD013F, 0xFFFFFF, 0xDD013F]]])]: {
+    name: "🐝 BUNDESLIGA: DORTMUND vs RB LEIPZIG", color: 0xFDE100, icon: "🐝"
+  },
+
+  // 🌍 ĐỘI TUYỂN - khớp với TEAM_COLORS index 39-46
+  [JSON.stringify([[0, 0xFFDD00, [0xAA0000, 0xFF2200, 0xAA0000]], [0, 0xCC0000, [0x000066, 0xFFFFFF, 0x000066]]])]: {
+    name: "⚔️ EURO ĐẠI CHIẾN: CROATIA vs ANH", color: 0xCC0000, icon: "⚔️"
+  },
+  // Index 39: Cam Hà Lan vs Croatia
+  [JSON.stringify([[0, 0xFFFFFF, [0xFF5500, 0xFF5500]], [90, 0x0000BB, [0xFFFFFF, 0xFF2200, 0xFFFFFF]]])]: {
+    name: "🌪️ ĐẠI CHIẾN CHÂU ÂU: HÀ LAN vs CROATIA", color: 0xFF5500, icon: "🌪️"
+  },
+  [JSON.stringify([[0, 0x006622, [0xFFCC00, 0xFFCC00]], [0, 0x000000, [0x5588BB, 0x5588BB]]])]: {
+    name: "🌞 SIÊU KINH ĐIỂN NAM MỸ: BRAZIL vs ARGENTINA", color: 0xFFCC00, icon: "🌞"
+  },
+  [JSON.stringify([[0, 0x003399, [0xFFCC00, 0xFFCC00]], [0, 0xFFFFFF, [0xCC0011, 0x002288, 0xCC0011]]])]: {
+    name: "☕ RỰC LỬA NAM MỸ: COLOMBIA vs CHILE", color: 0xFFCC00, icon: "☕"
+  },
+  // Index 42: Nhật Bản vs Hàn Quốc
+  [JSON.stringify([[0, 0xFFFFFF, [0x000066, 0x0000AA]], [0, 0xFFFFFF, [0xCC0011, 0xCC0011]]])]: {
+    name: "⛩️ DERBY ĐÔNG Á: NHẬT BẢN vs HÀN QUỐC", color: 0x0000AA, icon: "⛩️"
+  },
+  // Index 43: Ả Rập Xê Út vs Australia
+  [JSON.stringify([[0, 0xFFFFFF, [0x006633, 0x006633]], [0, 0x00AA44, [0xFFCC00, 0xFFCC00]]])]: {
+    name: "🐪 CHÂU Á TRANH BÁ: Ả RẬP XÊ ÚT vs AUSTRALIA", color: 0x006633, icon: "🐪"
+  },
+
+  // 🚀 SỰ KIỆN ĐẶC BIỆT - khớp với TEAM_COLORS index 35-38
+  // Index 35: Cyberpunk (Đen Tím vs Tím Hồng)
+  [JSON.stringify([[135, 0xFFFFFF, [0x000000, 0x111111, 0x000000]], [135, 0xFFFFFF, [0x9900CC, 0x5500AA, 0xFF0099]]])]: {
+    name: "🤖 CHẾ ĐỘ CYBERPUNK 2077 KÍCH HOẠT", color: 0x9900CC, icon: "🤖"
+  },
+  // Index 36: Việt Nam vs Thái Lan
+  [JSON.stringify([[0, 0xFFFF00, [0xDD0000, 0xBB0000]], [0, 0xFFFFFF, [0x0000EE, 0x000099]]])]: {
+    name: "⭐ DERBY ĐÔNG NAM Á: VIỆT NAM vs THÁI LAN", color: 0xFFFF00, icon: "⭐"
+  },
+  // Index 38: Cam Lửa vs Xanh Lá (Rồng Lửa vs Rồng Độc)
+  [JSON.stringify([[90, 0x000000, [0xFF4400, 0x882200]], [90, 0x000000, [0x00FF44, 0x008822]]])]: {
+    name: "🐉 TRẬN CHIẾN QUÁI THÚ: RỒNG LỬA vs RỒNG ĐỘC", color: 0xFF4400, icon: "🐉"
+  },
+  // Index 33: Đỏ Trắng vs Xanh Trắng (Juventus vs Napoli kiểu mới)
+  [JSON.stringify([[0, 0xFFD700, [0xFFFFFF, 0x000000, 0xFFFFFF]], [0, 0x000000, [0x0099CC, 0x0099CC]]])]: {
+    name: "🍕 ĐẠI CHIẾN NƯỚC Ý: JUVENTUS vs NAPOLI", color: 0x0099CC, icon: "🍕"
+  },
+  // Index 30: Đen Đỏ vs Đen Xanh (AC Milan vs Inter)
+  [JSON.stringify([[0, 0xFFFFFF, [0xDD0011, 0x000000, 0xDD0011]], [0, 0xFFEE00, [0x0022BB, 0x000000, 0x0022BB]]])]: {
+    name: "🏟️ DERBY DELLA MADONNINA: AC MILAN vs INTER MILAN", color: 0xDD0011, icon: "🏟️"
+  },
+  // Index 31: Đỏ vs Vàng Đen (Bayern vs Dortmund)
+  [JSON.stringify([[0, 0xFFFFFF, [0xCC0022, 0x880011]], [0, 0xFFFFFF, [0xFFDD00, 0x000000, 0xFFDD00]]])]: {
+    name: "⚡ DER KLASSIKER: BAYERN MUNICH vs DORTMUND", color: 0xFFDD00, icon: "⚡"
+  },
+  // Index 32: Đỏ vs Xanh (Arsenal vs Chelsea)
+  [JSON.stringify([[0, 0xFFFFFF, [0xEE0000, 0xCC0000]], [0, 0xFFFFFF, [0x0033AA, 0x0033AA]]])]: {
+    name: "🛡️ ĐẠI CHIẾN LONDON: ARSENAL vs CHELSEA", color: 0xEE0000, icon: "🛡️"
+  },
+  [JSON.stringify([[0, 0xFFFFFF, [0xBB0011, 0x880011]], [0, 0xFFFFFF, [0x55AADD, 0x7FCCEE]]])]: {
+    name: "⚔️ DERBY MANCHESTER: MAN UTD vs MAN CITY", color: 0xBB0011, icon: "⚔️"
+  },
+  [JSON.stringify([[0, 0xAA8800, [0xFFFFFF, 0xEEEEEE]], [0, 0xFFDD00, [0x003366, 0x990033, 0x003366]]])]: {
+    name: "🔥 EL CLÁSICO: REAL MADRID vs BARCELONA", color: 0xFFDD00, icon: "🔥"
+  },
+  // Index 39 Golden Night (Đen Vàng)
+  [JSON.stringify([[0, 0xBB8800, [0x000000, 0x111111, 0x000000]], [0, 0x000000, [0xBBAA00, 0xFFDD00, 0xBBAA00]]])]: {
+    name: "👑 SỰ KIỆN VIP: ĐÊM HOÀNG KIM (GOLDEN NIGHT)", color: 0xFFDD00, icon: "👑"
   },
 };
 const NORMAL_MATCHES = {
-  // 1. Vàng chanh - Đỏ vs Vàng chanh - Xanh navy
-  [JSON.stringify([[60, 0xFFCC00, [0xE83030]], [60, 0xFFCC00, [0x004170]]])]: {
-    name: "🔴 Đỏ Viền Vàng vs 🔵 Xanh Viền Vàng", icon: "☀️"
+  // 1. Đỏ thuần vs Xanh Navy
+  [JSON.stringify([[60, 0xFFFF00, [0xFF3030, 0xFF6060]], [60, 0xFFFF00, [0x003EA6, 0x0060D0]]])]: {
+    name: "🔴 Đỏ Rực vs 🔵 Xanh Navy", icon: "⚔️"
   },
-  // 2. Trắng - Đỏ nhạt vs Trắng - Xanh ngọc
-  [JSON.stringify([[60, 0xFFFFFF, [0xFF4A4A]], [60, 0xFFFFFF, [0x5ECFFF]]])]: {
-    name: "🌸 Đỏ Pastel vs 🧊 Xanh Lơ", icon: "🎨"
+  // 2. Đỏ rực vs Cyan (avatar đỏ vs avatar đen)
+  [JSON.stringify([[60, 0xFF0000, [0xFFFFFF, 0xFFE000]], [60, 0x000000, [0x00E5FF, 0x00BFFF]]])]: {
+    name: "🔥 Đỏ Lửa vs 💎 Xanh Băng", icon: "☄️"
   },
-  // 3. Trắng - Đỏ mận vs Trắng - Xanh lam
-  [JSON.stringify([[60, 0xFFFFFF, [0xD60419]], [60, 0xFFFFFF, [0x0099FF]]])]: {
-    name: "🩸 Đỏ Mận vs 🌊 Xanh Biển", icon: "💧"
+  // 3. Đỏ Cam vs Xanh Lam
+  [JSON.stringify([[45, 0x000000, [0xFF4500, 0xFFAA00, 0xFF4500]], [45, 0xFFFFFF, [0x0044CC, 0x00AAFF, 0x0044CC]]])]: {
+    name: "🌅 Solar Flare vs ⚡ Electric Blue", icon: "🌋"
   },
-  // 4. Đen - Cam/Vàng vs Đen - Xanh/Trắng
-  [JSON.stringify([[45, 0x000000, [0xFF2400, 0xFFFF00]], [45, 0x000000, [0x1F51FF, 0xFFFFFF]]])]: {
-    name: "🔥 Solar Flare vs ⚡ Electric Blue", icon: "☄️"
+  // 4. Cam rực vs Xanh Navy
+  [JSON.stringify([[0, 0x000000, [0xFF6600, 0xFFCC00]], [0, 0xFFFFFF, [0x000066, 0x0000CC]]])]: {
+    name: "🟠 Cam Rực vs 🌊 Navy Đêm", icon: "🔆"
   },
-  // 5. Trắng kem - Dải đỏ vs Trắng kem - Dải Cyan
-  [JSON.stringify([[0, 0xF7FFF2, [0xE00202, 0xB00101, 0x800000]], [0, 0xF7FFF2, [0x00F7FF, 0x00D1D1, 0x00A7AD]]])]: {
-    name: "🌋 Magma Sọc vs 🌊 Aqua Sọc", icon: "🌋"
+  // 5. Đỏ Mận sọc vs Cyan Sọc
+  [JSON.stringify([[0, 0xFFFFFF, [0xCC0000, 0x880000, 0xCC0000]], [0, 0x000000, [0x00CCCC, 0x008888, 0x00CCCC]]])]: {
+    name: "🌋 Magma Đỏ vs 🌊 Aqua Sọc", icon: "🌋"
   },
-  // 6. Trắng kem - Hồng nhạt vs Trắng kem - Xanh nhạt
-  [JSON.stringify([[90, 0xF7FFF2, [0xFF2121, 0xFF5757, 0xFC9595]], [90, 0xF7FFF2, [0x00C3FF, 0x45E0FF, 0xB5F5FC]]])]: {
-    name: "🌅 Bình Minh vs ❄️ Băng Tuyết", icon: "⛅"
+  // 6. Hồng Đỏ vs Xanh Dương Đậm
+  [JSON.stringify([[90, 0xFFFFFF, [0xFF0055, 0xFF5580, 0xFF0055]], [90, 0xFFFFFF, [0x0011CC, 0x4455FF, 0x0011CC]]])]: {
+    name: "💗 Hồng Dạ Quang vs 🌑 Xanh Đêm", icon: "💫"
   },
-  // 7. Trắng - Đen sọc Đỏ vs Xám - Trắng sọc Xanh
-  [JSON.stringify([[45, 0xFFFFFF, [0x000000, 0xFF0000, 0x000000]], [45, 0x808080, [0xFFFFFF, 0x0096FF, 0xFFFFFF]]])]: {
-    name: "⚫ Sọc Đen Đỏ vs ⚪ Sọc Trắng Xanh", icon: "🦓"
+  // 7. Đen Đỏ vs Trắng Xanh
+  [JSON.stringify([[45, 0xFFFFFF, [0x000000, 0xFF0000, 0x000000]], [45, 0x000000, [0xFFFFFF, 0x00AAFF, 0xFFFFFF]]])]: {
+    name: "⚫ Đen Đỏ vs ⚪ Trắng Xanh", icon: "🦓"
   },
-  // 8. Trắng - Đỏ sọc Đen vs Trắng - Xanh sọc Đen
-  [JSON.stringify([[45, 0xFFFFFF, [0xD60000, 0x000000, 0xD60000]], [45, 0xFFFFFF, [0x0058A3, 0x000000, 0x0058A3]]])]: {
+  // 8. Trắng sọc Đỏ vs Đen sọc Xanh
+  [JSON.stringify([[45, 0x000000, [0xFFFFFF, 0xDD0000, 0xFFFFFF]], [45, 0xFFFFFF, [0x000000, 0x0066FF, 0x000000]]])]: {
     name: "🔴 Đỏ Cổ Điển vs 🔵 Xanh Cổ Điển", icon: "🛡️"
   },
-  // 9. Vàng - Dải Đỏ đậm vs Vàng - Dải Xanh sáng
-  [JSON.stringify([[-45, 0xFFCC00, [0xD10000, 0x8C0000, 0xD10000]], [-45, 0xFFCC00, [0x00DDFF, 0x87E3FF, 0x00DDFF]]])]: {
+  // 9. Vàng Đỏ vs Đen Cyan
+  [JSON.stringify([[-45, 0x000000, [0xFF2200, 0xFFDD00, 0xFF2200]], [-45, 0xFFDD00, [0x004466, 0x00BBEE, 0x004466]]])]: {
     name: "🟡 Vàng Nóng vs 💎 Xanh Kim Cương", icon: "🔆"
   },
-  // 10. Trắng - Dải Hồng vs Trắng - Dải Tím Xanh
-  [JSON.stringify([[232, 0xFFFFFF, [0xFFCCFA, 0xFF99DD, 0xFF6176]], [129, 0xFFFFFF, [0x4D39CC, 0x7A70FF, 0x7DB1FF]]])]: {
+  // 10. Hồng Tươi vs Tím Xanh
+  [JSON.stringify([[232, 0xFFFFFF, [0xFF0077, 0xFF44AA, 0xFF0077]], [129, 0x000000, [0x5522CC, 0x8866FF, 0x5522CC]]])]: {
     name: "💖 Hồng Neon vs 🌌 Tím Galaxy", icon: "✨"
   },
-  // 11. Trắng - Dải Xanh lá vs Trắng - Dải Tím đậm
-  [JSON.stringify([[45, 0xFFFFFF, [0x00C950, 0x007830]], [45, 0xFFFFFF, [0x9B59B6, 0x5B2C6F]]])]: {
-    name: "🌿 Rừng Sâu vs 🍇 Nho Tím", icon: "🍃"
+  // 11. Xanh Lá Sáng vs Tím Đậm
+  [JSON.stringify([[45, 0x000000, [0x00FF44, 0x00BB33]], [45, 0xFFFFFF, [0x8800CC, 0x5500AA]]])]: {
+    name: "🌿 Xanh Lá Neon vs 🍇 Tím Đậm", icon: "🍃"
   },
-  // 12. Đen - Vàng/Cam vs Đen - Cyan/Blue
-  [JSON.stringify([[90, 0x000000, [0xFFE600, 0xFFB300, 0xFF8000]], [90, 0x000000, [0x00FFFF, 0x00BFFF, 0x0080FF]]])]: {
+  // 12. Vàng Đen vs Xanh Trắng
+  [JSON.stringify([[90, 0x000000, [0xFFDD00, 0xFF8800, 0xFFDD00]], [90, 0xFFFFFF, [0x002299, 0x0055CC, 0x002299]]])]: {
     name: "🟡 Vàng Đen vs 🔵 Neon Blue", icon: "⚡"
   },
-  // 13. Trắng - Xám sẫm vs Đen - Bạc
-  [JSON.stringify([[135, 0xFFFFFF, [0x434343, 0x000000]], [135, 0x000000, [0xE0E0E0, 0xFFFFFF]]])]: {
+  // 13. Xám Đen vs Trắng Vàng
+  [JSON.stringify([[135, 0xFF2200, [0x222222, 0x000000, 0x222222]], [135, 0x0044FF, [0xEEEEEE, 0xFFFFFF, 0xEEEEEE]]])]: {
     name: "🌑 Bóng Đêm vs ⚪ Ánh Trăng", icon: "🌘"
   },
-  // 14. Trắng - Cam/Đỏ vs Trắng - Xanh Navy
-  [JSON.stringify([[60, 0xFFFFFF, [0xFF8C00, 0xFF4500]], [60, 0xFFFFFF, [0x000080, 0x0000CD]]])]: {
-    name: "🟠 Lửa Cam vs ⚓ Navy", icon: "🔥"
+  // 14. Cam Đỏ vs Xanh Navy
+  [JSON.stringify([[60, 0x000000, [0xFF6600, 0xFF2200, 0xFF6600]], [60, 0xFFDD00, [0x000044, 0x0000AA, 0x000044]]])]: {
+    name: "🟠 Lửa Cam vs ⚓ Navy Đêm", icon: "🔥"
   },
-  // 15. Trắng - Hồng/Tím vs Trắng - Xanh Rêu
-  [JSON.stringify([[45, 0xFFFFFF, [0xFF00FF, 0x8A2BE2]], [45, 0xFFFFFF, [0x2E8B57, 0x006400]]])]: {
+  // 15. Xanh Lá Neon vs Đỏ Lửa
+  [JSON.stringify([[90, 0x000000, [0x00FF66, 0x00AA44]], [90, 0x000000, [0xFF2200, 0xAA0000]]])]: {
+    name: "🌿 Matrix Xanh vs 🔥 Rồng Lửa", icon: "🐉"
+  },
+  // 16. Hồng Tím vs Xanh Rêu
+  [JSON.stringify([[45, 0xFFFFFF, [0xFF00CC, 0x9900CC]], [45, 0x000000, [0x006633, 0x003300]]])]: {
     name: "🔮 Tím Ma Thuật vs 🌲 Lục Lâm", icon: "🪄"
   },
-  // 16. Trắng - Dải Hồng Mềm vs Trắng - Dải Xanh Mint
-  [JSON.stringify([[120, 0xFFFFFF, [0xFFD1DC, 0xFFB6C1]], [120, 0xFFFFFF, [0xAEC6CF, 0x98FF98]]])]: {
-    name: "🌸 Kẹo Hồng vs 🍃 Kẹo Bạc Hà", icon: "🍬"
+  // 17. Xanh Lá Matrix vs Đỏ Lửa
+  [JSON.stringify([[0, 0x000000, [0x00FF44, 0x008822]], [0, 0x000000, [0xFF2200, 0x880000]]])]: {
+    name: "💻 Hacker Matrix vs 🔥 Firewall", icon: "💻"
   },
-  // 17. Trắng - Dải Đỏ/Tím vs Trắng - Dải Cyan/Đen
-  [JSON.stringify([[135, 0xFFFFFF, [0xFF512F, 0xDD2476, 0x900C3F]], [135, 0xFFFFFF, [0x1CB5E0, 0x000046, 0x000000]]])]: {
-    name: "🌇 Hoàng Hôn vs 🌃 Đêm Sâu", icon: "🌆"
-  },
-  // 18. Đen - Vàng Hoàng Gia vs Trắng - Tím Hoàng Gia
-  [JSON.stringify([[45, 0x000000, [0xBF953F, 0xFCF6BA, 0xB38728]], [45, 0xFFFFFF, [0x4A00E0, 0x8E2DE2, 0x4A00E0]]])]: {
+  // 18. Vàng Hoàng Gia vs Tím Ngọc
+  [JSON.stringify([[45, 0x000000, [0xFFCC00, 0xFFFF66, 0xFFCC00]], [45, 0xFFFF00, [0x5500AA, 0x8800DD, 0x5500AA]]])]: {
     name: "👑 Vàng Hoàng Gia vs 🟣 Tím Hoàng Gia", icon: "⚜️"
   },
-  // 19. Trắng - Đỏ tối sẫm vs Trắng - Xanh rêu/Nâu
-  [JSON.stringify([[60, 0xFFFFFF, [0x4D0000, 0x800000, 0xFF7300]], [60, 0xFFFFFF, [0x2E8B57, 0x8B4513, 0x228B22]]])]: {
-    name: "🩸 Máu vs 🌿 Thợ Săn", icon: "🏹"
+  // 19. Đỏ Sẫm Cam vs Xanh Lá Thẫm
+  [JSON.stringify([[60, 0xFFAA00, [0xFF0000, 0xAA0000, 0xFF5500]], [60, 0x9900CC, [0x003322, 0x006644, 0x00AA77]]])]: {
+    name: "🩸 Máu Đỏ vs 🌿 Thợ Săn Rừng", icon: "🏹"
   },
-  // 20. Trắng - Xanh Navy vs Đen - Vàng
-  [JSON.stringify([[135, 0xFFFFFF, [0x330066, 0x1A1A1A]], [135, 0x000000, [0xCCFF00, 0x1A1A1A]]])]: {
-    name: "🟣 Đêm Tím vs 🟢 Neon Xanh", icon: "🎮"
+  // 20. Tím Đêm vs Xanh Neon
+  [JSON.stringify([[135, 0xFFCC00, [0x220044, 0x110022]], [135, 0x000000, [0x99FF00, 0x66CC00]]])]: {
+    name: "🟣 Đêm Tím vs 🟢 Neon Lime", icon: "🎮"
   },
-  // 21. Trắng - Đỏ/Hồng vs Trắng - Xám Xanh
-  [JSON.stringify([[-45, 0xFFFFFF, [0xE74C3C, 0xC0392B]], [-45, 0xFFFFFF, [0x2C3E50, 0x34495E]]])]: {
+  // 21. Đỏ Thẫm vs Xanh Thép
+  [JSON.stringify([[-45, 0xFFFFFF, [0xCC2200, 0x990000]], [-45, 0xFFFFFF, [0x223355, 0x445577]]])]: {
     name: "🔴 Đỏ Thẫm vs 🌑 Thép Xanh", icon: "⚔️"
   },
-  // 22. Trắng - Đỏ/Cam vs Trắng - Xanh lam dải
-  [JSON.stringify([[45, 0xFFFFFF, [0xFF512F, 0xF09819, 0xFF512F]], [45, 0xFFFFFF, [0x0052D4, 0x4364F7, 0x6FB1FC]]])]: {
+  // 22. Cam Lửa vs Xanh Lam
+  [JSON.stringify([[45, 0x000000, [0xFF5500, 0xFFAA00, 0xFF5500]], [45, 0xFFFFFF, [0x0033AA, 0x0066DD, 0x0033AA]]])]: {
     name: "🔥 Hỏa Diệm vs ❄️ Băng Sương", icon: "☄️"
   },
-  // 23. Vàng viền Đỏ vs Xanh viền Trắng (Tương tự CLB)
-  [JSON.stringify([[0, 0x009B3A, [0xFFD700, 0xFFD700]], [0, 0x000000, [0x68A7D4, 0x68A7D4]]])]: {
-    name: "🟡 Sọc Vàng vs 🔵 Sọc Lam", icon: "⭐"
+  // 23. Navy vs Vàng
+  [JSON.stringify([[0, 0xFFFFFF, [0x000055, 0x0000AA, 0x000055]], [0, 0x000000, [0xFFCC00, 0xFFFF44, 0xFFCC00]]])]: {
+    name: "⚓ Navy vs 🌟 Vàng Rực", icon: "⭐"
   },
-  // 24. Trắng - Xám Bạc vs Đen - Bạc
-  [JSON.stringify([[60, 0xFFFFFF, [0x1034A6, 0x1338A8]], [60, 0x1034A6, [0xFFFFFF, 0xFFFFFF]]])]: {
-    // Ánh xạ an toàn
-    name: "⚪ Bạc Tinh vs ⚫ Xám Tối", icon: "🪙"
+  // 24. Cyan vs Vàng
+  [JSON.stringify([[0, 0xFFFFFF, [0x00AAAA, 0x0088BB]], [0, 0x000000, [0xFFDD00, 0xFFBB00]]])]: {
+    name: "🌊 Biển Ban Mai vs 🏜️ Cát Vàng", icon: "🌊"
   },
-  // 25. Trắng - Xanh sọc vàng vs Đen - Xanh nhạt (Phòng ngừa lỗi mã)
-  [JSON.stringify([[0, 0xFFFFFF, [0x81ECEC, 0x74B9FF]], [0, 0x000000, [0xFFD700, 0xFFE600]]])]: {
-    name: "🟢 Sọc Xanh vs 🟡 Sọc Vàng", icon: "🎗️"
-  },
-  // 26. Tím Oải Hương vs Sữa Tươi
-  [JSON.stringify([[60, 0xFFFFFF, [0xA29BFE, 0xCE9BFE]], [60, 0xA29BFE, [0xFFFFFF, 0xFFFFFF]]])]: {
-    name: "💜 Tím Lavender vs 🥛 Sữa Trắng", icon: "✨"
-  },
-  // 27. Bình minh biển vs Cát vàng
-  [JSON.stringify([[0, 0xFFFFFF, [0x81ECEC, 0x74B9FF]], [0, 0x000000, [0xFFD700, 0xFFE600]]])]: {
-    name: "🌅 Biển Ban Mai vs 🏜️ Cát Vàng", icon: "🌊"
-  },
-  // 28. Cam Chanh vs Xanh Mint
-  [JSON.stringify([[45, 0xFFFFFF, [0xFFA502, 0xFFE066]], [45, 0x000000, [0x26DE81, 0x20BF6B]]])]: {
+  // 25. Cam Chanh vs Xanh Bạc Hà
+  [JSON.stringify([[45, 0x000000, [0xFFAA00, 0xFFEE44]], [45, 0xFFFFFF, [0x00AA55, 0x008844]]])]: {
     name: "🍊 Cam Chanh vs 🌿 Xanh Bạc Hà", icon: "🍃"
   },
-  // 29. Dạ quang vs Thiên thanh
-  [JSON.stringify([[45, 0xFFFFFF, [0xFF007F, 0xEE1C24]], [45, 0xFFFFFF, [0x00A0E9, 0x034694]]])]: {
+  // 26. Hồng Dạ Quang vs Xanh Đậm
+  [JSON.stringify([[45, 0xFFFFFF, [0xFF0077, 0xDD0022]], [45, 0x000000, [0x00FFFF, 0x0088FF]]])]: {
     name: "💖 Hồng Dạ Quang vs 🔵 Thiên Thanh", icon: "💫"
   },
-  // 30. Tím Cam Hoàng Hôn
-  [JSON.stringify([[135, 0xFFFFFF, [0xFF512F, 0xDD2476, 0x900C3F]], [135, 0xFFFFFF, [0x1CB5E0, 0x000046]]])]: {
+  // 27. Hoàng Hôn vs Đêm Sâu
+  [JSON.stringify([[135, 0xFFFFFF, [0xFF0000, 0x880000, 0xCC2266]], [135, 0xFFFFFF, [0x000044, 0x000088, 0x000044]]])]: {
     name: "🌇 Chiều Tà vs 🌃 Màn Đêm", icon: "🌆"
+  },
+  // 28. Xanh Bầu Trời vs Vàng Kim
+  [JSON.stringify([[90, 0x000000, [0x88BBDD, 0xFFFFFF, 0x88BBDD]], [90, 0x000000, [0xFFDD00, 0xCC9900, 0xFFDD00]]])]: {
+    name: "🌀 Bầu Trời vs 🌟 Hoàng Kim", icon: "🌤️"
+  },
+  // 29. Hồng Neon vs Cyan Đậm
+  [JSON.stringify([[90, 0xFFFFFF, [0xFF0077, 0xFF6600]], [90, 0x000000, [0x00CCEE, 0x001188]]])]: {
+    name: "💗 Hồng Cyberpunk vs 🌊 Xanh Neon", icon: "🌴"
+  },
+  // 30. Hoàng Hôn Đỏ vs Đêm Tối
+  [JSON.stringify([[135, 0xFFFFFF, [0xFF4400, 0xCC0033, 0xFF4400]], [135, 0xFFFFFF, [0x001166, 0x003399, 0x001166]]])]: {
+    name: "🌇 Hoàng Hôn vs 🌙 Biển Đêm", icon: "🌆"
+  },
+  // 31. Vàng Cyan vs Đỏ Tím
+  [JSON.stringify([[60, 0x000000, [0xFFDD00, 0x00FFFF]], [60, 0x000000, [0xFF0033, 0x6600CC]]])]: {
+    name: "💛 Vàng Cyan vs 💜 Đỏ Tím", icon: "💫"
+  },
+  // 32. Hồng Pastel vs Xanh Pastel
+  [JSON.stringify([[120, 0xAA0055, [0xFFCCDD, 0xFFAABB]], [120, 0xFFFFFF, [0x004499, 0x002266]]])]: {
+    name: "🌸 Hồng Pastel vs 🌊 Xanh Pastel", icon: "💮"
+  },
+  // 33. Hồng Nhạt vs Xanh Da Trời
+  [JSON.stringify([[45, 0x990055, [0xFF99BB, 0xFFBBCC, 0xFFCCDD]], [45, 0xFFFFFF, [0x004499, 0x002266, 0x004499]]])]: {
+    name: "🎀 Bé Gái vs 🍼 Bé Trai", icon: "🧸"
+  },
+  // 34. Tím Lavender vs Xanh Navy
+  [JSON.stringify([[60, 0x000033, [0x9988EE, 0xBBAEFF]], [60, 0x5500AA, [0xFFFFFF, 0xFFFFFF]]])]: {
+    name: "🪻 Tím Lavender vs ⚓ Xanh Navy", icon: "🪻"
   }
 };
 
@@ -471,21 +500,21 @@ const PENALTY_MISS_COMMENTARIES = [
   "Sút hỏng. Đối thủ đã phán đoán thành công ý đồ dứt điểm.",
 ];
 
-const DISCORD_LOG_WEBHOOK = "https://discord.com/api/webhooks/1485117622415527936/93auaAMEXtma8D_HH_7dl5UbyennvDtU0Sm2TiBkhaz6JMbCZjY5PVM_KC4iVcgVZQ2h";
-const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1388523871162077194/cw2SGaLdFt-cZU-ckrn2zBKd0lfExphspv0t7JN7VB9K-navldr88JnbE453jXP8zPHc";
-const DISCORD_STATS_WEBHOOK = "https://discord.com/api/webhooks/1492333366106656768/WY8zu5fCY0eZSgK6raVOFM1fD0YJ9NGTrDyginbY6LIfBpSrCaew6DfMHOKNDCfVvinR"
+const DISCORD_LOG_WEBHOOK = "";
+const DISCORD_WEBHOOK = "";
+const DISCORD_STATS_WEBHOOK = ""
 // ⚠️ WEBHOOK BÁO CÁO LỖI: Dùng cùng DISCORD_WEBHOOK hoặc thay bằng webhook riêng nếu muốn kênh riêng
-const DISCORD_REPORT_WEBHOOK = "https://discord.com/api/webhooks/1500881895150583849/PjI7fzgolN8Pp5dcNwRHXPxrVXK4iFXBZtDhe9BqCna0RZ7CPveRKiS2ujsjI2DPuc9F"; // ← Đổi thành URL webhook khác nếu muốn gửi vào kênh riêng
+const DISCORD_REPORT_WEBHOOK = ""; // ← Đổi thành URL webhook khác nếu muốn gửi vào kênh riêng
 // Discord User ID của các admin cần được tag khi có báo cáo lỗi
 // Hướng dẫn lấy ID: Bật Developer Mode trong Discord → chuột phải vào tên user → "Copy User ID"
-const REPORT_TAG_USER_IDS = ["1138755902917328986", "566171771624226819"]; // ← Điền ID thật vào đây!
+const REPORT_TAG_USER_IDS = [""]; // ← Điền ID thật vào đây!
 const STADIUM_TRAINING = '{"name": "Practice","width": 250,"height": 250,"cameraWidth": 0,"cameraHeight": 0,"maxViewWidth": 0,"cameraFollow": "ball","spawnDistance": 170,"redSpawnPoints": [],"blueSpawnPoints": [],"kickOffReset": "partial","bg": {"color": "718C5A","type": "grass","height": 150,"width": 150,"cornerRadius": 0,"kickOffRadius": 0},"traits": {"ballArea": {"vis": false,"bCoef": 1,"cMask": ["ball"]},"goalPost": {"radius": 8,"invMass": 0,"bCoef": 0.5},"goalNet": {"vis": true,"bCoef": 0.1,"cMask": ["ball"]},"kickOffBarrier": {"vis": false,"bCoef": 0.1,"cGroup": ["redKO","blueKO"],"cMask": ["red","blue"]},"line": {"vis": true,"bCoef": 0,"cMask": [""]}},"vertexes": [],"segments": [],"goals": [],"discs": [],"planes": [{"normal": [0,-1],"dist": -200},{"normal": [0,1],"dist": -200},{"normal": [-1,0],"dist": -200},{"normal": [1,0],"dist": -200},{"normal": [0,-1],"dist": -150,"trait": "ballArea"},{"normal": [0,1],"dist": -150,"trait": "ballArea"},{"normal": [-1,0],"dist": -150,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea"},{"normal": [1,0],"dist": -150,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea"}],"joints": [],"playerPhysics": {"radius": 15.5,"bCoef": 0.35,"invMass": 0.5,"damping": 0.96,"cGroup": ["red","blue"],"acceleration": 0.118,"gravity": [0,0],"kickingAcceleration": 0.083,"kickingDamping": 0.96,"kickStrength": 4.7,"kickback": 0},"ballPhysics": {"radius": 6,"bCoef": 0.468,"cMask": ["all"],"damping": 0.99,"invMass": 1.4,"gravity": [0,0],"color": "BDFF80","cGroup": ["ball"],"canBeStored": true},"canBeStored": true}';
-const STADIUM_1v1 = '{"name" : "lỏ | 1v1 2v2","width" : 420,"height" : 200,"spawnDistance" : 180,"bg" : { "type" : "hockey", "width" : 368, "height" : 171, "kickOffRadius" : 65, "cornerRadius" : 0 },"vertexes" : [{ "x" : -368, "y" : 171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -368, "y" : 65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -368, "y" : -65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -368, "y" : -171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 368, "y" : 171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 368, "y" : 65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 368, "y" : -65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 368, "y" : -171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 0, "y" : 65, "trait" : "kickOffBarrier" },{ "x" : 0, "y" : -65, "trait" : "line" },{ "x" : 368, "y" : 171, "bCoef" : 1, "trait" : "ballArea" },{ "x" : 368, "y" : -171, "bCoef" : 1, "trait" : "ballArea" },{ "x" : 0, "y" : 171, "bCoef" : 0, "trait" : "line" },{ "x" : 0, "y" : -171, "bCoef" : 0, "trait" : "line" },{ "x" : 0, "y" : 65, "trait" : "kickOffBarrier" },{ "x" : 0, "y" : -65, "trait" : "kickOffBarrier" },{ "x" : 377, "y" : -65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : 377, "y" : -171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -377, "y" : -65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : -377, "y" : -171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -377, "y" : 65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : -377, "y" : 171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 377, "y" : 65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : 377, "y" : 171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 0, "y" : 199, "trait" : "kickOffBarrier" },{ "x" : 0, "y" : 65, "trait" : "kickOffBarrier" },{ "x" : 0, "y" : -65, "trait" : "kickOffBarrier" },{ "x" : 0, "y" : -199, "trait" : "kickOffBarrier" },{ "x" : -368.53340356886, "y" : -62.053454903872, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,-80 ] },{ "x" : -400.05760771891, "y" : -62.053454903872, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,-80 ] },{ "x" : -400.05760771891, "y" : 64.043361696331, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,80 ] },{ "x" : -368.53340356886, "y" : 64.043361696331, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,80 ] },{ "x" : 368.09926357786, "y" : 63.94882446641, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,-80 ] },{ "x" : 400, "y" : 64, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,-80 ] },{ "x" : 400, "y" : -61.927767991658, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,80 ] },{ "x" : 368.9681846993, "y" : -62.144998272018, "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "curve" : 0, "color" : "F8F8F8", "pos" : [-700,80 ] },{ "x" : -368, "y" : -142.37229643041, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : -90 },{ "x" : -260.90035258157, "y" : -50.168480548544, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 0 },{ "x" : -368, "y" : -160.81305960678, "bCoef" : 0.1, "trait" : "line", "curve" : -90 },{ "x" : -358.5379338963, "y" : -171, "bCoef" : 0.1, "trait" : "line", "curve" : -90 },{ "x" : -368, "y" : 141.33175243687, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 90 },{ "x" : -260.90035258157, "y" : 49.127936555002, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 0 },{ "x" : -368, "y" : 159.77251561324, "bCoef" : 0.1, "trait" : "line", "curve" : 90 },{ "x" : -358.5379338963, "y" : 171, "bCoef" : 0.1, "trait" : "line", "curve" : 90 },{ "x" : 368, "y" : 159.77251561324, "bCoef" : 0.1, "trait" : "line", "curve" : -90 },{ "x" : 358.36266315432, "y" : 171, "bCoef" : 0.1, "trait" : "line", "curve" : -90 },{ "x" : 368, "y" : -160.81305960678, "bCoef" : 0.1, "trait" : "line", "curve" : 90 },{ "x" : 358.36266315432, "y" : -171, "bCoef" : 0.1, "trait" : "line", "curve" : 90 },{ "x" : 368, "y" : -142.37229643041, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 90 },{ "x" : 260.72508183959, "y" : -50.168480548544, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 90 },{ "x" : 368, "y" : 141.33175243687, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : -90 },{ "x" : 260.72508183959, "y" : 49.127936555002, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : -90 },{ "x" : 260.72508183959, "y" : -50.168480548544, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 0 },{ "x" : 260.72508183959, "y" : 49.127936555002, "bCoef" : 0.1, "trait" : "line", "color" : "F8F8F8", "curve" : 0 },{ "x" : -250.86909422732, "y" : -1.2295321189394, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : 0.18898812539692, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : -2.6480523632758, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : 1.6075083697333, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : 0.89824824756514, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : -1.9387922411076, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : 1.9621384308174, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -250.86909422732, "y" : -3.0026824243599, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : -1.2295321189394, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : 0.18898812539692, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : -2.6480523632758, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : 1.6075083697333, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : 0.89824824756514, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : -1.9387922411076, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : 1.9621384308174, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 250.69382348534, "y" : -3.0026824243599, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : -1.2295321189394, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : 0.18898812539692, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : -2.6480523632758, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : 1.6075083697333, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : 0.89824824756514, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : -1.9387922411076, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : 1.9621384308174, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -185.66591492467, "y" : -3.0026824243599, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : -1.2295321189394, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : 0.18898812539692, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : -2.6480523632758, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : 1.6075083697333, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : 0.89824824756514, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : -1.9387922411076, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : 1.9621384308174, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : 185.49064418269, "y" : -3.0026824243599, "bCoef" : 0.1, "trait" : "line", "curve" : 180 },{ "x" : -160.58776903904, "y" : -159.39453936245, "bCoef" : 0.1, "trait" : "line" },{ "x" : -160.58776903904, "y" : -182.09086327183, "bCoef" : 0.1, "trait" : "line" },{ "x" : -80.337702205015, "y" : -159.39453936245, "bCoef" : 0.1, "trait" : "line" },{ "x" : -80.337702205015, "y" : -182.09086327183, "bCoef" : 0.1, "trait" : "line" },{ "x" : 160.41249829706, "y" : -159.39453936245, "bCoef" : 0.1, "trait" : "line" },{ "x" : 160.41249829706, "y" : -182.09086327183, "bCoef" : 0.1, "trait" : "line" },{ "x" : 80.162431463036, "y" : -159.39453936245, "bCoef" : 0.1, "trait" : "line" },{ "x" : 80.162431463036, "y" : -182.09086327183, "bCoef" : 0.1, "trait" : "line" },{ "x" : -254.88159756902, "y" : -171, "bCoef" : 0.1, "trait" : "line" },{ "x" : -254.88159756902, "y" : -182.09086327183, "bCoef" : 0.1, "trait" : "line" },{ "x" : -371.91294503531, "y" : -87.759267023458, "bCoef" : 0.1, "trait" : "line" },{ "x" : -384.61920561736, "y" : -87.759267023458, "bCoef" : 0.1, "trait" : "line" },{ "x" : 371.73767429333, "y" : -87.759267023458, "bCoef" : 0.1, "trait" : "line" },{ "x" : 384.44393487538, "y" : -87.759267023458, "bCoef" : 0.1, "trait" : "line" },{ "x" : -371.91294503531, "y" : 86.718723029916, "bCoef" : 0.1, "trait" : "line" },{ "x" : -384.61920561736, "y" : 86.718723029916, "bCoef" : 0.1, "trait" : "line" },{ "x" : 371.73767429333, "y" : 86.718723029916, "bCoef" : 0.1, "trait" : "line" },{ "x" : 384.44393487538, "y" : 86.718723029916, "bCoef" : 0.1, "trait" : "line" },{ "x" : -254.88159756902, "y" : 171, "bCoef" : 0.1, "trait" : "line" },{ "x" : -254.88159756902, "y" : 181.05031927829, "bCoef" : 0.1, "trait" : "line" },{ "x" : 254.70632682704, "y" : -171, "bCoef" : 0.1, "trait" : "line" },{ "x" : 254.70632682704, "y" : -182.09086327183, "bCoef" : 0.1, "trait" : "line" },{ "x" : 254.70632682704, "y" : 171, "bCoef" : 0.1, "trait" : "line" },{ "x" : 254.70632682704, "y" : 181.05031927829, "bCoef" : 0.1, "trait" : "line" },{ "x" : 377, "y" : -65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : 377, "y" : -171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -377, "y" : -65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : -377, "y" : -171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -377, "y" : 65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : -377, "y" : 171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 377, "y" : 65, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "line" },{ "x" : 377, "y" : 171, "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 371, "y" : -65, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 371, "y" : -171, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 371, "y" : 65, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : 371, "y" : 171, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -371, "y" : 65, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -371, "y" : 171, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -371, "y" : -65, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" },{ "x" : -371, "y" : -171, "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea" }],"segments" : [{ "v0" : 0, "v1" : 1, "trait" : "ballArea" },{ "v0" : 2, "v1" : 3, "trait" : "ballArea" },{ "v0" : 4, "v1" : 5, "trait" : "ballArea" },{ "v0" : 6, "v1" : 7, "trait" : "ballArea" },{ "v0" : 8, "v1" : 9, "curve" : 180, "cGroup" : ["blueKO" ], "trait" : "kickOffBarrier" },{ "v0" : 8, "v1" : 9, "curve" : -180, "cGroup" : ["redKO" ], "trait" : "kickOffBarrier" },{ "v0" : 1, "v1" : 0, "vis" : true, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -368 },{ "v0" : 5, "v1" : 4, "vis" : true, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 368 },{ "v0" : 2, "v1" : 3, "vis" : true, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -368 },{ "v0" : 6, "v1" : 7, "vis" : true, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 368 },{ "v0" : 0, "v1" : 10, "vis" : true, "color" : "FFFFFF", "bCoef" : 1, "trait" : "ballArea", "y" : 171 },{ "v0" : 3, "v1" : 11, "vis" : true, "color" : "FFFFFF", "bCoef" : 1, "trait" : "ballArea", "y" : -171 },{ "v0" : 12, "v1" : 13, "curve" : 0, "vis" : true, "color" : "FFFFFF", "bCoef" : 0, "trait" : "line" },{ "v0" : 9, "v1" : 8, "curve" : -180, "vis" : true, "color" : "FFFFFF", "bCoef" : 0, "trait" : "line" },{ "v0" : 15, "v1" : 14, "curve" : 180, "vis" : true, "color" : "FFFFFF", "bCoef" : 0, "trait" : "line" },{ "v0" : 2, "v1" : 1, "curve" : 0, "vis" : true, "color" : "FFFFFF", "bCoef" : 0, "trait" : "line" },{ "v0" : 6, "v1" : 5, "curve" : 0, "vis" : true, "color" : "FFFFFF", "bCoef" : 0, "trait" : "line" },{ "v0" : 16, "v1" : 17, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 330 },{ "v0" : 18, "v1" : 19, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -330 },{ "v0" : 20, "v1" : 21, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -330 },{ "v0" : 22, "v1" : 23, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 330 },{ "v0" : 24, "v1" : 25, "trait" : "kickOffBarrier" },{ "v0" : 26, "v1" : 27, "trait" : "kickOffBarrier" },{ "v0" : 28, "v1" : 29, "curve" : 0, "color" : "F8F8F8", "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "pos" : [-700,-80 ], "y" : -80 },{ "v0" : 29, "v1" : 30, "color" : "F8F8F8", "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "x" : -590 },{ "v0" : 30, "v1" : 31, "curve" : 0, "color" : "F8F8F8", "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "pos" : [-700,80 ], "y" : 80 },{ "v0" : 32, "v1" : 33, "curve" : 0, "color" : "F8F8F8", "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "pos" : [-700,-80 ], "y" : -80 },{ "v0" : 33, "v1" : 34, "color" : "F8F8F8", "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "x" : -590 },{ "v0" : 34, "v1" : 35, "curve" : 0, "color" : "F8F8F8", "cMask" : ["red","blue","ball" ], "trait" : "goalNet", "pos" : [-700,80 ], "y" : 80 },{ "v0" : 36, "v1" : 37, "curve" : 94.0263701017, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 39, "v1" : 38, "curve" : 86.632306418889, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 40, "v1" : 41, "curve" : -94.026370101699, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 37, "v1" : 41, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 43, "v1" : 42, "curve" : -86.632306418888, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 45, "v1" : 44, "curve" : 86.632306418884, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 47, "v1" : 46, "curve" : -86.632306418899, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 48, "v1" : 49, "curve" : -94.026370101699, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 50, "v1" : 51, "curve" : 94.026370101699, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line" },{ "v0" : 52, "v1" : 53, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 390 },{ "v0" : 55, "v1" : 54, "curve" : -180.00692920292, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 54, "v1" : 55, "curve" : -180.00218240614, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 57, "v1" : 56, "curve" : -179.64823645332, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 56, "v1" : 57, "curve" : -180.35758668147, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 59, "v1" : 58, "curve" : -180.02357323962, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 58, "v1" : 59, "curve" : -180.00924102399, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 61, "v1" : 60, "curve" : -180.06885755885, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 60, "v1" : 61, "curve" : -180.02948353257, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -375 },{ "v0" : 63, "v1" : 62, "curve" : -179.99869069543, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 62, "v1" : 63, "curve" : -179.99939258776, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 65, "v1" : 64, "curve" : -180.08826047163, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 64, "v1" : 65, "curve" : -179.91186753664, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 67, "v1" : 66, "curve" : -179.99528711105, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 66, "v1" : 67, "curve" : -179.99743836358, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 69, "v1" : 68, "curve" : -179.98626041101, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 68, "v1" : 69, "curve" : -179.99175181595, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 375 },{ "v0" : 71, "v1" : 70, "curve" : -180.04715562398, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 70, "v1" : 71, "curve" : -179.95294709391, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 73, "v1" : 72, "curve" : -179.95715750564, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 72, "v1" : 73, "curve" : -179.89943871875, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 75, "v1" : 74, "curve" : -179.94773754738, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 74, "v1" : 75, "curve" : -179.98221351296, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 77, "v1" : 76, "curve" : -180.4151727218, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 76, "v1" : 77, "curve" : -179.58764458796, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -277.5 },{ "v0" : 79, "v1" : 78, "curve" : -180.00086646359, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 78, "v1" : 79, "curve" : -180.01965986376, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 81, "v1" : 80, "curve" : -180.03532601389, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 80, "v1" : 81, "curve" : -179.99380079, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 83, "v1" : 82, "curve" : -180.0044468452, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 82, "v1" : 83, "curve" : -180.01386779847, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 85, "v1" : 84, "curve" : -180.05158287563, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 84, "v1" : 85, "curve" : -180.01212223878, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 277.5 },{ "v0" : 86, "v1" : 87, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -240 },{ "v0" : 88, "v1" : 89, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -120 },{ "v0" : 90, "v1" : 91, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 240 },{ "v0" : 92, "v1" : 93, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 120 },{ "v0" : 94, "v1" : 95, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -381 },{ "v0" : 96, "v1" : 97, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -240, "y" : 123 },{ "v0" : 98, "v1" : 99, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -240, "y" : 123 },{ "v0" : 100, "v1" : 101, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -240, "y" : -123 },{ "v0" : 102, "v1" : 103, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -240, "y" : -123 },{ "v0" : 104, "v1" : 105, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : -381 },{ "v0" : 106, "v1" : 107, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 381 },{ "v0" : 108, "v1" : 109, "curve" : 0, "vis" : true, "color" : "F8F8F8", "bCoef" : 0.1, "trait" : "line", "x" : 381 },{ "v0" : 110, "v1" : 111, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 330 },{ "v0" : 112, "v1" : 113, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -330 },{ "v0" : 114, "v1" : 115, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -330 },{ "v0" : 116, "v1" : 117, "vis" : false, "color" : "FFFFFF", "bCoef" : 1, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 330 },{ "v0" : 118, "v1" : 119, "vis" : false, "color" : "FFFFFF", "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 371 },{ "v0" : 120, "v1" : 121, "vis" : false, "color" : "FFFFFF", "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea", "x" : 371 },{ "v0" : 122, "v1" : 123, "vis" : false, "color" : "FFFFFF", "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -371 },{ "v0" : 124, "v1" : 125, "vis" : false, "color" : "FFFFFF", "bCoef" : 0, "cMask" : ["ball" ], "trait" : "ballArea", "x" : -371 }],"goals" : [{ "p0" : [-374.25,-62.053454903872 ], "p1" : [-374.25,64.043361696331 ], "team" : "red" },{ "p0" : [374.25,62 ], "p1" : [374.25,-62 ], "team" : "blue" }],"discs" : [{"radius":3.9405255187564,"pos":[-368.53340356886,64.043361696331],"color":"6666CC","trait":"goalPost","y":80},{"radius":3.9405255187564,"pos":[-368.53340356886,-62.053454903872],"color":"6666CC","trait":"goalPost","y":-80,"x":-560},{"radius":3.9405255187564,"pos":[368.9681846993,-62.144998272018],"color":"6666CC","trait":"goalPost","y":80},{"radius":3.9405255187564,"pos":[368.09926357786,63.94882446641],"color":"6666CC","trait":"goalPost","y":-80,"x":-560},{"radius":3,"invMass":0,"pos":[-368,-171],"color":"FFCC00","bCoef":0.1,"trait":"line"},{"radius":3,"invMass":0,"pos":[-368,171],"color":"FFCC00","bCoef":0.1,"trait":"line"},{"radius":3,"invMass":0,"pos":[368,171],"color":"FFCC00","bCoef":0.1,"trait":"line"},{"radius":3,"invMass":0,"pos":[368,-171],"color":"FFCC00","bCoef":0.1,"trait":"line"},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false}],"planes" : [{ "normal" : [0,1 ], "dist" : -171, "trait" : "ballArea" },{ "normal" : [0,-1 ], "dist" : -171, "trait" : "ballArea" },{ "normal" : [0,1 ], "dist" : -200, "bCoef" : 0.2, "cMask" : ["all" ] },{ "normal" : [0,-1 ], "dist" : -200, "bCoef" : 0.2, "cMask" : ["all" ] },{ "normal" : [1,0 ], "dist" : -420, "bCoef" : 0.2, "cMask" : ["all" ] },{ "normal" : [-1,0 ], "dist" : -420, "bCoef" : 0.2, "cMask" : ["all" ] }],"traits" : {"ballArea" : { "vis" : false, "bCoef" : 1, "cMask" : ["ball" ] },"goalPost" : { "radius" : 8, "invMass" : 0, "bCoef" : 1 },"goalNet" : { "vis" : true, "bCoef" : 0.1, "cMask" : ["all" ] },"kickOffBarrier" : { "vis" : false, "bCoef" : 0.1, "cGroup" : ["redKO","blueKO" ], "cMask" : ["red","blue" ] },"line" : { "vis" : true, "bCoef" : 0, "cMask" : ["" ] },"arco" : { "radius" : 2, "cMask" : ["n/d" ], "color" : "cccccc" }},"playerPhysics" : {"acceleration" : 0.11,"kickingAcceleration" : 0.083,"kickStrength" : 4.4,"bCoef" : 0},"ballPhysics" : {"radius" : 6.24,"color" : "FFCC00","bCoef" : 0.4,"invMass" : 1.5,"damping" : 0.99}}';
+const STADIUM_1v1 = '{"name":"KFL 1v1 2v2 By DaYo from HaxMaps","width":480,"height":230,"bg":{"kickOffRadius":60,"color":"525252"},"vertexes":[{"x":-401.4,"y":-200,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":401.4,"y":-200,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":401.4,"y":200,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":-401.4,"y":200,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":0,"y":200,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":0,"y":-200,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":0,"y":-80,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"color":"ffffff"},{"x":0,"y":80,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"color":"ffffff"},{"x":-400,"y":60,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":-400,"y":-60,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":400,"y":-60,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":400,"y":60,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":0,"y":230,"cMask":[],"cGroup":[]},{"x":0,"y":-230,"cMask":[],"cGroup":[]},{"x":436.4,"y":-60,"cMask":[],"cGroup":[],"color":"5957ff"},{"x":436.4,"y":60,"cMask":[],"cGroup":[],"color":"5957ff"},{"x":-436.4,"y":-60,"cMask":[],"cGroup":[],"color":"ff5757"},{"x":-436.4,"y":60,"cMask":[],"cGroup":[],"color":"ff5757"},{"x":400,"y":-135,"cMask":["wall"],"cGroup":["wall"]},{"x":400,"y":135,"cMask":["wall"],"cGroup":["wall"],"curve":180},{"x":-400,"y":-135,"cMask":["wall"],"cGroup":["wall"],"curve":180,"_data":{"mirror":{}}},{"x":-400,"y":135,"cMask":["wall"],"cGroup":["wall"]},{"x":-400,"y":-201.4,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":400,"y":-201.4,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":400,"y":201.4,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":-400,"y":201.4,"cMask":[],"cGroup":[],"color":"ffffff"},{"x":435,"y":-61.4,"cMask":[],"cGroup":[],"color":"5957ff"},{"x":435,"y":61.4,"cMask":[],"cGroup":[],"color":"5957ff"},{"x":-435,"y":-61.4,"cMask":[],"cGroup":[],"color":"ff5757"},{"x":-435,"y":61.4,"cMask":[],"cGroup":[],"color":"ff5757"},{"x":-400,"y":135,"cMask":["wall"],"cGroup":["wall"],"curve":180},{"x":400,"y":-135,"cMask":["wall"],"cGroup":["wall"],"curve":180},{"x":-39.70962850170082,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-39.439628568644224,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-38.599457340390344,"y":8.577657186753411,"cMask":["wall"],"cGroup":["wall"]},{"x":-12.167333969347064,"y":-39.86836860352869,"cMask":["wall"],"cGroup":["wall"]},{"x":-9.864305764766423,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-3.160793923255983,"y":-45.4438457749184,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":0,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":23.85882621501726,"y":-45.28500027146,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-1.715531437350682,"y":-23.15967440423421,"cMask":["wall"],"cGroup":["wall"]},{"x":23.15967440423421,"y":-22.730791544896537,"cMask":["wall"],"cGroup":["wall"]},{"x":31.57871768309533,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":32.16621445032529,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-37.56521420501247,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-37.29521427195587,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-37.56521420501247,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-37.29521427195587,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-35.13279364200405,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-34.86279370894746,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.10095151508689,"y":7.826910099405138,"cMask":["wall"],"cGroup":["wall"]},{"x":-13.668828144043612,"y":-40.61911569087696,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-36.8477141365777,"y":9.828902332333866,"cMask":["wall"],"cGroup":["wall"]},{"x":-10.415590765534422,"y":-38.61712345794823,"cMask":["wall"],"cGroup":["wall"]},{"x":-36.613888547160386,"y":8.180543428107411,"cMask":["wall"],"cGroup":["wall"]},{"x":-7.878736971536467,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-38.99657109903633,"y":10.960339738629349,"cMask":["wall"],"cGroup":["wall"]},{"x":-10.261419523412414,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-1.175225130026027,"y":-45.04673201627241,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":1.9855687932299562,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":0.016116145911946544,"y":-44.64961825762642,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":3.1769100691679295,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-1.3184176787046924,"y":-21.174105611004254,"cMask":["wall"],"cGroup":["wall"]},{"x":23.5567881628802,"y":-20.74522275166658,"cMask":["wall"],"cGroup":["wall"]},{"x":-0.5241901614127096,"y":-18.79142305912831,"cMask":["wall"],"cGroup":["wall"]},{"x":24.351015680172182,"y":-18.362540199790637,"cMask":["wall"],"cGroup":["wall"]},{"x":-3.160793923255983,"y":-42.26693570575047,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":23.85882621501726,"y":-42.10809020229207,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-3.160793923255983,"y":-39.48713939522853,"cMask":["wall"],"cGroup":["wall"]},{"x":23.85882621501726,"y":-39.32829389177013,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-2.946245715851926,"y":-44.207199958117776,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":24.073374422421317,"y":-44.048354454659375,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":34.302406014000624,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":34.88990278123059,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":36.68563330354275,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":37.273130070772716,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":32.506675491688455,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":32.84713653305161,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":43.4945141098152,"cMask":["wall"],"cGroup":["wall"]},{"x":2.222303693945231,"y":-45.017316182298636,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":5.383097617201214,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":4.428491241978515,"y":-43.914222408281994,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":7.5892851652344975,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-37.56521420501247,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-37.29521427195587,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-36.45504304370199,"y":9.006540046091088,"cMask":["wall"],"cGroup":["wall"]},{"x":-35.42079990832411,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-35.15079997526752,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-35.42079990832411,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-35.15079997526752,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-32.447841442424945,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-32.718379412259104,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-37.95653721839854,"y":8.255792958742814,"cMask":["wall"],"cGroup":["wall"]},{"x":-34.70329983988935,"y":10.257785191671543,"cMask":["wall"],"cGroup":["wall"]},{"x":-34.46947425047203,"y":8.609426287445087,"cMask":["wall"],"cGroup":["wall"]},{"x":-36.85215680234798,"y":11.389222597967025,"cMask":["wall"],"cGroup":["wall"]},{"x":-35.56106555856469,"y":11.54443376968455,"cMask":["wall"],"cGroup":["wall"]},{"x":-9.12894218752141,"y":-36.90159202059755,"cMask":["wall"],"cGroup":["wall"]},{"x":-35.56106555856469,"y":11.54443376968455,"cMask":["wall"],"cGroup":["wall"]},{"x":-9.12894218752141,"y":-36.90159202059755,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.88802132883167,"y":12.536548263458796,"cMask":["wall"],"cGroup":["wall"]},{"x":-12.152869753207753,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-44.75098551676566,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-44.48098558370906,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-43.64081435545518,"y":8.577657186753411,"cMask":["wall"],"cGroup":["wall"]},{"x":-17.208690984411902,"y":-39.86836860352869,"cMask":["wall"],"cGroup":["wall"]},{"x":-14.905662779831259,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-8.20215093832082,"y":-45.4438457749184,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-5.041357015064836,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":18.817469199952424,"y":-45.28500027146,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-6.756888452415518,"y":-23.15967440423421,"cMask":["wall"],"cGroup":["wall"]},{"x":18.118317389169373,"y":-22.730791544896537,"cMask":["wall"],"cGroup":["wall"]},{"x":26.537360668030495,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":27.124857435260456,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-42.606571220077306,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-42.3365712870207,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-42.606571220077306,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-42.3365712870207,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.174150657068886,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-39.9041507240123,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-45.14230853015172,"y":7.826910099405138,"cMask":["wall"],"cGroup":["wall"]},{"x":-18.71018515910845,"y":-40.61911569087696,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-41.88907115164254,"y":9.828902332333866,"cMask":["wall"],"cGroup":["wall"]},{"x":-15.456947780599258,"y":-38.61712345794823,"cMask":["wall"],"cGroup":["wall"]},{"x":-41.65524556222522,"y":8.180543428107411,"cMask":["wall"],"cGroup":["wall"]},{"x":-12.920093986601303,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-44.03792811410116,"y":10.960339738629349,"cMask":["wall"],"cGroup":["wall"]},{"x":-15.30277653847725,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-6.216582145090863,"y":-45.04673201627241,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-3.05578822183488,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-5.025240869152889,"y":-44.64961825762642,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-1.8644469458969066,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-6.359774693769529,"y":-21.174105611004254,"cMask":["wall"],"cGroup":["wall"]},{"x":18.515431147815363,"y":-20.74522275166658,"cMask":["wall"],"cGroup":["wall"]},{"x":-5.565547176477546,"y":-18.79142305912831,"cMask":["wall"],"cGroup":["wall"]},{"x":19.309658665107346,"y":-18.362540199790637,"cMask":["wall"],"cGroup":["wall"]},{"x":-8.20215093832082,"y":-42.26693570575047,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":18.817469199952424,"y":-42.10809020229207,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-8.20215093832082,"y":-39.48713939522853,"cMask":["wall"],"cGroup":["wall"]},{"x":18.817469199952424,"y":-39.32829389177013,"cMask":["wall"],"cGroup":["wall"]},{"x":-7.9876027309167625,"y":-44.207199958117776,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":19.03201740735648,"y":-44.048354454659375,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":29.261048998935788,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":29.848545766165753,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":31.644276288477915,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":33.854194221406914,"y":43.4945141098152,"cMask":["wall"],"cGroup":["wall"]},{"x":27.46531847662362,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":27.805779517986775,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-2.819053321119605,"y":-45.017316182298636,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":0.3417406021363778,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-0.6128657730863214,"y":-43.914222408281994,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":2.5479281501696613,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-42.606571220077306,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-42.3365712870207,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-41.496400058766824,"y":9.006540046091088,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.46215692338895,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-40.19215699033235,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.46215692338895,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-40.19215699033235,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-38.02973636038053,"y":-47.002316878116766,"cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{}}},{"x":-37.75973642732394,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":-42.99789423346337,"y":8.255792958742814,"cMask":["wall"],"cGroup":["wall"]},{"x":-39.74465685495419,"y":10.257785191671543,"cMask":["wall"],"cGroup":["wall"]},{"x":-39.510831265536865,"y":8.609426287445087,"cMask":["wall"],"cGroup":["wall"]},{"x":-41.89351381741281,"y":11.389222597967025,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.602422573629525,"y":11.54443376968455,"cMask":["wall"],"cGroup":["wall"]},{"x":-14.170299202586246,"y":-36.90159202059755,"cMask":["wall"],"cGroup":["wall"]},{"x":-40.602422573629525,"y":11.54443376968455,"cMask":["wall"],"cGroup":["wall"]},{"x":-14.170299202586246,"y":-36.90159202059755,"cMask":["wall"],"cGroup":["wall"]},{"x":-45.9293783438965,"y":12.536548263458796,"cMask":["wall"],"cGroup":["wall"]},{"x":-17.19422676827259,"y":45.33391918015176,"cMask":["wall"],"cGroup":["wall"]},{"x":55,"y":42,"cMask":["wall"],"cGroup":["wall"]},{"x":35.59589441669825,"y":42,"cMask":["wall"],"cGroup":["wall"]}],"segments":[{"v0":5,"v1":6,"color":"ffffff","bCoef":0,"cMask":[],"cGroup":[]},{"v0":4,"v1":7,"color":"ffffff","bCoef":0,"cMask":[],"cGroup":[]},{"v0":6,"v1":13,"vis":false,"bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"]},{"v0":7,"v1":12,"vis":false,"bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"]},{"v0":6,"v1":7,"curve":180,"color":"ffffff","bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO"],"curveF":6.123233995736766e-17},{"v0":7,"v1":6,"curve":180,"color":"ffffff","bCoef":0.1,"cMask":["red","blue"],"cGroup":["blueKO"],"curveF":6.123233995736766e-17},{"v0":10,"v1":14,"color":"5957ff","bCoef":0.1,"cMask":["ball"],"bias":-10},{"v0":26,"v1":27,"color":"5957ff","bCoef":0.1,"cMask":["ball"],"bias":-10},{"v0":15,"v1":11,"color":"5957ff","bCoef":0.1,"cMask":["ball"],"bias":-10},{"v0":8,"v1":17,"color":"ff5757","bCoef":0.1,"cMask":["ball"],"bias":-10,"y":60},{"v0":29,"v1":28,"color":"ff5757","bCoef":0.1,"cMask":["ball"],"bias":-10},{"v0":16,"v1":9,"color":"ff5757","bCoef":0.1,"cMask":["ball"],"bias":-10,"y":-60},{"v0":9,"v1":8,"color":"C5C5C5","bCoef":0,"cMask":[]},{"v0":10,"v1":11,"color":"C5C5C5","bCoef":0,"cMask":[]},{"v0":0,"v1":1,"color":"ffffff","cMask":["ball"],"bias":-10},{"v0":23,"v1":10,"color":"ffffff","cMask":["ball"],"bias":-10},{"v0":11,"v1":24,"color":"ffffff","cMask":["ball"],"bias":-10},{"v0":2,"v1":3,"color":"ffffff","cMask":["ball"],"bias":-10},{"v0":25,"v1":8,"color":"ffffff","cMask":["ball"],"bias":-10},{"v0":9,"v1":22,"color":"ffffff","cMask":["ball"],"bias":-10},{"v0":20,"v1":30,"curve":180,"color":"626262","cMask":["wall"],"cGroup":["wall"]},{"v0":19,"v1":31,"curve":180,"color":"626262","cMask":["wall"],"cGroup":["wall"]},{"v0":32,"v1":33,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":34,"v1":35,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":34,"v1":36,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":37,"v1":38,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":40,"v1":41,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":42,"v1":43,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":43,"v1":44,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":45.33391918015176},{"v0":45,"v1":46,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":47,"v1":48,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":49,"v1":50,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":51,"v1":52,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":53,"v1":54,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":55,"v1":56,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":57,"v1":58,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":59,"v1":60,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":61,"v1":62,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":63,"v1":64,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":65,"v1":66,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":67,"v1":68,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{},"arc":{"a":[-3.160793923255983,-42.26693570575047],"b":[23.85882621501726,-42.10809020229207],"radius":null,"center":[null,null],"from":null,"to":null}}},{"v0":69,"v1":70,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":71,"v1":72,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{},"arc":{"a":[-2.946245715851926,-44.207199958117776],"b":[24.073374422421317,-44.048354454659375],"radius":null,"center":[null,null],"from":null,"to":null}}},{"v0":73,"v1":74,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":75,"v1":76,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":77,"v1":78,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":45.33391918015176},{"v0":79,"v1":80,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":45.33391918015176},{"v0":81,"v1":82,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":83,"v1":84,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":85,"v1":86,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":88,"v1":89,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":90,"v1":91,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":92,"v1":93,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":98,"v1":99,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":100,"v1":101,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":102,"v1":103,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":104,"v1":105,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":106,"v1":107,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":106,"v1":108,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":109,"v1":110,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":112,"v1":113,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":114,"v1":115,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":115,"v1":116,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":45.33391918015176},{"v0":117,"v1":118,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":119,"v1":120,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":121,"v1":122,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":125,"v1":126,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":127,"v1":128,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":129,"v1":130,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":131,"v1":132,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":133,"v1":134,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":135,"v1":136,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":137,"v1":138,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":139,"v1":140,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{},"arc":{"a":[-8.20215093832082,-42.26693570575047],"b":[18.817469199952424,-42.10809020229207],"radius":null,"center":[null,null],"from":null,"to":null}}},{"v0":141,"v1":142,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":143,"v1":144,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"_data":{"mirror":{},"arc":{"a":[-7.9876027309167625,-44.207199958117776],"b":[19.03201740735648,-44.048354454659375],"radius":null,"center":[null,null],"from":null,"to":null}}},{"v0":145,"v1":146,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":147,"v1":148,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":149,"v1":150,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":45.33391918015176},{"v0":151,"v1":152,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":45.33391918015176},{"v0":153,"v1":154,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":155,"v1":156,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":157,"v1":158,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":160,"v1":161,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":162,"v1":163,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":164,"v1":165,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":170,"v1":171,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":172,"v1":173,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":80,"v1":148,"color":"ffffff","cMask":["wall"],"cGroup":["wall"]},{"v0":176,"v1":177,"color":"ffffff","cMask":["wall"],"cGroup":["wall"],"y":42}],"planes":[{"normal":[0,1],"dist":-230,"bCoef":0,"_data":{"extremes":{"normal":[0,1],"dist":-230,"canvas_rect":[-1651.0297475714392,-536.7697609817459,1652.880677781721,536.7697609817459],"a":[-1651.0297475714392,-230],"b":[1652.880677781721,-230]}}},{"normal":[0,-1],"dist":-230,"bCoef":0,"_data":{"extremes":{"normal":[0,-1],"dist":-230,"canvas_rect":[-1651.0297475714392,-536.7697609817459,1652.880677781721,536.7697609817459],"a":[-1651.0297475714392,230],"b":[1652.880677781721,230]}}},{"normal":[1,0],"dist":-480,"bCoef":0,"_data":{"extremes":{"normal":[1,0],"dist":-480,"canvas_rect":[-1651.0297475714392,-536.7697609817459,1652.880677781721,536.7697609817459],"a":[-480,-536.7697609817459],"b":[-480,536.7697609817459]}}},{"normal":[-1,0],"dist":-480,"bCoef":0,"_data":{"extremes":{"normal":[-1,0],"dist":-480,"canvas_rect":[-1651.0297475714392,-536.7697609817459,1652.880677781721,536.7697609817459],"a":[480,-536.7697609817459],"b":[480,536.7697609817459]}}}],"goals":[{"p0":[-407.9,60],"p1":[-407.9,-60],"team":"red"},{"p0":[407.9,60],"p1":[407.9,-60],"team":"blue"}],"discs":[{"radius":5.4,"invMass":0,"pos":[-400,-60],"color":"ffffff"},{"radius":5.4,"invMass":0,"pos":[-400,60],"color":"ffffff"},{"radius":5.4,"invMass":0,"pos":[400,-60],"color":"ffffff"},{"radius":5.4,"invMass":0,"pos":[400,60],"color":"ffffff"},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false},{"radius":6,"invMass":0,"pos":[10000,10000],"color":"FF0000","bCoef":0,"cMask":[],"cGroup":[],"vis":false}],"playerPhysics":{"bCoef":0,"acceleration":0.11,"kickingAcceleration":0.083,"kickStrength":4.2},"ballPhysics":{"radius":5.8,"invMass":1.55,"pos":[0,0],"color":"FFF26D","bCoef":0.412,"cGroup":["ball","kick","score"]},"traits":{},"joints":[],"redSpawnPoints":[],"blueSpawnPoints":[],"canBeStored":false}';
 const STADIUM_3v3 = '{"name": "lỏ | 3v3","width": 800,"height": 350,"spawnDistance": 350,"bg": {"type": "hockey","width": 700,"height": 320,"kickOffRadius": 100,"cornerRadius": 0,"color": "6D925C"},"vertexes": [{"x": 701,"y": 320,"trait": "ballArea"},{"x": 698,"y": -317,"trait": "ballArea"},{"x": 0,"y": 100,"bCoef": 0.15,"trait": "kickOffBarrier","color": "F8F8F8","vis": true,"curve": 180},{"x": 0,"y": -100,"bCoef": 0.15,"trait": "kickOffBarrier","color": "F8F8F8","vis": true,"curve": 180},{"x": 0,"y": -349,"trait": "kickOffBarrier"},{"x": -701,"y": -80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [-700,-80],"p0": [-707.25,0]},{"x": -740,"y": -80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [-700,-80],"p0": [-707.25,0]},{"x": -740,"y": 80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [-700,80],"p0": [-707.25,0]},{"x": -701,"y": 80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [-700,80],"p0": [-707.25,0]},{"x": 699,"y": -80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [700,-80]},{"x": 740,"y": -80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [700,-80]},{"x": 740,"y": 80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [700,80]},{"x": 699,"y": 80,"cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","curve": 0,"color": "FFFFFF","pos": [700,80]},{"x": -700,"y": 80,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","color": "F8F8F8","pos": [-700,80],"p0": [-707.25,0]},{"x": -700,"y": 321,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","color": "F8F8F8"},{"x": -700,"y": -80,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","color": "F8F8F8","pos": [-700,-80],"p0": [-707.25,0]},{"x": -700,"y": -319,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","color": "F8F8F8"},{"x": -700,"y": 320,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF"},{"x": 701,"y": 320,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF"},{"x": 700,"y": 80,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","pos": [700,80]},{"x": 700,"y": 320,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea"},{"x": 700,"y": -317,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","color": "F8F8F8"},{"x": 700,"y": -80,"bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","color": "F8F8F8","pos": [700,-80]},{"x": 698,"y": -317,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea"},{"x": 698,"y": -317,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea"},{"x": -701,"y": -320,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"color": "FFFFFF"},{"x": 698,"y": -320,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"color": "FFFFFF"},{"x": 0,"y": -319,"bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","color": "FFFFFF"},{"x": 0,"y": -100,"bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","color": "FFFFFF"},{"x": 0,"y": 100,"bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","color": "FFFFFF"},{"x": 0,"y": 320,"bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","color": "FFFFFF"},{"x": 0,"y": -100,"bCoef": 0.1,"cMask": ["red","blue"],"trait": "kickOffBarrier","vis": true,"color": "F8F8F8"},{"x": 0,"y": -100,"trait": "kickOffBarrier","color": "F8F8F8","vis": true,"curve": -180},{"x": 0,"y": -100,"trait": "kickOffBarrier","color": "F8F8F8","vis": true,"curve": 0},{"x": -706.3571428571429,"y": 77.95238095238096,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"vis": false,"pos": [-700,80],"p0": [-707.25,0]},{"x": -706.3571428571429,"y": 318.95238095238096,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"vis": false},{"x": -706.3571428571429,"y": -320,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","vis": false,"curve": 0},{"x": -706.3571428571429,"y": -81,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","vis": false,"curve": 0,"pos": [-700,-80],"p0": [-707.25,0]},{"x": 708.2619047619047,"y": -319.0476190476191,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","vis": false,"curve": 0},{"x": 708.2619047619047,"y": -82.0476190476191,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","vis": false,"curve": 0,"pos": [700,-80]},{"x": 707.2619047619047,"y": 81.04761904761904,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"vis": false,"pos": [700,80]},{"x": 707.2619047619047,"y": 321.04761904761904,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"vis": false},{"x": 0,"y": -100,"bCoef": 0.1,"trait": "line"},{"x": -700,"y": -80,"bCoef": 0.1,"trait": "line","p0": [-707.25,0],"color": "ff9494"},{"x": -700,"y": 80,"bCoef": 0.1,"trait": "line","p0": [-707.25,0],"color": "ff9494"},{"x": 700,"y": -80,"bCoef": 0.1,"trait": "line","color": "a3baff"},{"x": 700,"y": 80,"bCoef": 0.1,"trait": "line","color": "a3baff"},{"x": -700,"y": 270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -470,"y": 270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -700,"y": 307,"bCoef": 0.1,"trait": "line","curve": -90,"color": "FFFFFF"},{"x": -686,"y": 320,"bCoef": 0.1,"trait": "line","curve": -90,"color": "FFFFFF"},{"x": -700,"y": -270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -470,"y": -270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -700,"y": -305,"bCoef": 0.1,"trait": "line","curve": 90,"color": "FFFFFF"},{"x": -687,"y": -320,"bCoef": 0.1,"trait": "line","curve": 90,"color": "FFFFFF"},{"x": 700,"y": -303,"bCoef": 0.1,"trait": "line","curve": -90,"color": "FFFFFF"},{"x": 684,"y": -320,"bCoef": 0.1,"trait": "line","curve": -90,"color": "FFFFFF"},{"x": 700,"y": 306,"bCoef": 0.1,"trait": "line","curve": 90,"color": "FFFFFF"},{"x": 687,"y": 320,"bCoef": 0.1,"trait": "line","curve": 90,"color": "FFFFFF"},{"x": 700,"y": 270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 470,"y": 270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 700,"y": -270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 470,"y": -270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 470,"y": 270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 470,"y": -270,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -514,"y": 0.5555555555555562,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": -1.4444444444444438,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": 2.5555555555555562,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": -3.4444444444444438,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": -2.4444444444444438,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": 1.5555555555555562,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": -3.9444444444444438,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": -514,"y": 3.0555555555555562,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": -0.11111111111110983,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": -2.11111111111111,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": 1.8888888888888902,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": -4.11111111111111,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": -3.11111111111111,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": 0.8888888888888902,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": -4.61111111111111,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 514,"y": 2.38888888888889,"bCoef": 0.1,"trait": "line","curve": 180,"color": "FFFFFF"},{"x": 703,"y": -319,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF","vis": false,"curve": 0},{"x": 703,"y": -82,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF","pos": [700,-80],"vis": false,"curve": 0},{"x": 703,"y": 81,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","pos": [700,80],"vis": false,"curve": 0,"color": "FFFFFF"},{"x": 703,"y": 321,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","vis": false,"curve": 0,"color": "FFFFFF"},{"x": -703,"y": 78,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF","pos": [-700,80],"vis": false,"p0": [-707.25,0]},{"x": -703,"y": 319,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF","vis": false},{"x": -703,"y": -82,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF","pos": [-700,-80],"vis": false,"p0": [-707.25,0]},{"x": -703,"y": -321,"bCoef": 0,"cMask": ["ball"],"trait": "ballArea","color": "FFFFFF","vis": false},{"x": 0,"y": 100,"bCoef": 0.15,"trait": "kickOffBarrier","color": "FFFFFF","vis": true,"curve": 180},{"x": 0,"y": -100,"bCoef": 0.15,"trait": "kickOffBarrier","color": "FFFFFF","vis": true,"curve": 180},{"x": 0,"y": 100,"bCoef": 0.15,"trait": "kickOffBarrier","color": "FFFFFF","vis": true,"curve": 180},{"x": 0,"y": -100,"bCoef": 0.15,"trait": "kickOffBarrier","color": "FFFFFF","vis": true,"curve": 180},{"x": -0.13291470434327612,"y": 100,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -0.13291470434327612,"y": -100.36002093144947,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 0,"y": 99.04761904761905,"trait": "kickOffBarrier"},{"x": 0,"y": 350,"bCoef": 0.15,"trait": "kickOffBarrier","color": "F8F8F8","vis": true,"curve": 180},{"x": -699.4653214422947,"y": 168.7268590662594,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -594.9755404186691,"y": 168.7268590662594,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -699.4653214422947,"y": -168.7268590662594,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -594.9755404186691,"y": -168.7268590662594,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 700.7870182057165,"y": 167.8781102469103,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 594.954218584181,"y": 167.8781102469103,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 700.7870182057165,"y": -169.57560788560852,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": 594.954218584181,"y": -169.57560788560852,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 0},{"x": -470.00000000000006,"y": 120,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": -100},{"x": -470.00000000000006,"y": -120,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": -100},{"x": 469.9999999999995,"y": 120,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 100},{"x": 469.9999999999995,"y": -120,"bCoef": 0.1,"trait": "line","color": "FFFFFF","curve": 100}],"segments": [{"v0": 5,"v1": 6,"curve": 0,"color": "FFFFFF","cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","pos": [-700,-80],"y": -80,"p0": [-707.25,0]},{"v0": 6,"v1": 7,"color": "FFFFFF","cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","x": -740,"p0": [-707.25,0]},{"v0": 7,"v1": 8,"curve": 0,"color": "FFFFFF","cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","pos": [-700,80],"y": 80,"p0": [-707.25,0]},{"v0": 9,"v1": 10,"curve": 0,"color": "FFFFFF","cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","pos": [700,-80],"y": -80},{"v0": 10,"v1": 11,"color": "FFFFFF","cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","x": 740},{"v0": 11,"v1": 12,"curve": 0,"color": "FFFFFF","cMask": ["ball"],"cGroup": ["red","blue"],"trait": "goalNet","pos": [700,80],"y": 80},{"v0": 2,"v1": 3,"curve": 180,"vis": true,"color": "F8F8F8","bCoef": 0.15,"cGroup": ["blueKO"],"trait": "kickOffBarrier"},{"v0": 2,"v1": 3,"curve": -180,"vis": true,"color": "F8F8F8","bCoef": 0.15,"cGroup": ["redKO"],"trait": "kickOffBarrier"},{"v0": 3,"v1": 4,"trait": "kickOffBarrier"},{"v0": 13,"v1": 14,"vis": true,"color": "F8F8F8","bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","x": -700},{"v0": 15,"v1": 16,"vis": true,"color": "F8F8F8","bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","x": -700},{"v0": 17,"v1": 18,"vis": true,"color": "FFFFFF","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","y": 320},{"v0": 19,"v1": 20,"vis": true,"color": "F8F8F8","bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","x": 700},{"v0": 21,"v1": 22,"vis": true,"color": "F8F8F8","bCoef": 1.15,"cMask": ["ball"],"trait": "ballArea","x": 700},{"v0": 23,"v1": 24,"vis": true,"color": "F8F8F8","bCoef": 0,"cMask": ["ball"],"trait": "ballArea","x": 550,"y": -240},{"v0": 25,"v1": 26,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","y": -320},{"v0": 27,"v1": 28,"vis": true,"color": "FFFFFF","bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier"},{"v0": 29,"v1": 30,"vis": true,"color": "FFFFFF","bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier"},{"v0": 34,"v1": 35,"curve": 0,"vis": false,"color": "F8F8F8","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","x": -707.5},{"v0": 36,"v1": 37,"curve": 0,"vis": false,"color": "F8F8F8","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","x": -707.5},{"v0": 38,"v1": 39,"curve": 0,"vis": false,"color": "F8F8F8","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","x": 707.5},{"v0": 40,"v1": 41,"curve": 0,"vis": false,"color": "F8F8F8","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","x": 707.5},{"v0": 43,"v1": 44,"curve": 0,"vis": true,"color": "ff9494","bCoef": 0.1,"trait": "line","x": -700,"p0": [-707.25,0]},{"v0": 45,"v1": 46,"curve": 0,"vis": true,"color": "a3baff","bCoef": 0.1,"trait": "line","x": 700},{"v0": 47,"v1": 48,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 50,"v1": 49,"curve": -90,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 51,"v1": 52,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 48,"v1": 52,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -470},{"v0": 54,"v1": 53,"curve": 90,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 56,"v1": 55,"curve": -90,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 58,"v1": 57,"curve": 90,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 59,"v1": 60,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 61,"v1": 62,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 63,"v1": 64,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 470},{"v0": 66,"v1": 65,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 65,"v1": 66,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 68,"v1": 67,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 67,"v1": 68,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 70,"v1": 69,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 69,"v1": 70,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 72,"v1": 71,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 71,"v1": 72,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -514},{"v0": 74,"v1": 73,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 73,"v1": 74,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 76,"v1": 75,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 75,"v1": 76,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 78,"v1": 77,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 77,"v1": 78,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 80,"v1": 79,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 79,"v1": 80,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": 514},{"v0": 81,"v1": 82,"curve": 0,"vis": false,"color": "FFFFFF","bCoef": 0,"cMask": ["ball"],"trait": "ballArea","x": 703},{"v0": 83,"v1": 84,"curve": 0,"vis": false,"color": "FFFFFF","bCoef": 0,"cMask": ["ball"],"trait": "ballArea","x": 703},{"v0": 85,"v1": 86,"vis": false,"color": "FFFFFF","bCoef": 0,"cMask": ["ball"],"trait": "ballArea","x": -703},{"v0": 87,"v1": 88,"vis": false,"color": "FFFFFF","bCoef": 0,"cMask": ["ball"],"trait": "ballArea","x": -703},{"v0": 89,"v1": 90,"curve": -180,"vis": true,"color": "FFFFFF","bCoef": 0.15,"cGroup": ["redKO"],"trait": "kickOffBarrier"},{"v0": 91,"v1": 92,"curve": 180,"vis": true,"color": "FFFFFF","bCoef": 0.15,"cGroup": ["blueKO"],"trait": "kickOffBarrier"},{"v0": 95,"v1": 96,"trait": "kickOffBarrier"},{"v0": 97,"v1": 98,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 99,"v1": 100,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 98,"v1": 100,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -470},{"v0": 101,"v1": 102,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 103,"v1": 104,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"v0": 102,"v1": 104,"curve": 0,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -470},{"v0": 105,"v1": 106,"curve": -100,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -470},{"v0": 107,"v1": 108,"curve": 100,"vis": true,"color": "FFFFFF","bCoef": 0.1,"trait": "line","x": -470}],"goals": [{"p0": [-706.25,-75],"p1": [-706.25,80],"team": "red"},{"p0": [706.25,80],"p1": [706.25,-80],"team": "blue"}],"discs": [{"radius": 5,"pos": [-700,80],"color": "FFFFFF","trait": "goalPost","y": 80,"p0": [-707.25,0]},{"radius": 5,"pos": [-700,-80],"color": "FFFFFF","trait": "goalPost","y": -80,"x": -560,"p0": [-707.25,0]},{"radius": 5,"pos": [700,80],"color": "FFFFFF","trait": "goalPost","y": 80},{"radius": 5,"pos": [700,-80],"color": "FFFFFF","trait": "goalPost","y": -80},{"radius": 3,"invMass": 0,"pos": [-700,320],"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"radius": 3,"invMass": 0,"pos": [-700,-320],"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"radius": 3,"invMass": 0,"pos": [700,-320],"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"radius": 3,"invMass": 0,"pos": [700,320],"color": "FFFFFF","bCoef": 0.1,"trait": "line"},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false}],"planes": [{"normal": [0,1],"dist": -320,"bCoef": 1,"trait": "ballArea","vis": false,"curve": 0,"_data": {"extremes": {"normal": [0,1],"dist": -320,"canvas_rect": [-800,-350,10006,10006],"a": [-800,-320],"b": [10006,-320]}}},{"normal": [0,-1],"dist": -320,"bCoef": 1,"trait": "ballArea","_data": {"extremes": {"normal": [0,-1],"dist": -320,"canvas_rect": [-800,-350,10006,10006],"a": [-800,320],"b": [10006,320]}}},{"normal": [0,1],"dist": -350,"bCoef": 0.1,"_data": {"extremes": {"normal": [0,1],"dist": -350,"canvas_rect": [-800,-350,10006,10006],"a": [-800,-350],"b": [10006,-350]}}},{"normal": [0,-1],"dist": -350,"bCoef": 0.1,"_data": {"extremes": {"normal": [0,-1],"dist": -350,"canvas_rect": [-800,-350,10006,10006],"a": [-800,350],"b": [10006,350]}}},{"normal": [1,0],"dist": -760,"bCoef": 0.1,"_data": {"extremes": {"normal": [1,0],"dist": -760,"canvas_rect": [-800,-350,10006,10006],"a": [-760,-350],"b": [-760,10006]}}},{"normal": [-1,0],"dist": -760,"bCoef": 0.1,"_data": {"extremes": {"normal": [-1,0],"dist": -760,"canvas_rect": [-800,-350,10006,10006],"a": [760,-350],"b": [760,10006]}}},{"normal": [1,0],"dist": -760,"bCoef": 0.1,"trait": "ballArea","vis": false,"curve": 0,"_data": {"extremes": {"normal": [1,0],"dist": -760,"canvas_rect": [-800,-350,10006,10006],"a": [-760,-350],"b": [-760,10006]}}},{"normal": [-1,0],"dist": -760,"bCoef": 0.1,"trait": "ballArea","vis": false,"curve": 0,"_data": {"extremes": {"normal": [-1,0],"dist": -760,"canvas_rect": [-800,-350,10006,10006],"a": [760,-350],"b": [760,10006]}}}],"traits": {"ballArea": {"vis": false,"bCoef": 1,"cMask": ["ball"]},"goalPost": {"radius": 8,"invMass": 0,"bCoef": 0.5},"goalNet": {"vis": true,"bCoef": 0.1,"cMask": ["all"]},"line": {"vis": true,"bCoef": 0.1,"cMask": [""]},"kickOffBarrier": {"vis": false,"bCoef": 0.1,"cGroup": ["redKO","blueKO"],"cMask": ["red","blue"]}},"playerPhysics": {"bCoef": 0,"acceleration": 0.11,"kickingAcceleration": 0.083,"kickStrength": 4.4},"ballPhysics": {"radius": 5.8,"bCoef": 0.412,"invMass": 1.5,"color": "BDFF80"},"joints": [],"redSpawnPoints": [[-200,0],[-200,-80],[-200,80]],"blueSpawnPoints": [[200,0],[200,-80],[200,80]],"cameraWidth": 0,"cameraHeight": 0,"maxViewWidth": 0,"cameraFollow": "ball","canBeStored": false,"kickOffReset": "partial"}';
 const STADIUM = '{"name": "lỏ | Stadium","width": 900,"height": 400,"spawnDistance": 400,"bg": {"type": "grass","width": 800,"height": 350,"kickOffRadius": 95,"cornerRadius": 0,"color": "718B5B"},"vertexes": [{"x": -800,"y": 350,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30,"color": "ffffff","curve": 0,"vis": false},{"x": -800,"y": 100,"bCoef": 0.95,"cMask": ["all"],"trait": "ballArea","bias": -30,"curve": 0,"vis": false,"color": "ffffff"},{"x": -800,"y": -100,"bCoef": 0.95,"cMask": ["all"],"trait": "ballArea","bias": 0,"curve": 0,"vis": true,"color": "ffffff"},{"x": -800,"y": -350,"bCoef": 0.95,"cMask": ["ball"],"trait": "ballArea","bias": -30,"color": "ffffff","curve": 0,"vis": false},{"x": 800,"y": 350,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30,"color": "ffffff","curve": 0,"vis": false},{"x": 800,"y": 100,"bCoef": 0.95,"cMask": ["all"],"trait": "ballArea","bias": 0,"curve": 0,"color": "ffffff","vis": false},{"x": 800,"y": -100,"bCoef": 0.95,"cMask": ["all"],"trait": "ballArea","bias": 30,"curve": 0,"color": "ffffff"},{"x": 800,"y": -350,"bCoef": 0.95,"cMask": ["ball"],"trait": "ballArea","bias": -30,"color": "ffffff","curve": 0,"vis": false},{"x": 0,"y": 404,"trait": "kickOffBarrier"},{"x": 0,"y": 95,"trait": "line","color": "ffffff"},{"x": 0,"y": -95,"trait": "line","color": "ffffff"},{"x": 0,"y": -404,"trait": "kickOffBarrier"},{"x": -835,"y": -100,"bCoef": 0.05,"cMask": ["all"],"trait": "goalNet","radius": 0,"curve": 0,"color": "ffffff"},{"x": 835,"y": -100,"bCoef": 0.05,"cMask": ["all"],"trait": "goalNet","radius": 0,"curve": 0,"color": "ffffff"},{"x": -835,"y": 100,"bCoef": 0.05,"cMask": ["all"],"trait": "goalNet","radius": 0,"curve": 0,"color": "ffffff"},{"x": 835,"y": 100,"bCoef": 0.05,"cMask": ["all"],"trait": "goalNet","radius": 0,"curve": 0,"color": "ffffff"},{"x": 0,"y": 95,"trait": "kickOffBarrier","curve": 180,"color": "ffffff"},{"x": 0,"y": -95,"trait": "kickOffBarrier","curve": 180,"color": "ffffff"},{"x": 800,"y": -100,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","curve": 0,"bias": -30,"vis": false},{"x": 0,"y": 350,"bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","color": "ffffff"},{"x": 0,"y": -350,"bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","color": "ffffff"},{"x": -45,"y": -25,"bCoef": 0,"trait": "line"},{"x": -30,"y": -25,"bCoef": 0,"trait": "line"},{"x": -30,"y": 10,"bCoef": 0,"trait": "line"},{"x": -10,"y": 10,"bCoef": 0,"trait": "line"},{"x": -10,"y": 25,"bCoef": 0,"trait": "line"},{"x": -45,"y": 25,"bCoef": 0,"trait": "line"},{"x": 10,"y": -25,"bCoef": 0,"trait": "line"},{"x": 45,"y": -25,"bCoef": 0,"trait": "line"},{"x": 45,"y": 25,"bCoef": 0,"trait": "line"},{"x": 10,"y": 25,"bCoef": 0,"trait": "line"},{"x": 22,"y": -12,"bCoef": 0,"trait": "line"},{"x": 33,"y": -12,"bCoef": 0,"trait": "line"},{"x": 33,"y": 12,"bCoef": 0,"trait": "line"},{"x": 22,"y": 12,"bCoef": 0,"trait": "line"},{"x": 26.14449016918153,"y": -41,"bCoef": 0,"trait": "line","color": "ffffff","_data": {"mirror": {}}},{"x": 35.43832241020169,"y": -41.73215465122187,"bCoef": 0,"trait": "line","color": "ffffff","_data": {"mirror": {}}},{"x": 27.474013107757965,"y": -31.504851902657116,"bCoef": 0,"trait": "line","color": "ffffff","_data": {"mirror": {}}},{"x": 0,"y": 0,"bCoef": 0,"trait": "line","vis": false},{"x": 0,"y": 0,"bCoef": 0,"trait": "line","vis": false},{"x": 800,"y": 225,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": 800,"y": -225,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": 560,"y": -225,"bCoef": 0,"trait": "line","curve": 0,"color": "ffffff"},{"x": 560,"y": 225,"bCoef": 0,"trait": "line","curve": 0,"color": "ffffff"},{"x": 560,"y": 95,"bCoef": 0,"trait": "line","curve": 100,"color": "ffffff"},{"x": 560,"y": -95,"bCoef": 0,"trait": "line","curve": 100,"color": "ffffff"},{"x": -560,"y": -225,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": -560,"y": 225,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": -800,"y": 225,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": -800,"y": -225,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": -560,"y": 95,"bCoef": 0,"trait": "line","curve": 100,"color": "ffffff"},{"x": -560,"y": -95,"bCoef": 0,"trait": "line","curve": 100,"color": "ffffff"},{"x": -800,"y": 345,"bCoef": 0,"trait": "line","color": "ffffff","curve": 180,"vis": true},{"x": 795,"y": 350,"bCoef": 1,"trait": "line","curve": 0,"bias": 30},{"x": 800,"y": 345,"trait": "line","curve": 180},{"x": -800,"y": -345,"trait": "line","curve": -180},{"x": -795,"y": -350,"trait": "line","curve": -180},{"x": 795,"y": -350,"bCoef": 0.95,"trait": "line","curve": 0,"vis": false},{"x": 800,"y": -345,"trait": "line","curve": -180},{"x": -795,"y": 350,"bCoef": 0,"cMask": ["ball"],"trait": "line","vis": true,"color": "ffffff","curve": 180},{"x": -457.142857143,"y": -348,"bCoef": 0,"trait": "line","color": "718B5B"},{"x": -457.142857143,"y": 348,"bCoef": 0,"trait": "line","color": "718B5B"},{"x": 457.142857143,"y": -348,"bCoef": 0,"trait": "line"},{"x": 457.142857143,"y": 348,"bCoef": 0,"trait": "line"},{"x": -800,"y": -155,"trait": "line","color": "ffffff"},{"x": -700,"y": -155,"trait": "line","color": "ffffff"},{"x": -700,"y": 155,"trait": "line"},{"x": -800,"y": 155,"trait": "line"},{"x": -630,"y": -1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": -630,"y": 1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": -630,"y": 1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": -630,"y": -1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": 700,"y": -155,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": 700,"y": 155,"bCoef": 0,"trait": "line","color": "ffffff"},{"x": 800,"y": 155,"bCoef": 0,"trait": "line"},{"x": 800,"y": -155,"bCoef": 0,"trait": "line"},{"x": 630,"y": 1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": 630,"y": -1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": 630,"y": -1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": 630,"y": 1.5,"bCoef": 0,"trait": "line","curve": 180},{"x": -800,"y": -100,"bCoef": 0.95,"cMask": ["all"],"trait": "ballArea","bias": 0,"curve": 0,"vis": true,"color": "ffffff"},{"x": -800,"y": -350,"bCoef": 0.95,"cMask": ["ball"],"trait": "ballArea","bias": -30,"color": "ffffff","curve": 0,"vis": false},{"x": -457.142857143,"y": -348,"bCoef": 0,"trait": "line","color": "718B5B"},{"x": -457.142857143,"y": 348,"bCoef": 0,"trait": "line","color": "718B5B"},{"x": 457.142857143,"y": -348,"bCoef": 0,"trait": "line"},{"x": 457.142857143,"y": 348,"bCoef": 0,"trait": "line"},{"x": -490,"y": -450,"cGroup": ["c1"],"vis": false},{"x": -490,"y": 450,"cGroup": ["c1"],"vis": false},{"x": 490,"y": -450,"cGroup": ["c2"],"vis": false},{"x": 490,"y": 450,"cGroup": ["c2"],"vis": false}],"segments": [{"v0": 0,"v1": 1,"bCoef": 1,"trait": "ballArea","bias": -30},{"v0": 2,"v1": 3,"bCoef": 1,"trait": "ballArea","bias": -30},{"v0": 4,"v1": 5,"bCoef": 1,"trait": "ballArea","bias": 30},{"v0": 6,"v1": 7,"curve": 0,"bCoef": 1,"trait": "ballArea"},{"v0": 8,"v1": 9,"trait": "kickOffBarrier"},{"v0": 9,"v1": 10,"curve": 180,"cGroup": ["blueKO"],"trait": "kickOffBarrier"},{"v0": 9,"v1": 10,"curve": -180,"cGroup": ["redKO"],"trait": "kickOffBarrier"},{"v0": 10,"v1": 11,"trait": "kickOffBarrier"},{"v0": 2,"v1": 12,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["all"],"trait": "goalNet","y": -100},{"v0": 6,"v1": 13,"curve": 0,"vis": true,"color": "ffffff","bCoef": 0.1,"cMask": ["all"],"trait": "goalNet","y": -100},{"v0": 1,"v1": 14,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["all"],"trait": "goalNet","y": 100},{"v0": 5,"v1": 15,"curve": 0,"vis": true,"color": "ffffff","bCoef": 0.1,"cMask": ["all"],"trait": "goalNet","y": 100},{"v0": 1,"v1": 0,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30,"x": -800},{"v0": 5,"v1": 4,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": -30,"x": 800},{"v0": 2,"v1": 3,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": -30,"x": -800},{"v0": 6,"v1": 7,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30,"x": 800},{"v0": 10,"v1": 9,"curve": -180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 17,"v1": 16,"curve": 180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 2,"v1": 1,"curve": 0,"vis": true,"color": "ff9494","bCoef": 0,"trait": "line","x": -800},{"v0": 6,"v1": 5,"curve": 0,"vis": true,"color": "a3baff","bCoef": 0,"trait": "line","x": 795},{"v0": 17,"v1": 20,"vis": true,"color": "ffffff","bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier"},{"v0": 16,"v1": 19,"vis": true,"color": "ffffff","bCoef": 0.1,"cMask": ["red","blue"],"cGroup": ["redKO","blueKO"],"trait": "kickOffBarrier","x": 0},{"v0": 7,"v1": 3,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30,"y": -350},{"v0": 0,"v1": 4,"curve": 0,"vis": false,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","y": 350},{"v0": 21,"v1": 22,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 22,"v1": 23,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 23,"v1": 24,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 24,"v1": 25,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 25,"v1": 26,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 26,"v1": 21,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 27,"v1": 28,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 28,"v1": 29,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 29,"v1": 30,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 30,"v1": 27,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 43,"v1": 40,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","y": 225},{"v0": 43,"v1": 42,"curve": 0,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","x": 560},{"v0": 42,"v1": 41,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","y": -225},{"v0": 44,"v1": 45,"curve": 100,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","x": 560},{"v0": 48,"v1": 47,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","y": 225},{"v0": 47,"v1": 46,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","x": -560},{"v0": 46,"v1": 49,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","y": -225},{"v0": 51,"v1": 50,"curve": 100,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","x": -560},{"v0": 15,"v1": 13,"curve": 0,"vis": true,"color": "ffffff","bCoef": 0.05,"cMask": ["all"],"trait": "goalNet","x": 835},{"v0": 12,"v1": 14,"curve": 0,"vis": true,"color": "ffffff","bCoef": 0.05,"cMask": ["all"],"trait": "goalNet","x": -835},{"v0": 53,"v1": 54,"curve": 180,"color": "ffffff","trait": "line"},{"v0": 55,"v1": 56,"curve": -180,"color": "ffffff","trait": "line"},{"v0": 57,"v1": 58,"curve": -180,"color": "ffffff","trait": "line"},{"v0": 0,"v1": 4,"curve": 0,"vis": false,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30},{"v0": 0,"v1": 53,"curve": 0,"vis": true,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 30},{"v0": 3,"v1": 57,"curve": 0,"vis": false,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea"},{"v0": 3,"v1": 7,"curve": 0,"vis": false,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": -30},{"v0": 7,"v1": 18,"curve": 0,"vis": false,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": -30},{"v0": 4,"v1": 5,"curve": 0,"vis": false,"color": "ffffff","bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 0},{"v0": 0,"v1": 1,"curve": 0,"vis": false,"color": "FFFFFF","bCoef": 1,"trait": "ballArea","bias": 0},{"v0": 3,"v1": 2,"curve": 0,"vis": false,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 0},{"v0": 52,"v1": 59,"curve": 180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","bias": 0},{"v0": 64,"v1": 65,"curve": 0,"vis": true,"color": "ffffff","trait": "line"},{"v0": 66,"v1": 67,"curve": 0,"vis": true,"color": "ffffff","trait": "line"},{"v0": 65,"v1": 66,"curve": 0,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 68,"v1": 69,"curve": 180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 70,"v1": 71,"curve": 180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 72,"v1": 73,"color": "ffffff","bCoef": 0,"trait": "line","x": 710},{"v0": 73,"v1": 74,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 72,"v1": 75,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 76,"v1": 77,"curve": 180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","x": 642.5},{"v0": 78,"v1": 79,"curve": 180,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 81,"v1": 80,"curve": 0,"vis": false,"bCoef": 1,"cMask": ["ball"],"trait": "ballArea","bias": 0},{"v0": 86,"v1": 87,"vis": false,"color": "eb387a","cMask": ["c1"]},{"v0": 88,"v1": 89,"vis": false,"color": "eb387a","cMask": ["c2"]},{"v0": 31,"v1": 32,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 32,"v1": 33,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 33,"v1": 34,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 34,"v1": 31,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line"},{"v0": 35,"v1": 36,"curve": 208.0275647476128,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","_data": {"mirror": {},"arc": {"a": [26.14449016918153,-41],"b": [35.43832241020169,-41.73215465122187],"curve": 208.0275647476128,"radius": 4.804301335717605,"center": [30.700039422357595,-42.525871005775045],"from": 2.81838982199157,"to": 0.16597045456351098}}},{"v0": 36,"v1": 37,"curve": 70.09948797392062,"vis": true,"color": "ffffff","bCoef": 0,"trait": "line","_data": {"mirror": {},"arc": {"a": [35.43832241020169,-41.73215465122187],"b": [27.474013107757965,-31.504851902657116],"curve": 70.09948797392062,"radius": 11.285777131053878,"center": [24.166594833963302,-42.29511370735805],"from": 0.04990287982944615,"to": 1.2733697489365303}}}],"goals": [{"p0": [-809.5,-99.5],"p1": [-809.5,99.5],"team": "red"},{"p0": [809.5,99.5],"p1": [809.5,-99.5],"team": "blue"}],"discs": [{"radius": 0,"pos": [-490,-350],"color": "ffffff","bCoef": 0,"cMask": ["c1"],"cGroup": ["none"],"trait": "line"},{"radius": 0,"pos": [-490,350],"color": "ffffff","bCoef": 0,"cMask": ["c1"],"cGroup": ["none"],"trait": "line"},{"radius": 0,"pos": [490,-350],"color": "ffffff","bCoef": 0,"cMask": ["c2"],"cGroup": ["none"],"trait": "line"},{"radius": 0,"pos": [490,350],"color": "ffffff","bCoef": 0,"cMask": ["c2"],"cGroup": ["none"],"trait": "line"},{"radius": 5.5,"pos": [-800,100],"color": "FFFFFF","bCoef": 1.35,"trait": "goalPost"},{"radius": 5.5,"pos": [-800,-100],"color": "FFFFFF","bCoef": 1.35,"trait": "goalPost"},{"radius": 5.5,"pos": [800,100],"color": "FFFFFF","bCoef": 1.35,"trait": "goalPost"},{"radius": 5.5,"pos": [800,-100],"color": "FFFFFF","bCoef": 1.35,"trait": "goalPost"},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false},{"radius": 6,"invMass": 0,"pos": [10000,10000],"color": "FF0000","bCoef": 0,"cMask": [],"cGroup": [],"vis": false}],"planes": [{"normal": [0,1],"dist": -404,"bCoef": 0.2,"cMask": ["all"],"_data": {"extremes": {"normal": [0,1],"dist": -404,"canvas_rect": [-1133.7408,-508.92364800000007,12604.678272000001,12604.678272000001],"a": [-1133.7408,-404],"b": [12604.678272000001,-404]}}},{"normal": [0,-1],"dist": -404,"bCoef": 0.2,"cMask": ["all"],"_data": {"extremes": {"normal": [0,-1],"dist": -404,"canvas_rect": [-1133.7408,-508.92364800000007,12604.678272000001,12604.678272000001],"a": [-1133.7408,404],"b": [12604.678272000001,404]}}},{"normal": [1,0],"dist": -900,"bCoef": 0.2,"cMask": ["all"],"_data": {"extremes": {"normal": [1,0],"dist": -900,"canvas_rect": [-1133.7408,-508.92364800000007,12604.678272000001,12604.678272000001],"a": [-900,-508.92364800000007],"b": [-900,12604.678272000001]}}},{"normal": [-1,0],"dist": -900,"bCoef": 0.2,"cMask": ["all"],"_data": {"extremes": {"normal": [-1,0],"dist": -900,"canvas_rect": [-1133.7408,-508.92364800000007,12604.678272000001,12604.678272000001],"a": [900,-508.92364800000007],"b": [900,12604.678272000001]}}}],"traits": {"ballArea": {"vis": false,"bCoef": 1,"cMask": ["ball"]},"goalPost": {"radius": 8,"invMass": 0,"bCoef": 1},"goalNet": {"vis": true,"bCoef": 0.1,"cMask": ["all"]},"kickOffBarrier": {"vis": false,"bCoef": 0.1,"cGroup": ["redKO","blueKO"],"cMask": ["red","blue"]},"line": {"vis": true,"bCoef": 0,"cMask": [""]},"arco": {"radius": 2,"cMask": ["n/d"],"color": "cccccc"}},"playerPhysics": {"bCoef": 0,"acceleration": 0.11,"kickingAcceleration": 0.083,"kickStrength": 4.4},"ballPhysics": {"radius": 5.8,"bCoef": 0.412,"invMass": 1.5,"color": "BDFF80"},"joints": [{"d0": 1,"d1": 2,"strength": "rigid","color": "eb387a","length": null},{"d0": 3,"d1": 4,"strength": "rigid","color": "15bcd6","length": null}],"canBeStored": false,"redSpawnPoints": [[-400,0],[-400,50],[-400,-50],[-400,100],[-400,-100],[-400,380]],"blueSpawnPoints": [[400,0],[400,50],[400,-50],[400,100],[400,-100],[400,380]],"kickOffReset": "full"}';
 const PENALTY_STADIUM = '{"name":"lỏ Stadium | PEN","width":420,"height":200,"spawnDistance":310,"bg":{"type":"grass","width":400,"height":260,"kickOffRadius":0,"cornerRadius":0,"color":"718B5B"},"vertexes":[{"x":323,"y":260,"bCoef":1,"cMask":["ball"],"trait":"ballArea","bias":-30},{"x":323,"y":100,"bCoef":1,"cMask":["ball"],"trait":"ballArea","bias":-30},{"x":323,"y":-100,"bCoef":1,"cMask":["ball"],"trait":"ballArea","bias":30},{"x":323,"y":-260,"bCoef":1,"cMask":["ball"],"trait":"ballArea","bias":30},{"x":370,"y":-100,"bCoef":0.1,"cMask":["ball"],"trait":"goalNet","radius":0},{"x":370,"y":100,"bCoef":0.1,"cMask":["ball"],"trait":"goalNet","radius":0},{"x":332,"y":-98,"bCoef":1,"cMask":["ball"],"trait":"line"},{"x":323,"y":260,"bCoef":0,"trait":"line"},{"x":323,"y":-260,"bCoef":0,"trait":"line"},{"x":0,"y":-260,"bCoef":0,"trait":"line"},{"x":0,"y":260,"bCoef":0,"trait":"line"},{"x":323,"y":200,"bCoef":0,"trait":"line"},{"x":110,"y":200,"bCoef":0,"trait":"line"},{"x":110,"y":-200,"bCoef":0,"trait":"line"},{"x":323,"y":-200,"bCoef":0,"trait":"line"},{"x":0,"y":100,"bCoef":0,"trait":"line"},{"x":0,"y":-100,"bCoef":0,"trait":"line"},{"x":110,"y":5,"bCoef":0,"trait":"line"},{"x":110,"y":-5,"bCoef":0,"trait":"line"},{"x":55,"y":-260,"bCoef":0,"cMask":["red"],"trait":"penArea"},{"x":65,"y":260,"bCoef":0,"cMask":["red"],"trait":"penArea"},{"x":300,"y":-90,"bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"},{"x":365,"y":-90,"bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"},{"x":365,"y":90,"bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"},{"x":300,"y":90,"bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"}],"segments":[{"v0":0,"v1":1,"trait":"ballArea"},{"v0":2,"v1":3,"trait":"ballArea"},{"v0":2,"v1":4,"vis":true,"color":"FFFFFF","cMask":["ball"],"trait":"goalNet","y":-100},{"v0":1,"v1":5,"vis":true,"color":"FFFFFF","cMask":["ball"],"trait":"goalNet","y":100},{"v0":1,"v1":0,"vis":true,"color":"FFFFFF","bCoef":1,"cMask":["ball"],"trait":"ballArea","bias":-30,"x":665},{"v0":2,"v1":3,"vis":true,"color":"FFFFFF","bCoef":1,"cMask":["ball"],"trait":"ballArea","bias":30,"x":665},{"v0":2,"v1":1,"curve":0,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":10,"v1":7,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":10,"v1":9,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":9,"v1":8,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":11,"v1":12,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":12,"v1":13,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":13,"v1":14,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":15,"v1":16,"curve":150,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":18,"v1":17,"curve":180,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":17,"v1":18,"curve":180,"vis":true,"color":"FFFFFF","bCoef":0,"trait":"line"},{"v0":5,"v1":4,"vis":true,"color":"FFFFFF","cMask":["ball"],"trait":"goalNet"},{"v0":19,"v1":20,"curve":45,"vis":false,"bCoef":0,"cMask":["red"],"trait":"penArea"},{"v0":21,"v1":22,"vis":false,"color":"FFFFFF","bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"},{"v0":22,"v1":23,"vis":false,"color":"FFFFFF","bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"},{"v0":23,"v1":24,"vis":false,"color":"FFFFFF","bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"},{"v0":24,"v1":21,"vis":false,"color":"FFFFFF","bCoef":0.1,"cMask":["red","blue"],"cGroup":["redKO","blueKO"],"trait":"kickOffBarrier"}],"goals":[{"p0":[332,100],"p1":[332,-100],"team":"blue"},{"p0":[325,-100],"p1":[100,0],"team":"red"},{"p0":[100,0],"p1":[320,100],"team":"red"}],"discs":[{"radius":5.75,"color":"FFDEAD","bCoef":0.4,"invMass":1.4,"pos":[110,0],"cGroup":["ball","kick","score"]},{"pos":[323,100],"trait":"goalPost"},{"pos":[323,-100],"trait":"goalPost"}],"planes":[{"normal":[0,1],"dist":-260,"bCoef":0.2,"cMask":["all"],"_data":{"extremes":{"normal":[0,1],"dist":-260,"canvas_rect":[-710,-260,710,260],"a":[-710,-260],"b":[710,-260]}}},{"normal":[0,-1],"dist":-260,"bCoef":0.2,"cMask":["all"],"_data":{"extremes":{"normal":[0,-1],"dist":-260,"canvas_rect":[-710,-260,710,260],"a":[-710,260],"b":[710,260]}}},{"normal":[1,0],"dist":-499,"bCoef":0.2,"cMask":["all"],"_data":{"extremes":{"normal":[1,0],"dist":-499,"canvas_rect":[-710,-260,710,260],"a":[-499,-260],"b":[-499,260]}}},{"normal":[-1,0],"dist":-376,"bCoef":0.2,"cMask":["all"],"_data":{"extremes":{"normal":[-1,0],"dist":-376,"canvas_rect":[-710,-260,710,260],"a":[376,-260],"b":[376,260]}}}],"traits":{"ballArea":{"vis":false,"bCoef":1,"cMask":["ball"]},"goalPost":{"radius":4.65,"invMass":0,"color":"C6D881","bCoef":1.25},"goalNet":{"vis":true,"bCoef":0.2,"cMask":["all"]},"kickOffBarrier":{"vis":false,"bCoef":0.1,"cGroup":["redKO","blueKO"],"cMask":["red","blue"]},"line":{"vis":true,"bCoef":0,"cMask":[""]},"arco":{"radius":2,"cMask":["n/d"],"color":"cccccc"},"penArea":{"vis":false,"bCoef":0,"cMask":["red"]}},"playerPhysics":{"radius":14.5,"acceleration":0.11,"kickingAcceleration":0.083,"kickStrength":4.655,"bCoef":0.25},"ballPhysics":"disc0","joints":[],"canBeStored":false,"redSpawnPoints":[[-100,0]],"blueSpawnPoints":[[323,0]],"kickOffReset":"full"}';
-const DISCORD_LINK = "https://discord.gg/HTZD8HA";
-const COMMANDS_TO_VALIDATE = ["discord", "kickafk", "afk", "captains", "unmute", "clearmutes", "report"]; // These commands can cause spam in the chat or bypass the mute
+const DISCORD_LINK = "";
+const COMMANDS_TO_VALIDATE = ["discord", "kickafk", "afk", "captains", "unmute", "clearmutes", "report"];
 const INVISIBLE_CHARACTERS = ["	", "ㅤ"];
 var logMsg = "";
 
@@ -504,12 +533,12 @@ class Kick {
     this.player = byPlayer;
     this.time = room.getScores().time;
 
-    let xOpponentGoal = (byPlayer.team == 1) ? stadium.goalLine.x : -stadium.goalLine.x; // The x position value of the opponent's goal
+    let xOpponentGoal = (byPlayer.team == 1) ? stadium.goalLine.x : -stadium.goalLine.x;
     this.isAShot = (
       Math.abs(ballProperties.xspeed) + Math.abs(ballProperties.yspeed) > 1.5 && // ✅ Bỏ qua nếu bóng gần đứng yên
-      (xOpponentGoal * ballProperties.xspeed > 0) && // It's a kick toward the opponent goal
-      (Math.abs(ballProperties.x + ballProperties.xspeed * 97.5) > stadium.goalLine.x) && // At this speed, the ball can cross the goal line
-      (Math.abs(ballProperties.y + ballProperties.yspeed * (xOpponentGoal - ballProperties.x) / ballProperties.xspeed) < stadium.goalLine.y) // Check if it's on target (not really accurate because it might hit the post)
+      (xOpponentGoal * ballProperties.xspeed > 0) &&
+      (Math.abs(ballProperties.x + ballProperties.xspeed * 97.5) > stadium.goalLine.x) &&
+      (Math.abs(ballProperties.y + ballProperties.yspeed * (xOpponentGoal - ballProperties.x) / ballProperties.xspeed) < stadium.goalLine.y)
     );
   }
 };
@@ -577,21 +606,19 @@ class TeamStats {
 };
 class Penalty {
   constructor() {
-    this.groups = [[], []]; // Penalty takers
-    this.results = [[], []]; // Results of taken penalties (first for RED, second for BLUE)
+    this.groups = [[], []];
+    this.results = [[], []];
   }
   getTurn() {
     return this.results[0].length - this.results[1].length;
   }
-  // Returns the team that wins the penalty shootout
   getPenaltyWinner() {
-    if (this.results[0].length > 5) { // "Sudden Death" round
+    if (this.results[0].length > 5) {
       if (this.results[0].length != this.results[1].length) return null;
       if (this.results[0].at(-1) == this.results[1].at(-1)) return null;
       return this.results[0].at(-1) ? 1 : 2;
     };
 
-    // One team has more penalties scored than the other team even if the other team scores all the remaining penalties
     if (this.results[0].filter(result => result).length > 5 - this.results[1].filter(result => !result).length) {
       return 1;
     } else if (this.results[1].filter(result => result).length > 5 - this.results[0].filter(result => !result).length) {
@@ -673,7 +700,7 @@ class Surrender {
   vote(player) {
     if (player.team == 0) return;
     if (isCaptain(player.id)) {
-      this.surrender(player.team); // Captains can surrender anytime
+      this.surrender(player.team);
       return; // 🎯 VÁ LỖI: Thêm return để ngắt ngay lập tức, không in ra thông báo đếm phiếu thừa thãi nữa!
     }
 
@@ -696,7 +723,7 @@ class Surrender {
   }
 }
 
-var commands = { // Format: "alias: [function, availableModes, minimumRole, captainOnly]"
+var commands = {
   help: [helpFunc, ["rand", "pick"], ROLE.PLAYER, false],
   discord: [discordFunc, ["rand", "pick"], ROLE.PLAYER, false],
   bye: [byeFunc, ["rand", "pick"], ROLE.PLAYER, false],
@@ -710,11 +737,7 @@ var commands = { // Format: "alias: [function, availableModes, minimumRole, capt
   predict: [predictFunc, ["rand", "pick"], ROLE.PLAYER, false],
   captains: [listCaptainsFunc, ["pick"], ROLE.PLAYER, false],
   surrender: [surrenderFunc, ["pick"], ROLE.PLAYER, false],
-  //sub: [subFunc, ["pick"], ROLE.PLAYER, true],
   leavecap: [leaveCaptainFunc, ["pick"], ROLE.PLAYER, true],
-  //pause: [pauseFunc, ["pick"], ROLE.PLAYER, true],
-  //resume: [resumeFunc, ["pick"], ROLE.PLAYER, true],
-  //msgcolor: [setMsgColorFunc, ["rand", "pick"], ROLE.PLAYER, false],
   adjustsize: [adjustSizeFunc, ["rand", "pick"], ROLE.PLAYER, false],
   yellow: [yellowCardFunc, ["rand", "pick"], ROLE.ADMIN, false],
   clearyellow: [clearYellowCardFunc, ["rand", "pick"], ROLE.ADMIN, false],
@@ -739,9 +762,9 @@ var commands = { // Format: "alias: [function, availableModes, minimumRole, capt
   clan: [clanFunc, ["rand", "pick"], ROLE.PLAYER, false],
   huongdan: [huongdanFunc, ["rand", "pick"], ROLE.PLAYER, false],
 };
-var identities = {}; // Store connection string/public IDs of players
-var adminAuths = new Set(); // Remember admin's auth for auto-login
-var afkList = new Set([0]); // Host player is always in AFK mode
+var identities = {};
+var adminAuths = new Set();
+var afkList = new Set([0]);
 var muteList = new Set();
 var banList = [];
 var isPlaying = false;
@@ -760,10 +783,10 @@ var kits = { red: null, blue: null };
 var prevScore = null;
 var predictions = {};
 var warnings = {};
-var lastMessages = []; // The last 4 messages in the form of [message, playerId, sendingTime]
+var lastMessages = [];
 var game = new Game;
 var surrenderVoter = new Surrender;
-var stadium = { // Stadium attributes
+var stadium = {
   goalLine: { x: 0, y: 0 },
   ballRadius: 0,
   playerRadius: 0,
@@ -808,12 +831,11 @@ var surrenderedTeam = 0; // Biến lưu vết đội nào đã đầu hàng
 let leaversFromCurrentMatch = new Set();
 
 // ===== Anti Defender Rank Script (Bản Tàng Hình Tối Ưu & Đẩy Lùi) =====
-const playerRadius = 15;
 const MAX_CB_PLAYERS = 4; // Tối đa 4 người được lui về thủ
 
 function checkCbLimit() {
   // Chỉ hoạt động khi trận đấu đang diễn ra
-  if (!isPlaying || MAX_CB_PLAYERS == 0) return;
+  if (typeof isPlaying !== 'undefined' && !isPlaying || MAX_CB_PLAYERS == 0) return;
 
   let redPlayers = room.getPlayerList().filter((player) => player.team == 1);
   let bluePlayers = room.getPlayerList().filter((player) => player.team == 2);
@@ -829,46 +851,67 @@ function checkCbLimit() {
   let players = room.getPlayerList().filter((player) => player.team != 0);
   let redCount = 0, blueCount = 0;
 
+  // TẠO CACHE: Lưu trước kích thước/thuộc tính của toàn bộ cầu thủ để tránh lag
+  let pProps = {};
+  players.forEach(p => {
+    let props = room.getPlayerDiscProperties(p.id);
+    if (props) pProps[p.id] = props;
+  });
+
+  // Đếm số người dùng size thực tế (radius)
   players.forEach(function (player) {
+    let props = pProps[player.id];
+    if (!props) return;
+    let radius = props.radius; // Tự động lấy kích thước to/nhỏ của cầu thủ
+
     if (player.team == 1) {
-      if (player.position.x - playerRadius <= redLimitX - 0.1) ++redCount;
+      if (player.position.x - radius <= redLimitX - 0.1) ++redCount;
     } else if (player.team == 2) {
-      if (player.position.x + playerRadius >= blueLimitX + 0.1) ++blueCount;
+      if (player.position.x + radius >= blueLimitX + 0.1) ++blueCount;
     }
   });
 
+  // Áp dụng cGroup cho Đội Đỏ
   players.forEach(function (player) {
     if (player.team == 2) return;
-    let currentProps = room.getPlayerDiscProperties(player.id);
+    let currentProps = pProps[player.id];
     if (!currentProps) return;
-    let targetGroup = (redCount >= MAX_CB_PLAYERS && player.position.x - playerRadius > redLimitX - 0.1) ? 536870914 : 2;
+    let radius = currentProps.radius;
+
+    let targetGroup = (redCount >= MAX_CB_PLAYERS && player.position.x - radius > redLimitX - 0.1) ? 536870914 : 2;
     if (currentProps.cGroup !== targetGroup) {
       room.setPlayerDiscProperties(player.id, { cGroup: targetGroup });
     }
   });
 
+  // Đẩy khớp nối tường Đội Đỏ (Disc 2)
   if (redCount >= MAX_CB_PLAYERS) {
     if (room.getDiscProperties(2) && room.getDiscProperties(2).y != 350) room.setDiscProperties(2, { y: 350 });
   } else {
     if (room.getDiscProperties(2) && room.getDiscProperties(2).y != -350) room.setDiscProperties(2, { y: -350 });
   }
 
+  // Áp dụng cGroup cho Đội Xanh
   players.forEach(function (player) {
     if (player.team == 1) return;
-    let currentProps = room.getPlayerDiscProperties(player.id);
+    let currentProps = pProps[player.id];
     if (!currentProps) return;
-    let targetGroup = (blueCount >= MAX_CB_PLAYERS && player.position.x + playerRadius < blueLimitX + 0.1) ? 1073741828 : 4;
+    let radius = currentProps.radius;
+
+    let targetGroup = (blueCount >= MAX_CB_PLAYERS && player.position.x + radius < blueLimitX + 0.1) ? 1073741828 : 4;
     if (currentProps.cGroup !== targetGroup) {
       room.setPlayerDiscProperties(player.id, { cGroup: targetGroup });
     }
   });
 
+  // Đẩy khớp nối tường Đội Xanh (Disc 4)
   if (blueCount >= MAX_CB_PLAYERS) {
     if (room.getDiscProperties(4) && room.getDiscProperties(4).y != 350) room.setDiscProperties(4, { y: 350 });
   } else {
     if (room.getDiscProperties(4) && room.getDiscProperties(4).y != -350) room.setDiscProperties(4, { y: -350 });
   }
 }
+
 
 let tickCounter = 0;
 
@@ -1020,8 +1063,8 @@ room.setKickRateLimit(6, 0, 0);
 loadStadium("training").then(_ => { room.startGame() });
 setInterval(randomAnnouncement, NOTIFICATION_INTERVAL * 1000);
 setInterval(randomGameStat, 2.5 * 60 * 1000);
-if (MODE == "pick") setInterval(showSpecTable.bind(null), 5 * 1000); // Send Spectators table once every few seconds to prevent it from being faded away by other messages
-// THÔNG BÁO NHẮC NHỞ ANTI-TOXIC & NỘI QUY (Lặp lại mỗi 5 phút)
+if (MODE == "pick") setInterval(showSpecTable.bind(null), 5 * 1000);
+
 // THÔNG BÁO NHẮC NHỞ ANTI-TOXIC & NỘI QUY (Lặp lại mỗi 5 phút)
 setInterval(() => {
   room.sendAnnouncement("🥰Room lỏ nhưng cầu thủ thì không. Vui lòng anh em thi đấu hết mình và tôn trọng đối thủ.", null, 0x00FFFF, "small-bold", 0);
@@ -1152,12 +1195,12 @@ function getPlayerStats() {
 async function randomAnnouncement() {
   let msg;
   switch (getRandomInt(2)) {
-    case 0: // Send Discord link
+    case 0:
       msg = "🔔 Mã nguồn được viết bởi shelld3v (Discord). Mã nguồn: https://github.com/shelld3v/haxball-host";
       break;
-    default: // Send a random quote
+    default:
       try {
-        (quotes.length == 0) && await fetch("https://api.quotable.io/quotes/random?limit=50", { method: "GET" }) // Fetch new quotes
+        (quotes.length == 0) && await fetch("https://api.quotable.io/quotes/random?limit=50", { method: "GET" })
           .then(response => response.json())
           .then(json => quotes = json.map(quote => `"${quote.content}" - ${quote.author}`));
       } catch (error) {
@@ -1174,40 +1217,42 @@ function randomGameStat() {
   let scores = room.getScores();
   if ((scores == null) || (scores.time < 60)) return;
   let fact;
-  switch (getRandomInt(5)) {
-    case 0:
-      fact = `Kiểm soát bóng: 🟥 ${game.getStats().possession.map(possession => possession + "%").join(" - ")} 🟦`;
-      break;
-    case 1:
-      let passes = game.getStats().passes;
-      if (passes[0] + passes[1] == 0) return;
-      fact = `Lượt chuyền bóng: 🟥 ${passes.join(" - ")} 🟦`;
-      break;
-    case 2:
-      fact = `Sút trúng đích: 🟥 ${game.getStats().shotsOnTarget.join(" - ")} 🟦`;
-      break;
-    case 3:
-      if (winningStreak < 3) return;
-      fact = `Chuỗi bất bại của ${TEAM_NAMES[prevWinner]}: ${winningStreak}`;
-    case 4:
-      let topPasser = new PlayerStats();
-      for (let teamId = 1; teamId < 3; teamId++) {
-        for (const stats of Object.values(game.teams[teamId].players)) {
-          if (stats.passes <= topPasser.passes) continue;
-          topPasser = stats;
+  try {
+    switch (getRandomInt(5)) {
+      case 0:
+        fact = `Kiểm soát bóng: 🟥 ${game.getStats().possession.map(possession => possession + "%").join(" - ")} 🟦`;
+        break;
+      case 1:
+        let passes = game.getStats().passes;
+        if (passes[0] + passes[1] == 0) return;
+        fact = `Lượt chuyền bóng: 🟥 ${passes.join(" - ")} 🟦`;
+        break;
+      case 2:
+        fact = `Sút trúng đích: 🟥 ${game.getStats().shotsOnTarget.join(" - ")} 🟦`;
+        break;
+      case 3:
+        if (winningStreak < 3) return;
+        fact = `Chuỗi bất bại của ${TEAM_NAMES[prevWinner]}: ${winningStreak}`;
+        break;
+      case 4:
+        let topPasser = new PlayerStats();
+        for (let teamId = 1; teamId < 3; teamId++) {
+          for (const stats of Object.values(game.teams[teamId].players)) {
+            if (stats.passes <= topPasser.passes) continue;
+            topPasser = stats;
+          };
         };
-      };
-      if (topPasser.passes == 0) return;
-      fact = `Thực hiện nhiều đường chuyền nhất: ${topPasser.name} (${topPasser.passes} đường chuyền)`;
-  };
-  room.sendAnnouncement(`⏩⏩    ${fact}    ⏪⏪`, null, 0xCF9FFF, "small-bold");
+        if (topPasser.passes == 0) return;
+        fact = `Thực hiện nhiều đường chuyền nhất: ${topPasser.name} (${topPasser.passes} đường chuyền)`;
+    };
+    room.sendAnnouncement(`⏩⏩    ${fact}    ⏪⏪`, null, 0xCF9FFF, "small-bold");
+  } catch (e) { }
 }
 
 function updateMetadata() {
   let month = new Date().getMonth() + 1;
   let lastPlayedMonth = localStorage.getItem("last_played_month");
-  // Assign missing metadata items (inaccurately)
-  lastPlayedMonth || (lastPlayedMonth = month); // This also prevents `month != lastPlayedMonth` condition below, which is good because calling `resetStorage()` would cause bugs as it uses "last_played_month" from localStorage
+  lastPlayedMonth || (lastPlayedMonth = month);
   localStorage.getItem("starting_month") || localStorage.setItem("starting_month", lastPlayedMonth);
 
   if (month != lastPlayedMonth) {
@@ -1417,7 +1462,6 @@ function resetStorage() {
   localStorage.setItem("starting_month", new Date().getMonth() + 1);
 }
 
-// Get months that are being monitored for statistics
 function getMonths() {
   let starting_month = localStorage.getItem("starting_month");
   let ending_month = localStorage.getItem("last_played_month");
@@ -1425,7 +1469,6 @@ function getMonths() {
   return starting_month;
 }
 
-// Get a chat-pingable tag from player's name
 function getTag(name) {
   return "@" + name.replace(/ /g, "_");
 }
@@ -1440,29 +1483,22 @@ function getDisplayLength(string) {
   return Math.round(len);
 }
 
-// Get a random number from a range (start from 0)
 function getRandomInt(rangeEnd) {
   return Math.floor(Math.random() * rangeEnd);
 }
 
-// Get a random element from an array
 function randomChoice(array) {
   return array[getRandomInt(array.length)];
 }
 
-// Get value in meters from haxball length unit
 function convertToMeters(value) {
-  // 37 is the ratio I got by comparing a haxball pitch with a real-life futsal pitch
   return ~~(value / 37);
 }
 
-// Get the distance knowing the coordinates of 2 points
 function getDistance(x, y) {
-  // Use Pythagoras
   return Math.sqrt(x ** 2 + y ** 2);
 }
 
-// Return the opposite team ID of a team ID
 function getOppositeTeamId(id) {
   return (id == 1) ? 2 : (id == 2) ? 1 : 0;
 }
@@ -1531,7 +1567,6 @@ function log(msg) {
   logMsg += msg + "\n";
 }
 
-// Move AFK player to bottom of the Spectators list
 function reorderPlayers() {
   room.reorderPlayers(Array.from(afkList), false);
 }
@@ -1557,7 +1592,6 @@ function saveSetting(id, setting) {
   localStorage.setItem(`setting_${getAuth(id)}`, JSON.stringify(setting));
 }
 
-// Return player's statistics in the room
 function getStats(auth) {
   return new PlayerReport(JSON.parse(localStorage.getItem(auth)));
 }
@@ -1568,33 +1602,33 @@ function getGameStats(player, team) {
 
   // 🎯 BỊT LỖ HỔNG NHÂN BẢN 2 BẢNG ĐIỂM
   // Bắt buộc lưu chỉ số vào đội gốc 120p, bất kể lúc luân lưu bị hệ thống kéo đi đâu
-  if (isTakingPenalty && game.penalty) {
-    if (game.penalty.groups[0].includes(player.id)) team = 1;
-    else if (game.penalty.groups[1].includes(player.id)) team = 2;
-    else team = team || player.team;
-  } else {
-    team = team || player.team;
-  }
+  try {
+    if (isTakingPenalty && game.penalty) {
+      if (game.penalty.groups[0].includes(player.id)) team = 1;
+      else if (game.penalty.groups[1].includes(player.id)) team = 2;
+      else team = team || player.team;
+    } else {
+      team = team || player.team;
+    }
 
-  if (game.teams[team].players[auth] === undefined) {
-    game.teams[team].players[auth] = new PlayerStats(player.name);
-  };
-  return game.teams[team].players[auth];
+    if (game.teams[team].players[auth] === undefined) {
+      game.teams[team].players[auth] = new PlayerStats(player.name);
+    };
+    return game.teams[team].players[auth];
+  } catch (e) {
+    return new PlayerStats(player.name);
+  }
 }
 
-// Get a player by name or tag
 function getPlayerByName(value) {
   if (!value) return null;
-  // Find player by tag
   if (value.startsWith("@")) {
     return room.getPlayerList().find(player => getTag(player.name) == value);
   };
-  // Find player by part of the name
   value = value.toLowerCase();
   return room.getPlayerList().find(player => player.name.toLowerCase().includes(value));
 }
 
-// Exclude AFK players from player list
 function getNonAfkPlayers() {
   return room.getPlayerList().filter(player => !afkList.has(player.id));
 }
@@ -1603,7 +1637,6 @@ function getSpectators() {
   return room.getPlayerList().filter(player => (player.team == 0) && !afkList.has(player.id));
 }
 
-// Get a player by position in Spectators list
 function getPlayerByPos(number) {
   return getNonAfkPlayers().filter(player => player.team == 0)[number - 1];
 }
@@ -1621,7 +1654,7 @@ function getMotm() {
         if (PLAYER_SCORING_RULES[statName] === undefined) continue;
         points += PLAYER_SCORING_RULES[statName] * value;
       };
-      if (teamId == prevWinner) points++; // Winners get an extra point
+      if (teamId == prevWinner) points++;
       if ((points > highestPoints) || ((points == highestPoints) && (stats.touches > motm[1].touches))) {
         highestPoints = points;
         motm = [auth, stats];
@@ -1640,7 +1673,6 @@ function getPredictionWinners() {
   }, []);
 }
 
-// Get the spectator with the most points
 function getBestSpectatorByStats() {
   let bestPlayer = null;
   let highest = -1;
@@ -1664,7 +1696,6 @@ function resizePlayer(id) {
   room.setPlayerDiscProperties(id, { radius: baseRadius + (+setting.sizeAdjustment) });
 }
 
-// Change players' size according to their settings
 function resizePlayers() {
   for (const player of room.getPlayerList()) {
     if (player.team == 0) continue;
@@ -1672,7 +1703,6 @@ function resizePlayers() {
   };
 }
 
-// Set random colors for 2 teams
 function setRandomColors() {
   let randomIndex;
   do {
@@ -2401,45 +2431,197 @@ async function celebrationEffect(playerEventObj, hasScored, forceEffectId = null
 
   // 4. Thực thi hiệu ứng
   switch (targetEffect) {
-    case 0:
+    case 0: {
+      // --- HIỆU ỨNG 0: SUPER SAIYAN (Hào quang rực cháy) ---
+      if (!player.position) return;
       let originalRadius = room.getPlayerDiscProperties(player.id).radius;
-      for (let i = 1; i <= 5; i += 1) {
-        await room.setPlayerDiscProperties(player.id, { radius: stadium.playerRadius - stadium.playerRadius * (i % 2) / 2 });
-        await new Promise(r => setTimeout(r, 500));
-      };
-      room.setPlayerDiscProperties(player.id, { radius: originalRadius });
-      break;
+      room.setPlayerAvatar(player.id, "🔥");
 
-    case 1:
-      room.setPlayerDiscProperties(player.id, { radius: stadium.playerRadius * 2 });
-      break;
+      let ssjInterval = setSafeInterval(() => {
+        let pProps = room.getPlayerDiscProperties(player.id);
+        if (!pProps) return;
 
-    case 2:
-      playerIds = room.getPlayerList().flatMap(player_ => (player_.team == player.team) && (player_.id != player.id) ? [player_.id] : []);
-      for (let pId of playerIds) {
-        let pProps = room.getPlayerDiscProperties(pId);
-        if (!pProps) continue;
-        let dx = player.position.x - pProps.x;
-        let dy = player.position.y - pProps.y;
-        room.setPlayerDiscProperties(pId, { xspeed: dx / 4, yspeed: dy / 4 });
-      };
-      break;
+        // Nhấp nháy kích thước
+        room.setPlayerDiscProperties(player.id, { radius: originalRadius * 1.5 });
+        setTimeout(() => room.setPlayerDiscProperties(player.id, { radius: originalRadius }), 100);
 
-    case 3:
-      let originalColor = room.getDiscProperties(0).color;
-      for (const color of [0xFF0000, 0xFF8000, 0xFFFF00, 0x80FF00, 0x00FF00, 0x00FF80, 0x00FFFF, 0x0080FF, 0x0000FF, 0x7F00FF, 0xFF00FF, 0xFF007F]) {
-        await room.setDiscProperties(0, { color: color });
-        await new Promise(r => setTimeout(r, 500));
-      };
-      room.setDiscProperties(0, { color: originalColor });
-      break;
+        // Phóng hào quang (đĩa) bay lượn lên trên
+        for (let i = 9; i <= 15; i++) { // Dùng 7 đĩa làm aura
+          room.setDiscProperties(i, {
+            x: pProps.x + (Math.random() * 30 - 15),
+            y: pProps.y + 15,
+            xspeed: Math.random() * 2 - 1,
+            yspeed: -(Math.random() * 5 + 5), // Bay ngược lên
+            vis: true, color: 0xFFD700, radius: 3 + Math.random() * 3,
+            invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
+          });
+        }
+      }, 200);
 
-    case 4:
-      for (const player_ of room.getPlayerList()) {
-        if (player_.team == 0 || player_.id == player.id) continue;
-        room.setPlayerDiscProperties(player_.id, { xspeed: 10 * ((player.team == 1) ? 1 : -1) });
-      };
+      setSafeTimeout(() => {
+        clearInterval(ssjInterval);
+        room.setPlayerAvatar(player.id, null);
+        room.setPlayerDiscProperties(player.id, { radius: originalRadius });
+        for (let i = 9; i <= 15; i++) room.setDiscProperties(i, { x: 10000, y: 10000, vis: false });
+      }, 2500);
       break;
+    }
+
+    case 1: {
+      // --- HIỆU ỨNG 1: ĐỘNG ĐẤT (Earthquake) ---
+      if (!player.position) return;
+      let originalRadius = room.getPlayerDiscProperties(player.id).radius;
+      room.setPlayerDiscProperties(player.id, { radius: originalRadius * 2.5 });
+      room.setPlayerAvatar(player.id, "🦍");
+
+      // Làm tất cả những người khác trên sân bị nảy bần bật (Earthquake effect)
+      let quakeInterval = setSafeInterval(() => {
+        let players = room.getPlayerList();
+        for (let p of players) {
+          if (p.team === 0 || p.id === player.id || !p.position) continue;
+          room.setPlayerDiscProperties(p.id, { yspeed: -7 + Math.random() * 14, xspeed: -3 + Math.random() * 6 });
+          room.setPlayerAvatar(p.id, "😵");
+        }
+      }, 300);
+
+      setSafeTimeout(() => {
+        clearInterval(quakeInterval);
+        room.setPlayerDiscProperties(player.id, { radius: originalRadius });
+        for (let p of room.getPlayerList()) {
+          if (p.team !== 0) room.setPlayerAvatar(p.id, null);
+        }
+      }, 2000);
+      break;
+    }
+
+    case 2: {
+      // --- HIỆU ỨNG 2: VÒNG TRÒN TÌNH BẠN (Team Dance) ---
+      if (!player.position) return;
+      room.setPlayerAvatar(player.id, "🕺");
+
+      let orbitAngle = 0;
+      let danceInterval = setSafeInterval(() => {
+        let pProps = room.getPlayerDiscProperties(player.id);
+        if (!pProps) return;
+        orbitAngle += 0.2;
+
+        let teammates = room.getPlayerList().filter(p => p.team === player.team && p.id !== player.id && p.position);
+        if (teammates.length === 0) return;
+
+        let angleStep = (Math.PI * 2) / teammates.length;
+
+        for (let i = 0; i < teammates.length; i++) {
+          let tProps = room.getPlayerDiscProperties(teammates[i].id);
+          if (!tProps) continue;
+
+          let targetX = pProps.x + Math.cos(orbitAngle + i * angleStep) * 60;
+          let targetY = pProps.y + Math.sin(orbitAngle + i * angleStep) * 60;
+
+          let dx = targetX - tProps.x;
+          let dy = targetY - tProps.y;
+
+          // Kéo đồng đội mượt mà vào vị trí vòng tròn
+          room.setPlayerDiscProperties(teammates[i].id, { xspeed: dx / 5, yspeed: dy / 5 });
+          room.setPlayerAvatar(teammates[i].id, "🎉");
+        }
+      }, 50);
+
+      setSafeTimeout(() => {
+        clearInterval(danceInterval);
+        for (let p of room.getPlayerList()) {
+          if (p.team !== 0) room.setPlayerAvatar(p.id, null);
+        }
+      }, 2500);
+      break;
+    }
+
+    case 3: {
+      // --- HIỆU ỨNG 3: QUẢ CẦU DISCO ---
+      let ball = room.getDiscProperties(0);
+      if (!ball) return;
+
+      let originalColor = ball.color;
+      let discoColors = [0xFF0000, 0xFF8000, 0xFFFF00, 0x00FF00, 0x00FFFF, 0x0000FF, 0xFF00FF];
+      let colorIndex = 0;
+      let discIndex = 9;
+
+      let discoInterval = setSafeInterval(() => {
+        let currentBall = room.getDiscProperties(0);
+        if (!currentBall) return;
+
+        // Đổi màu bóng liên tục
+        room.setDiscProperties(0, { color: discoColors[colorIndex % discoColors.length] });
+        colorIndex++;
+
+        // Bắn tia sáng từ bóng
+        for (let i = 0; i < 3; i++) {
+          let angle = Math.random() * Math.PI * 2;
+          room.setDiscProperties(discIndex, {
+            x: currentBall.x, y: currentBall.y,
+            xspeed: Math.cos(angle) * 12, yspeed: Math.sin(angle) * 12,
+            vis: true, color: discoColors[getRandomInt(discoColors.length)], radius: 4,
+            invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
+          });
+          discIndex++;
+          if (discIndex > 38) discIndex = 9;
+        }
+      }, 100);
+
+      setSafeTimeout(() => {
+        clearInterval(discoInterval);
+        room.setDiscProperties(0, { color: originalColor }); // Trả lại màu gốc
+        for (let i = 9; i <= 38; i++) room.setDiscProperties(i, { x: 10000, y: 10000, vis: false });
+      }, 2500);
+      break;
+    }
+
+    case 4: {
+      // --- HIỆU ỨNG 4: THẦN LA THIÊN CHINH (Shinra Tensei) ---
+      if (!player.position) return;
+      room.setPlayerAvatar(player.id, "💢");
+
+      // 1. Đẩy văng đối thủ theo hình tròn (Radial)
+      let players = room.getPlayerList();
+      for (let p of players) {
+        if (p.team === 0 || p.id === player.id) continue;
+        if (p.team !== player.team && p.position) {
+          let dx = p.position.x - player.position.x;
+          let dy = p.position.y - player.position.y;
+          let dist = Math.hypot(dx, dy) || 1;
+
+          if (dist < 350) { // Bán kính đẩy
+            room.setPlayerDiscProperties(p.id, {
+              xspeed: (dx / dist) * 22,
+              yspeed: (dy / dist) * 22
+            });
+            room.setPlayerAvatar(p.id, "💨");
+          }
+        }
+      }
+
+      // 2. Vòng sóng xung kích (bung 30 đĩa ra cùng lúc)
+      let count = 30;
+      for (let i = 1; i <= count; i++) {
+        let angle = (Math.PI * 2 * i) / count;
+        room.setDiscProperties(i + 8, {
+          x: player.position.x, y: player.position.y,
+          xspeed: Math.cos(angle) * 25, // Bay cực nhanh
+          yspeed: Math.sin(angle) * 25,
+          vis: true, color: 0xFFFFFF, radius: 4,
+          invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
+        });
+      }
+
+      setSafeTimeout(() => {
+        for (let p of room.getPlayerList()) {
+          if (p.team !== 0) room.setPlayerAvatar(p.id, null);
+        }
+        for (let i = 9; i <= 38; i++) {
+          room.setDiscProperties(i, { x: 10000, y: 10000, vis: false, xspeed: 0, yspeed: 0 });
+        }
+      }, 1500);
+      break;
+    }
 
     case 5: {
       if (!player.position) return;
@@ -2644,61 +2826,123 @@ async function celebrationEffect(playerEventObj, hasScored, forceEffectId = null
     }
 
     case 9: {
+      // --- HIỆU ỨNG 9: SIÊU HỐ ĐEN VŨ TRỤ (Mở rộng & Có ranh giới) ---
       if (!player.position) return;
       room.setPlayerAvatar(player.id, "🌌");
+      let bhAngle = 0;
 
-      let players = room.getPlayerList();
-      for (let i = 0; i < players.length; i++) {
-        let p = players[i];
-        if (p.team === 0 || p.id === player.id || !p.position) continue;
-        let dx = player.position.x - p.position.x;
-        let dy = player.position.y - p.position.y;
-        room.setPlayerDiscProperties(p.id, { xspeed: dx / 25, yspeed: dy / 25 });
-        room.setPlayerAvatar(p.id, "😵");
-      }
-
-      setSafeTimeout(() => {
+      let blackHoleInterval = setSafeInterval(() => {
         let pProps = room.getPlayerDiscProperties(player.id);
         if (!pProps) return;
-        let currentPlayers = room.getPlayerList();
-        for (let i = 0; i < currentPlayers.length; i++) {
-          let p = currentPlayers[i];
-          if (p.team === 0 || p.id === player.id) continue;
+
+        bhAngle += 0.2;
+
+        // 1. Mở rộng bán kính vòng xoáy lên 130 (thay vì 60 như cũ)
+        for (let i = 0; i < 30; i++) {
+          let spiralRadius = 130 - ((bhAngle * 12 + i * 6) % 130);
+          let angleOffset = bhAngle + (i * (Math.PI * 2) / 30);
+
+          room.setDiscProperties(i + 9, {
+            x: pProps.x + Math.cos(angleOffset) * spiralRadius,
+            y: pProps.y + Math.sin(angleOffset) * spiralRadius,
+            vis: true, color: (i % 2 === 0) ? 0x4B0082 : 0x000000,
+            radius: 3 + (spiralRadius / 25), // Chỉnh lại tỷ lệ size để đĩa không bị to quá đà
+            invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
+          });
+        }
+
+        // 2. Lực hút thông minh (Quỹ đạo lơ lửng)
+        let players = room.getPlayerList();
+        for (let i = 0; i < players.length; i++) {
+          let p = players[i];
+          if (p.team === 0 || p.id === player.id || !p.position) continue;
+
           let p2Props = room.getPlayerDiscProperties(p.id);
           if (!p2Props) continue;
-          let dx = p2Props.x - pProps.x;
-          let dy = p2Props.y - pProps.y;
-          room.setPlayerDiscProperties(p.id, { xspeed: dx / 3, yspeed: dy / 3 });
-          room.setPlayerAvatar(p.id, null);
+
+          let dx = pProps.x - p2Props.x;
+          let dy = pProps.y - p2Props.y;
+          let dist = Math.hypot(dx, dy) || 1;
+
+          if (dist > 55) {
+            // Nếu ở xa > Bị hút vào với vận tốc ổn định
+            room.setPlayerDiscProperties(p.id, {
+              xspeed: (dx / dist) * 7,
+              yspeed: (dy / dist) * 7
+            });
+            room.setPlayerAvatar(p.id, "😵");
+          } else {
+            // Nếu đã vào gần tới tâm > Ngừng hút, chuyển sang xoáy lơ lửng quanh tâm
+            room.setPlayerDiscProperties(p.id, {
+              xspeed: (-dy / dist) * 4, // Lực tiếp tuyến xoay tròn
+              yspeed: (dx / dist) * 4
+            });
+            room.setPlayerAvatar(p.id, "💫"); // Đổi avatar chóng mặt
+          }
         }
+      }, 50);
+
+      setSafeTimeout(() => {
+        clearInterval(blackHoleInterval);
         room.setPlayerAvatar(player.id, null);
-      }, 1500);
+
+        let currentPlayers = room.getPlayerList();
+        for (let i = 0; i < currentPlayers.length; i++) {
+          if (currentPlayers[i].team !== 0) room.setPlayerAvatar(currentPlayers[i].id, null);
+        }
+        for (let i = 9; i <= 38; i++) {
+          room.setDiscProperties(i, { x: 10000, y: 10000, vis: false });
+        }
+
+        // Vụ nổ đẩy ra nhẹ khi hố đen biến mất (có điều chỉnh lực dội)
+        let pProps = room.getPlayerDiscProperties(player.id);
+        if (pProps) {
+          for (let p of currentPlayers) {
+            if (p.team === 0 || p.id === player.id) continue;
+            let p2Props = room.getPlayerDiscProperties(p.id);
+            if (p2Props) {
+              let dx = p2Props.x - pProps.x;
+              let dy = p2Props.y - pProps.y;
+              let dist = Math.hypot(dx, dy) || 1;
+              room.setPlayerDiscProperties(p.id, {
+                xspeed: (dx / dist) * 10, // Đẩy văng ra theo hướng vector
+                yspeed: (dy / dist) * 10
+              });
+            }
+          }
+        }
+      }, 2500);
       break;
     }
 
     case 10: {
+      // --- HIỆU ỨNG 10: DẢI NGÂN HÀ HOÀNG KIM ---
       if (!player.position) return;
       room.setPlayerAvatar(player.id, "👑");
       let angle = 0;
-      const PI2_DIV_7 = (Math.PI * 2) / 7;
-      const orbitRadius = 35;
 
       let auraInterval = setSafeInterval(() => {
         let pProps = room.getPlayerDiscProperties(player.id);
         if (!pProps) return;
-        angle += 0.3;
+        angle += 0.15;
 
-        // 🎯 Lấy 7 đĩa từ ID 9 đến 15
-        for (let i = 1; i <= 7; i++) {
-          let offset = angle + (i * PI2_DIV_7);
-          room.setDiscProperties(i + 8, {
+        // Phân bổ 30 đĩa thành 3 lớp quỹ đạo (10 đĩa/lớp)
+        for (let i = 0; i < 30; i++) {
+          let layer = Math.floor(i / 10); // Lớp 0, 1, 2
+          let orbitRadius = 25 + (layer * 15); // Bán kính: 25, 40, 55
+          let speedMultiplier = 3 - layer; // Lớp trong quay nhanh hơn lớp ngoài
+          let offset = (angle * speedMultiplier) + ((i % 10) * (Math.PI * 2 / 10));
+
+          let colors = [0xFFD700, 0xFFA500, 0xFFFFFF]; // Vàng, Cam, Trắng
+
+          room.setDiscProperties(i + 9, {
             x: pProps.x + Math.cos(offset) * orbitRadius,
             y: pProps.y + Math.sin(offset) * orbitRadius,
-            vis: true, color: 0xFFD700, radius: 4,
+            vis: true, color: colors[layer], radius: 4 - (layer * 0.5),
             invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
           });
         }
-      }, 80);
+      }, 50);
 
       setSafeTimeout(() => {
         clearInterval(auraInterval);
@@ -2729,13 +2973,32 @@ async function celebrationEffect(playerEventObj, hasScored, forceEffectId = null
     }
 
     case 12: {
+      // --- HIỆU ỨNG 12: BOM HẠT NHÂN (Nuke Bomb) ---
       if (!player.position) return;
       let bombTimer = 3;
-      room.setPlayerAvatar(player.id, "💣");
+      room.setPlayerAvatar(player.id, "☢️");
+      let dangerRadius = 150;
 
       let countdown = setSafeInterval(() => {
+        let pProps = room.getPlayerDiscProperties(player.id);
+        if (!pProps) return;
+
         bombTimer--;
-        if (bombTimer > 0) room.setPlayerAvatar(player.id, bombTimer.toString());
+        if (bombTimer > 0) {
+          room.setPlayerAvatar(player.id, bombTimer.toString());
+          dangerRadius -= 40; // Vòng nguy hiểm siết lại
+
+          // Hiển thị vòng tròn cảnh báo
+          for (let i = 0; i < 30; i++) {
+            let angle = i * (Math.PI * 2 / 30);
+            room.setDiscProperties(i + 9, {
+              x: pProps.x + Math.cos(angle) * dangerRadius,
+              y: pProps.y + Math.sin(angle) * dangerRadius,
+              vis: true, color: 0xFF0000, radius: 3,
+              invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
+            });
+          }
+        }
       }, 500);
 
       setSafeTimeout(() => {
@@ -2744,30 +3007,27 @@ async function celebrationEffect(playerEventObj, hasScored, forceEffectId = null
         let pProps = room.getPlayerDiscProperties(player.id);
         if (!pProps) return;
 
+        // Đẩy văng tất cả mọi người trên sân (Áp lực cực mạnh)
         let playersOnField = room.getPlayerList();
-        for (let i = 0; i < playersOnField.length; i++) {
-          let p = playersOnField[i];
+        for (let p of playersOnField) {
           if (p.team === 0 || p.id === player.id) continue;
           let p2Props = room.getPlayerDiscProperties(p.id);
           if (!p2Props) continue;
           let dx = p2Props.x - pProps.x;
           let dy = p2Props.y - pProps.y;
           let dist = Math.hypot(dx, dy) || 1;
-          room.setPlayerDiscProperties(p.id, {
-            xspeed: (dx / dist) * 20,
-            yspeed: (dy / dist) * 20
-          });
+
+          room.setPlayerDiscProperties(p.id, { xspeed: (dx / dist) * 25, yspeed: (dy / dist) * 25 });
           room.setPlayerAvatar(p.id, "🚀");
         }
 
-        const PI2_DIV_15 = (Math.PI * 2) / 15;
-        // 🎯 Lấy 15 đĩa từ ID 9 đến 23
-        for (let i = 1; i <= 15; i++) {
-          let angle = i * PI2_DIV_15;
-          room.setDiscProperties(i + 8, {
+        // Bắn 30 đĩa ra mọi hướng như sóng xung kích
+        for (let i = 0; i < 30; i++) {
+          let angle = i * (Math.PI * 2 / 30);
+          room.setDiscProperties(i + 9, {
             x: pProps.x, y: pProps.y,
-            xspeed: Math.cos(angle) * 18, yspeed: Math.sin(angle) * 18,
-            vis: true, color: 0xFF4500, radius: 6,
+            xspeed: Math.cos(angle) * 25, yspeed: Math.sin(angle) * 25,
+            vis: true, color: 0xFF4500, radius: 8,
             invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
           });
         }
@@ -2775,9 +3035,8 @@ async function celebrationEffect(playerEventObj, hasScored, forceEffectId = null
 
       setSafeTimeout(() => {
         room.setPlayerAvatar(player.id, null);
-        let playersOnField = room.getPlayerList();
-        for (let i = 0; i < playersOnField.length; i++) {
-          if (playersOnField[i].team !== 0) room.setPlayerAvatar(playersOnField[i].id, null);
+        for (let p of room.getPlayerList()) {
+          if (p.team !== 0) room.setPlayerAvatar(p.id, null);
         }
         for (let i = 9; i <= 38; i++) {
           room.setDiscProperties(i, { x: 10000, y: 10000, vis: false, xspeed: 0, yspeed: 0 });
@@ -2820,64 +3079,61 @@ async function celebrationEffect(playerEventObj, hasScored, forceEffectId = null
     }
 
     case 14: {
+      // --- HIỆU ỨNG 14: BÃO CUỒNG PHONG ---
       if (!player.position) return;
       room.setPlayerAvatar(player.id, "🌪️");
       let tornadoAngle = 0;
-      let discIndex = 9; // 🎯 Bắt đầu từ 9
-
-      const PI2_DIV_3 = (Math.PI * 2) / 3;
-      const PI_DIV_2 = Math.PI / 2;
 
       let tornadoInterval = setSafeInterval(() => {
         let pProps = room.getPlayerDiscProperties(player.id);
         if (!pProps) return;
-
-        for (let i = 0; i < 3; i++) {
-          let offsetAngle = tornadoAngle + (i * PI2_DIV_3);
-          room.setDiscProperties(discIndex, {
-            x: pProps.x + Math.cos(offsetAngle) * 5,
-            y: pProps.y + Math.sin(offsetAngle) * 5,
-            xspeed: Math.cos(offsetAngle + PI_DIV_2) * 5 + Math.cos(offsetAngle) * 1,
-            yspeed: Math.sin(offsetAngle + PI_DIV_2) * 5 + Math.sin(offsetAngle) * 1,
-            vis: true, color: 0x87CEEB, radius: 4,
-            invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
-          });
-          discIndex++;
-          if (discIndex > 38) discIndex = 9; // 🎯 Tận dụng full 30 đĩa
-        }
         tornadoAngle += 0.4;
 
+        // Tạo 3 tầng lốc xoáy (10 đĩa mỗi tầng)
+        for (let i = 0; i < 30; i++) {
+          let layer = Math.floor(i / 10);
+          let layerRadius = 20 + (layer * 15); // Lốc xoáy to dần ra ngoài
+          let offsetAngle = tornadoAngle + (i * (Math.PI * 2 / 10)) + (layer * 0.5); // Xoắn ốc
+
+          room.setDiscProperties(i + 9, {
+            x: pProps.x + Math.cos(offsetAngle) * layerRadius,
+            y: pProps.y + Math.sin(offsetAngle) * layerRadius,
+            xspeed: Math.cos(offsetAngle + Math.PI / 2) * 5, // Vận tốc xoay
+            yspeed: Math.sin(offsetAngle + Math.PI / 2) * 5,
+            vis: true, color: 0x87CEEB, radius: 4 + layer,
+            invMass: 0, bCoef: 0, cMask: 0, cGroup: 0
+          });
+        }
+
+        // Kéo và xoáy đối thủ
         let currentPlayers = room.getPlayerList();
-        for (let i = 0; i < currentPlayers.length; i++) {
-          let p = currentPlayers[i];
+        for (let p of currentPlayers) {
           if (p.team === 0 || p.id === player.id) continue;
           let p2Props = room.getPlayerDiscProperties(p.id);
           if (!p2Props) continue;
+
           let dx = pProps.x - p2Props.x;
           let dy = pProps.y - p2Props.y;
           let distSq = dx * dx + dy * dy;
 
-          if (distSq < 32400) {
+          if (distSq < 40000) { // Phạm vi bão rộng hơn
             let dist = Math.hypot(dx, dy) || 1;
-            let pullForce = 2.0;
-            let spinForce = 2.5;
             room.setPlayerDiscProperties(p.id, {
-              xspeed: p2Props.xspeed * 0.5 + (dx / dist) * pullForce + (-dy / dist) * spinForce,
-              yspeed: p2Props.yspeed * 0.5 + (dy / dist) * pullForce + (dx / dist) * spinForce
+              xspeed: p2Props.xspeed * 0.7 + (dx / dist) * 3 + (-dy / dist) * 4,
+              yspeed: p2Props.yspeed * 0.7 + (dy / dist) * 3 + (dx / dist) * 4
             });
             room.setPlayerAvatar(p.id, "😵‍💫");
           }
         }
-      }, 110);
+      }, 50); // Tick rate nhanh hơn để lốc xoáy mượt hơn
 
       setSafeTimeout(() => {
         clearInterval(tornadoInterval);
         for (let i = 9; i <= 38; i++) {
           room.setDiscProperties(i, { x: 10000, y: 10000, vis: false, xspeed: 0, yspeed: 0 });
         }
-        let endPlayers = room.getPlayerList();
-        for (let i = 0; i < endPlayers.length; i++) {
-          if (endPlayers[i].team !== 0) room.setPlayerAvatar(endPlayers[i].id, null);
+        for (let p of room.getPlayerList()) {
+          if (p.team !== 0) room.setPlayerAvatar(p.id, null);
         }
       }, 2500);
       break;
@@ -2935,7 +3191,6 @@ function cleanupEffectDiscs() {
   }
 }
 
-// Show spectators with their assigned numbers to captains for them to pick by number
 function showSpecTable() {
   if (!isPicking) return;
   const capId = captains[pickTurn];
@@ -2970,12 +3225,10 @@ function showSpecTable() {
 }
 
 function isPlayerValid(player) {
-  // Players without a name are not allowed
   if (player.name.trim().length == 0) {
     room.kickPlayer(player.id, "Người chơi không có tên");
     return false;
   };
-  // Invisible characters aren't allowed
   if (INVISIBLE_CHARACTERS.some(char => player.name.includes(char))) {
     room.kickPlayer(player.id, "Tên người chơi chứa kí tự không hợp lệ");
     return false;
@@ -2984,12 +3237,10 @@ function isPlayerValid(player) {
   let tag = getTag(player.name.trim());
   for (const _player of room.getPlayerList()) {
     if (_player.id == player.id) continue;
-    // Player joined by 2 tabs
     if ((_player.id != 0) && (getConn(_player.id) == player.conn)) {
       room.kickPlayer(_player.id, "Bạn đã vào room bằng 1 tab khác");
       continue;
     };
-    // Duplicate tag
     if (getTag(_player.name.trim()) == tag) {
       room.kickPlayer(player.id, "Bạn đã trùng tên với một người khác trong room, xin vui lòng đổi lại");
       return false;
@@ -3015,9 +3266,9 @@ function saveIdentities(player) {
 }
 
 function canUseCommand(command, player) {
-  if (!command[1].includes(MODE)) return false; // Command is not available in this mode
-  if (getRole(player) < command[2]) return false; // Role is not high enough
-  if (isCaptain(player.id) < command[3]) return false; // Captain required
+  if (!command[1].includes(MODE)) return false;
+  if (getRole(player) < command[2]) return false;
+  if (isCaptain(player.id) < command[3]) return false;
   return true;
 }
 
@@ -3067,7 +3318,6 @@ function afkCallback(id) {
   delete afkPositions[id];
 }
 
-// Kick if player doesn't quit AFK mode in time
 function oversleepCallback(id) {
   let player = room.getPlayer(id);
   if (player && getRole(player) >= ROLE.ADMIN) {
@@ -3082,12 +3332,10 @@ function oversleepCallback(id) {
 function penaltyTimeoutCallback() {
   if (!isTakingPenalty) return;
   room.sendChat("Cầu thủ đã không thực hiện penalty trong thời gian quy định");
-  // Count as a miss if player doesn't perform the penalty in time
   game.penalty.push(false);
   takePenalty();
 }
 
-// Return true if the game is ongoing, false if the game is not yet started or is technically "over"
 function getGameStatus() {
   let scores = room.getScores();
   return (
@@ -3139,15 +3387,13 @@ async function updateTeamPlayers() {
     isUpdatingTeams = false; // Mở khóa
   }
 }
-// Update information to monitor last kickers, possession and passing accuracy
 function updateBallKick(player) {
   if (!isPlaying) return;
   let ballProperties = room.getDiscProperties(0);
   game.ballRecords.unshift(new Kick(ballProperties, player));
   game.ballRecords.pop();
 
-  if (game.ballRecords[1] === null) { // Kick-off pass
-    // Disallow pausing after kick-off
+  if (game.ballRecords[1] === null) {
     canPause = false;
     return;
   };
@@ -3156,7 +3402,6 @@ function updateBallKick(player) {
   let travelingDistance = getDistance(ballProperties.x - game.ballRecords[1].properties.x, ballProperties.y - game.ballRecords[1].properties.y);
   let stats = getGameStats(player);
   stats.touches++;
-  // If the previous kick was a shot on goal, check whether it was blocked and exclude that shot if it was
   if (
     game.ballRecords[1].isAShot &&
     (timeGap < 1) &&
@@ -3166,7 +3411,7 @@ function updateBallKick(player) {
     game.ballRecords[1].isAShot = false;
   } else if (game.ballRecords[0].isAShot) {
     stats.shotsOnTarget++;
-  } else if (Math.abs(ballProperties.x + ballProperties.xspeed * 100) < stadium.goalLine.x) { // Switch to penalty shootout when maximum added time reached
+  } else if (Math.abs(ballProperties.x + ballProperties.xspeed * 100) < stadium.goalLine.x) {
     let scores = room.getScores();
     if ((scores.timeLimit != 0) && (scores.time - scores.timeLimit > MAX_ADDED_TIME)) {
       startPenaltyShootout();
@@ -3176,12 +3421,11 @@ function updateBallKick(player) {
 
   stats = getGameStats(game.ballRecords[1].player);
   if ((game.ballRecords[2] !== null) && game.ballRecords[2].isAShot && (game.ballRecords[1].player.team != game.ballRecords[2].player.team)) stats.stoppedShots++;
-  if (player.team != game.ballRecords[1].player.team) return; // Received the ball from an opponent player
-  if ((player.id != game.ballRecords[1].player.id) && (travelingDistance > 12)) stats.passes++; // Received the ball from a teammate, so the previous kick was a pass
-  game.teams[player.team].possession += timeGap; // Received the ball from a teammate or from yourself, so it was in possession
+  if (player.team != game.ballRecords[1].player.team) return;
+  if ((player.id != game.ballRecords[1].player.id) && (travelingDistance > 12)) stats.passes++;
+  game.teams[player.team].possession += timeGap;
 }
 
-/// Change captain of a specific team
 async function updateCaptain(teamId, newCaptain) {
   let players = getNonAfkPlayers();
   if (!newCaptain) {
@@ -3217,7 +3461,6 @@ async function updateCaptain(teamId, newCaptain) {
     requestPick();
   };
 }
-/// Under certain circumstances, automatically pick, start the game and return true
 function checkAutoPick() {
   if (typeof isTakingPenalty !== 'undefined' && isTakingPenalty) return false;
   if (!isPicking) return false;
@@ -3531,7 +3774,6 @@ function showRankingsFunc(value, player) {
     return false;
   };
 
-  // Sort players by points
   playerList.sort(function (player1, player2) {
     if (player1.points == player2.points) {
       return player2.goals + player2.assists - player1.goals - player1.assists;
@@ -3540,7 +3782,6 @@ function showRankingsFunc(value, player) {
   })
   let msg = `⭐ Danh sách cầu thủ hàng đầu tháng ${getMonths()} ⭐: ${playerList.slice(0, 5).map((player, index) => `${index + 1}. ${player.name} (${player.points} ⭐)`).join("  •  ")}`;
   msg += `\n (Xếp hạng của bạn: ${1 + playerList.findIndex(stats => stats.auth == getAuth(player.id)) || "Không có"})`;
-  // Sort players by goals scored
   playerList.sort(function (player1, player2) {
     if (player1.goals == player2.goals) {
       return player2.assists - player1.assists;
@@ -3550,7 +3791,6 @@ function showRankingsFunc(value, player) {
   msg += `\n⚽ Danh sách ghi bàn hàng đầu tháng ${getMonths()} ⚽: ${playerList.slice(0, 5).map((player, index) => `${index + 1}. ${player.name} (${player.goals} ⚽)`).join("  •  ")}`;
   msg += `\n (Xếp hạng của bạn: ${1 + playerList.findIndex(stats => stats.auth == getAuth(player.id)) || "Không có"})`;
 
-  // Sort players by assists made
   playerList.sort(function (player1, player2) {
     if (player1.assists == player2.assists) {
       return player2.goals - player1.goals;
@@ -3642,7 +3882,7 @@ function predictFunc(prediction, player) {
     room.sendAnnouncement("Vui lòng cung cấp một tỉ số hợp lệ, có dạng RED-BLUE (VD: 3-1)", player.id, RED);
     return false;
   };
-  if (Object.values(predictions).some(predictors => predictors.includes(player.id))) { // Has already had a prediction
+  if (Object.values(predictions).some(predictors => predictors.includes(player.id))) {
     room.sendAnnouncement("Bạn chỉ có thể thực hiện một dự đoán trong một trận đấu", player.id, RED);
     return false;
   };
@@ -3662,12 +3902,12 @@ function predictFunc(prediction, player) {
     room.sendAnnouncement("Tỉ số không thể xảy ra", player.id, RED);
     return false;
   };
-  prediction = score.join("-"); // Re-format weird scores like "0x01-0x02", even though I don't know why I should even care
+  prediction = score.join("-");
   if (predictions[prediction] === undefined) {
     predictions[prediction] = [player.id];
   } else if ((MODE != "pick") && (predictions[prediction].length <= MAX_PLAYERS)) {
     predictions[prediction].push(player.id);
-  } else { // Maximum winners per match reached (1 in pick mode and maximum number of players each team in rand mode)
+  } else {
     room.sendAnnouncement("Đã có đủ người dự đoán tỉ số này, vui lòng dự đoán tỉ số khác", player.id, RED);
     return false;
   };
@@ -3747,7 +3987,6 @@ function subFunc(value, player) {
       return false;
     }
   }
-  // ----------------------------------------
   if (outPlayer.team != player.team) {
     room.sendAnnouncement("Không thể thay ra cầu thủ không nằm trong đội bạn", player.id, RED);
     return false;
@@ -4203,9 +4442,9 @@ function showAfksFunc(value, player) {
 
 function punishQuitGame(player) {
   if (
-    (getRole(player) >= ROLE.ADMIN) || // Admins receive no punishment
-    (getGameStatus() === false) || // No punishment if the player quits after the game is over
-    (getNonAfkPlayers().length < MAX_PLAYERS * 2 + 3) // No punishment if there are less than 3 spectators (the "captain slot" isn't that desired)
+    (getRole(player) >= ROLE.ADMIN) ||
+    (getGameStatus() === false) ||
+    (getNonAfkPlayers().length < MAX_PLAYERS * 2 + 3)
   ) return;
   let banMessage = "Bạn đã mắc quá nhiều lỗi vi phạm";
   let playerConn = getConn(player.id);
@@ -4216,9 +4455,9 @@ function punishQuitGame(player) {
   };
   room.sendAnnouncement(`${player.name} đã nhận ${warnings[playerConn]}/${MAX_WARNINGS_PER_PLAYER} cảnh cáo trong ngày do hành vi rời trận`, null, RED, "small-italic", 0);
   if (warnings[playerConn] < MAX_WARNINGS_PER_PLAYER) return;
-  delete warnings[playerConn]; // Reset warnings record after punishment
+  delete warnings[playerConn];
   room.sendAnnouncement(`${player.name} đã nhận hình phạt (ban ${VIOLATION_BAN_PERIOD} giờ) do mắc quá nhiều lỗi vi phạm`, null, RED, "small-bold", 0);
-  if (room.getPlayer(player.id) === null) { // Player left, save ban record so the next time the player joins, ban them
+  if (room.getPlayer(player.id) === null) {
     let bans = JSON.parse(localStorage.getItem("bans")) || [];
     bans.push([playerConn, banMessage, VIOLATION_BAN_PERIOD]);
     localStorage.setItem("bans", JSON.stringify(bans));
@@ -4240,7 +4479,6 @@ function ban(playerId, reason, timeout) {
   room.kickPlayer(playerId, reason, true);
 }
 
-// Pick a player from the Spectators to move to a team
 var _pickLock = false;
 async function pick(pickedPlayer, team) {
   if (_pickLock) return; // Chống spam click (Race condition)
@@ -4274,7 +4512,6 @@ async function pick(pickedPlayer, team) {
 }
 
 function handleCommand(player, input) {
-  // Get alias and value from command
   let splitIndex = input.indexOf(" ");
   splitIndex = (splitIndex != -1) ? splitIndex : input.length;
   let [alias, value] = [input.slice(0, splitIndex).toLowerCase(), input.slice(splitIndex + 1).trim()];
@@ -4287,21 +4524,18 @@ function handleCommand(player, input) {
   return command[0](value, player);
 }
 
-// Update stats about goals, assists and own goals
 function updateGoalStats(team) {
   let [shot, assist] = game.ballRecords;
   if (shot === null) return;
 
-  if (shot.player.team != team) { // Own goal
-    // Not an own goal but probably a clearing/goalkeeping effort
+  if (shot.player.team != team) {
     if (
-      assist && // Someone's kick resulted in this goal
-      assist.isAShot && // The previous kick was a shot on target
-      (assist.player.team == team) && // The previous kick came from an opponent player
-      (stadium.goalLine.x - Math.abs(shot.properties.x) < stadium.playerRadius * 4) && // The gap between the ball and the goal-line was pretty small it probably was an effort to clear the ball
-      (shot.time - assist.time < 3) // The time between 2 kicks wasn't too big, otherwise, it sounds nothing like a save
+      assist &&
+      assist.isAShot &&
+      (assist.player.team == team) &&
+      (stadium.goalLine.x - Math.abs(shot.properties.x) < stadium.playerRadius * 4) &&
+      (shot.time - assist.time < 3)
     ) {
-      // Correct the credits
       [shot, assist] = game.ballRecords.slice(1);
     } else {
       getGameStats(shot.player).ownGoals++;
@@ -4321,9 +4555,9 @@ function updateGoalStats(team) {
     let assisterStats = getGameStats(assist.player);
     if (assist.player.team != team) {
       assisterStats.errorsLeadingToGoal++;
-    } else if (assist.player.id != shot.player.id) { // Not a solo goal
+    } else if (assist.player.id != shot.player.id) {
       assisterStats.assists++;
-      if (assisterStats.assists != 1) { // Multiple assists O_O
+      if (assisterStats.assists != 1) {
         comment = comment.concat(", ", `${getTag(assist.player.name)} đã có cho mình kiến tạo thứ ${assisterStats.assists} trong trận đấu`);
       } else {
         comment = comment.concat(", ", `đường kiến tạo từ ${getTag(assist.player.name)}`);
@@ -4332,8 +4566,7 @@ function updateGoalStats(team) {
   };
   room.sendChat(comment);
 
-  // Calculate goal stats
-  let speed = convertToMeters(getDistance(shot.properties.xspeed, shot.properties.yspeed) * 60); // There are 60 frames per second
+  let speed = convertToMeters(getDistance(shot.properties.xspeed, shot.properties.yspeed) * 60);
   let distance = convertToMeters(getDistance(shot.properties.x - ballPosition.x, shot.properties.y - ballPosition.y));
   room.sendAnnouncement(`Khoảng cách: ${distance || "dưới 1"}m | Lực sút: ${speed} (m/s)`, null, 0x00FF00, "small", 0);
 }
@@ -5543,24 +5776,20 @@ function resetDayFunc(value, player) {
 }
 
 function celebrateGoal(team) {
-  // Get ScoresObject
   let scores = room.getScores();
   let goalDiff = scores.red - scores.blue;
   if (team == 2) goalDiff = -goalDiff;
-  // Get score line in string
   let scoreline = `${scores.red}-${scores.blue}`;
 
   // Tiếng hô ghi bàn nay chỉ còn là tiếng thở dài...
   var scream = "VÀO!";
   var comment = "Pha dứt điểm thành công. Bàn thắng được công nhận.";
 
-  // Design a good comment :P
   if (
-    ((scores.scoreLimit != 0) && [scores.red, scores.blue].includes(scores.scoreLimit)) || // Maximum goals reached
-    ((scores.timeLimit != 0) && (scores.time > scores.timeLimit - 7.5)) // Overtime or last-second goal
+    ((scores.scoreLimit != 0) && [scores.red, scores.blue].includes(scores.scoreLimit)) ||
+    ((scores.timeLimit != 0) && (scores.time > scores.timeLimit - 7.5))
   ) {
     scream = "BÀN THẮNG ẤN ĐỊNH TRẬN ĐẤU!"; // Thông báo dứt khoát cho bàn thắng chốt hạ hoặc phút cuối
-    // Pick a random comment
     comment = randomChoice(WINNING_GOAL_COMMENTARIES);
   } else {
     if ((scores.timeLimit != 0) && (scores.time > scores.timeLimit - 10)) goalDiff = -3;
@@ -5589,14 +5818,14 @@ function checkSpam(player, message) {
     (message === lastMessages[2][0]) &&
     (message === lastMessages[3][0]) &&
     (time - lastMessages[0][2] < 8000)
-  ) { // 5 duplicate messages in a row
+  ) {
     muteFunc(`${getTag(player.name)} 1 Spam`, room.getPlayer(0));
     return true;
   } else if (
     (lastMessages.length == 4) &&
     (lastMessages.every(message => message[1] == player.id)) &&
     (time - lastMessages[3][2] < 8000)
-  ) { // Sending too many messages in a short period of time
+  ) {
     muteFunc(`${getTag(player.name)} 1 Nhắn quá nhanh`, room.getPlayer(0));
     return true;
   };
@@ -5675,15 +5904,14 @@ async function startPenaltyShootout() {
   // thay vì MAX_NUMBER (chữ này không tồn tại trong JS)
   let deepestPositions = [Number.MAX_VALUE, -Number.MAX_VALUE];
 
-  // Store players' team and role (GK or not) for the penalty shootout
   room.getPlayerList().forEach(function (player) {
     if (player.team == 0) return;
     let group = game.penalty.groups[player.team - 1];
     if (
       (group.length == 0) ||
       ((player.position.x - deepestPositions[player.team - 1]) * (player.team * 2 - 3) > 0)
-    ) { // The lowest player will be assigned to the GK role
-      group.push(player.id); // GK is the player in the last index of the array
+    ) {
+      group.push(player.id);
       deepestPositions[player.team - 1] = player.position.x;
     } else {
       group.unshift(player.id);
@@ -5728,7 +5956,6 @@ async function endPenaltyShootout(winner) {
 
 async function takePenalty() {
   let winner = game.penalty.getPenaltyWinner();
-  // Found the winner in this penalty shootout
   if (winner !== null) {
     room.sendChat(`Loạt sút luân lưu kết thúc. Đội ${TEAM_NAMES[winner]} giành chiến thắng chung cuộc!`);
     endPenaltyShootout(winner);
@@ -5736,7 +5963,6 @@ async function takePenalty() {
   };
 
   room.stopGame();
-  // Put previous penalty taker and goalkeeper back to the Spectators
   for (const player of room.getPlayerList()) {
     await room.setPlayerTeam(player.id, 0);
   };
@@ -5754,7 +5980,7 @@ async function takePenalty() {
   await room.setPlayerTeam(penaltyTaker, 1);
   await room.setPlayerTeam(goalkeeper, 2);
   room.startGame();
-  room.setPlayerDiscProperties(penaltyTaker, { invMass: 9999 }); // Prevent penalty taker from mis-kicking the ball (in some penalty stadiums the ball's invMass is bigger than players')
+  room.setPlayerDiscProperties(penaltyTaker, { invMass: 9999 });
 
   let penResults = [[], []];
   for (let i = 0; i < 2; i++) {
@@ -6079,7 +6305,6 @@ room.onPlayerJoin = async function (player) {
   checkBan(player);
 
   if (MODE == "pick") {
-    // Assign captains if missing
     for (let teamId = 1; teamId < 3; teamId++) {
       if (captains[teamId] == 0) {
         updateCaptain(teamId, player);
@@ -6131,18 +6356,15 @@ room.onPlayerJoin = async function (player) {
 }
 
 room.onPlayerLeave = async function (player) {
-  // [LOGIC ROOM3.JS]
   if (player.team != 0) {
     await updateTeamPlayers();
     punishQuitGame(player);
-  } else if (afkList.has(player.id)) { // Player was in AFK list
-    // Remove from AFK list
+  } else if (afkList.has(player.id)) {
     afkList.delete(player.id);
   };
-  delete identities[player.id]; // Delete unused record
+  delete identities[player.id];
 
   if (typeof isTakingPenalty !== "undefined" && isTakingPenalty) {
-    // A penalty taker left the room
     for (let i = 0; i < 2; i++) {
       let index = game.penalty.groups[i].indexOf(player.id);
       if (index == -1) continue;
@@ -6230,7 +6452,6 @@ room.onPlayerTeamChange = async function (changedPlayer, byPlayer) {
 room.onPlayerBallKick = function (player) {
   if (isTakingPenalty) return;
   updateBallKick(player);
-  // (getRole(player) == ROLE.VIP) && room.setDiscProperties(0, {color: ballColor.getColor()}); // Switch ball color
 }
 
 room.onTeamGoal = function (team) {
@@ -6271,6 +6492,28 @@ room.onPositionsReset = function () {
     canPause = true;
   };
 }
+// 💬 Webhook Discord để theo dõi Chat của người chơi trong room
+const DISCORD_CHAT_WEBHOOK = ""; // Thay link webhook của bạn vào đây
+var isDiscordChatEnabled = false; // Mặc định là TẮT
+
+async function sendChatToDiscord(playerName, message) {
+  if (!isDiscordChatEnabled) return; // Chỉ đẩy lên Discord khi lệnh !xemchat được bật
+  if (!DISCORD_CHAT_WEBHOOK || DISCORD_CHAT_WEBHOOK === "") return;
+  try {
+    await fetch(DISCORD_CHAT_WEBHOOK, {
+      method: "POST",
+      body: JSON.stringify({
+        content: `**[${playerName}]**: ${message}`
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Lỗi gửi chat webhook: ", error);
+  }
+}
+
 // 🎯 Khai báo sổ đen chứa án phạt Mute (lưu ở ngay trên hàm onPlayerChat)
 const mutedPlayers = new Map();
 
@@ -6278,6 +6521,9 @@ room.onPlayerChat = function (player, message) {
   if (player.id == 0) return;
   message = message.trim();
   if (!message) return false;
+
+  // Gửi tin nhắn lên Discord Webhook
+  sendChatToDiscord(player.name, message);
 
   clearAfkRecord(player.id); // Tránh bị kick AFK khi đang thao tác
 
@@ -6357,7 +6603,6 @@ room.onPlayerChat = function (player, message) {
     return false;
   }
 
-  // Perform some validations on the message
   if (!message.startsWith("!") || (typeof COMMANDS_TO_VALIDATE !== 'undefined' && COMMANDS_TO_VALIDATE.some(command => message.substring(1).startsWith(command)))) {
     if (typeof muteList !== 'undefined' && muteList.has(getConn(player.id))) {
       room.sendAnnouncement("Không thể chat, bạn đã bị cấm", player.id, typeof RED !== 'undefined' ? RED : 0xFF0000);
@@ -6368,7 +6613,6 @@ room.onPlayerChat = function (player, message) {
         room.sendAnnouncement("Khung chat hiện đang bị khóa", player.id, typeof RED !== 'undefined' ? RED : 0xFF0000);
         return false;
       }
-      // Disallow Spectators from messaging when 2 teams are taking penalty
       if (typeof isTakingPenalty !== 'undefined' && isTakingPenalty && (player.team == 0)) {
         room.sendAnnouncement("Bạn chưa thể chat vào lúc này", player.id, typeof RED !== 'undefined' ? RED : 0xFF0000);
         return false;
@@ -6445,7 +6689,6 @@ room.onPlayerKicked = function (kickedPlayer, reason, banned, byPlayer) {
     banList.push([kickedPlayer.id, kickedPlayer.name, reason]);
     action = "banned";
   };
-  // Log this to monitor kicking activity
   console.log(`${kickedPlayer.name} was ${action} by ${byPlayer.name} (reason: ${reason})`);
   log(`${kickedPlayer.name} was ${action} by ${byPlayer.name} (Lý do: ${reason})`);
 }
@@ -6631,7 +6874,7 @@ room.onGameStop = async function (byPlayer) {
 
 room.onGamePause = function (byPlayer) {
   isPlaying = false;
-  clearAfkRecords(); // Stop monitoring AFK when the game is paused
+  clearAfkRecords();
 }
 
 room.onGameUnpause = function (byPlayer) {
@@ -6679,4 +6922,51 @@ setTimeout(() => {
     room.sendChat("📢 [HỆ THỐNG]: Đã quét và cập nhật Icon 🔰 & Level thành công cho các Clan phiên bản cũ!");
   }
 }, 3000); // Chạy sau khi room khởi động 3 giây
+
+// =========================================================================
+// 🌐 TÍNH NĂNG NHẬN TIN NHẮN TỪ DISCORD VÀO GAME
+// =========================================================================
+const DISCORD_BOT_TOKEN = ""; // Thay Token Bot của bạn vào đây
+const DISCORD_CHANNEL_ID = ""; // Thay ID kênh Discord vào đây
+
+try {
+  if (typeof process !== "undefined") {
+    const { Client, GatewayIntentBits } = require('discord.js');
+    const discordClient = new Client({
+      intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
+    });
+
+    discordClient.on('messageCreate', message => {
+      if (message.author.bot) return; // Bỏ qua tin nhắn của bot
+      if (message.channelId === DISCORD_CHANNEL_ID) {
+        const text = message.content.trim().toLowerCase();
+        if (text === '!xemchat') {
+          isDiscordChatEnabled = true;
+          message.reply('✅ Đã BẬT theo dõi chat: Tin nhắn trong game sẽ được chuyển tiếp lên đây!');
+          return;
+        }
+        if (text === '!tatchat') {
+          isDiscordChatEnabled = false;
+          message.reply('🚫 Đã TẮT theo dõi chat: Dừng nhận tin nhắn từ game.');
+          return;
+        }
+
+        if (typeof room !== 'undefined' && room.sendChat) {
+          // Đẩy tin nhắn vào Haxball
+          room.sendAnnouncement(`[ADMIN]: ${message.content}`, null, 0xFFD700, "bold", 2);
+        }
+      }
+    });
+
+    if (DISCORD_BOT_TOKEN && DISCORD_BOT_TOKEN !== "YOUR_BOT_TOKEN_HERE") {
+      discordClient.login(DISCORD_BOT_TOKEN).then(() => {
+        console.log("✅ Đã kết nối Discord Bot (Nhận tin nhắn) thành công!");
+      }).catch(err => {
+        console.error("❌ Lỗi đăng nhập Discord Bot:", err);
+      });
+    }
+  }
+} catch (e) {
+  console.log("⚠️ Bạn chưa cài discord.js, hãy mở CMD chạy lệnh: npm install discord.js");
+}
 
