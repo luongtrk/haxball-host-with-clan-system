@@ -36,9 +36,7 @@ Bộ code này là một phiên bản server Haxball được "độ" lại cự
 
 - **Đăng nhập Admin/Super Admin:** Pass xịn, đăng nhập nhanh, không rườm rà.
 - **Chống Toxic:** Ai văng tục, chửi thề sẽ bị khoá mõm (Mute) 10 phút ngay lập tức nếu tái phạm.
-- **Vote kích (VoteKick):** Ngứa mắt ai cả phòng có thể vote để đá ra ngoài, có cơ chế chống lạm dụng nha.
 - **Phạt Thoát Ngang:** Ai làm đội trưởng mà F5 thoát game né trách nhiệm sẽ bị tước quyền làm đội trưởng trận sau.
-- **Cày nhiều Tab:** Thoải mái mở nhiều Tab, mở nhiều clone vào phòng mà không sợ bị khoá.
 
 ## 📊 Bình Luận Viên Trực Tiếp
 
