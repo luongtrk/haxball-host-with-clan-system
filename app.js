@@ -17,7 +17,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 global.localStorage = new LocalStorage('./haxball_data_native');
-const TOKEN = "thr1.AAAAAGox9waDYsQyAX0DYQ.W2Jbh9A4zRo";
+const TOKEN = ""; //<--- Điền Token vào đây
 
 async function startRoom() {
     try {
