@@ -1,138 +1,118 @@
-# ⚽ Server Haxball Xịn Xò (Bản có Rank & Clan)
+# Haxball Headless Server (Rank & Clan System)
 
-![status](https://img.shields.io/badge/status-active-green)
+Mã nguồn máy chủ Haxball Headless tự động tích hợp hệ thống tính điểm Rank Elo, Bang hội (Clan), cơ chế chống AFK, chống ôm gôn (Anti-CB) và kết nối Discord.
 
-## ⚙️ Giới Thiệu Sương Sương
-
-Bộ code này là một phiên bản server Haxball được "độ" lại cực kỳ tâm huyết dành cho anh em Việt Nam (base gốc mượn ý tưởng từ shelld3v). Mình đã nhồi nhét vào đây đủ thứ tính năng từ leo Rank, đấu Clan, cơ chế chống đổ bê tông (Anti-CB) cho đến chống văng tục và ti tỉ hiệu ứng xịn xò khác!
-
-## 🎮 Các Chế Độ Chơi Chính
-
-- **Chế độ Pick (Đội trưởng chọn người):** Hệ thống thông minh tự đá những người treo máy (AFK) ra ngoài, ai làm đội trưởng mà trốn (F5 thoát game) sẽ bị phạt nặng.
-- **Chế độ Random:** Tự động chia đều đội hình dựa theo Rank của từng người cho cân kèo.
-- **Đá Luân Lưu (Penalty):** Hết giờ mà vẫn hoà là tự động bế cả làng sang map sân cỏ Penalty để sút phân định thắng thua luôn!
-
-## 🧠 Tính Năng Xoay Quanh Trận Đấu
-
-- **Anti-CB (Chống Hậu Vệ Đổ Bê Tông):** Cứ đứng ôm bo ở gôn là sẽ bị đẩy văng ra, buộc hai đội phải dâng lên tấn công.
-- **Đá bay người AFK:** Đứng im không nhúc nhích là tự động bị ném lên ghế Khán giả (không áp dụng khi đá 1v1 hoặc tập luyện nhé).
-- **Thay Người Giữa Trận (!sub):** Đang đá mà có người lag hay muốn nghỉ, đội trưởng gọi lệnh thay người trực tiếp luôn!
-- **Tự Động Reset:** Chuyển map, load trận mới mượt mà không cần ấn nút gì.
-
-## 🏆 Cày Rank & Mở Bang Hội (Clan)
-
-- **Ghi nhận mọi chỉ số:** Ghi lại chi tiết Bàn thắng, Kiến tạo, Cứu thua, Phá bóng, hay thậm chí cả phản lưới nhà =))
-- **Hệ Thống Rank ELO:** Đá hay thì lên Rank, phế thì tụt hạng, có đủ các mức Rank để anh em khoe thành tích.
-- **Hệ Thống Clan:** Lập Bang hội, gắn tag, icon riêng cực ngầu.
-- **Đại Chiến Clan:** Khi hai Clan mạnh đụng độ nhau, sân vận động sẽ tự động đổi màu và hiệu ứng siêu khét.
-
-## 🎆 Hiệu Ứng Bùng Nổ
-
-- **Ăn Mừng Bàn Thắng VIP:** Khi bạn ghi bàn, 14+ hiệu ứng cháy nổ vật lý (Lốc xoáy, Hố đen, Súng máy, Mưa sao băng...) sẽ nổ tung sân! (Mua bằng điểm Sao trong game).
-- **Màu Áo Đấu RGB:** Áo đấu đổi màu lấp lánh liên tục trong những trận quan trọng.
-- **Avatar Biểu Cảm:** Avatar nhảy số đếm ngược, hiện icon ngủ khò khò khi AFK hay bom nổ cực kỳ nhí nhố.
-
-## 🛡️ Tính Năng Quản Lý & Phạt Dân Chơi "Nghiệp Dư"
-
-- **Đăng nhập Admin/Super Admin:** Pass xịn, đăng nhập nhanh, không rườm rà.
-- **Chống Toxic:** Ai văng tục, chửi thề sẽ bị khoá mõm (Mute) 10 phút ngay lập tức nếu tái phạm.
-- **Phạt Thoát Ngang:** Ai làm đội trưởng mà F5 thoát game né trách nhiệm sẽ bị tước quyền làm đội trưởng trận sau.
-
-## 📊 Bình Luận Viên Trực Tiếp
-
-- Bình luận siêu vui ngay khi ghi bàn (VD: "Đệm bóng cận thành", "Sút xa sấm sét", "Flash"...).
-- Hét lên nếu có Hattrick, Poker...
-- Bình luận theo từng quả penalty.
-
-## 📡 Tương Tác Qua Discord
-
-- **Bảng Vàng:** Trận nào xong cũng gửi thông số chung cuộc và tên MVP thẳng lên kênh Discord.
-- **Log Chat:** Xem trực tiếp ai đang chat gì trong phòng qua Discord (để dễ quản lý).
-- **Báo cáo (Report):** Thấy ai hack hay phá game, gõ `!report` là tin nhắn bay thẳng tới Admin trên Discord.
-
-## 🏟️ Danh Sách Sân Vận Động (Map)
-
-- **Sân 5v5:** Map chính để cày Rank, có bo tròn góc và hỗ trợ Anti-CB.
-- **Sân 3v3:** Dành cho lúc phòng hơi hẻo người.
-- **Sân 1v1 / 2v2:** Dành cho mấy thanh niên thích solo kỹ năng.
-- **Sân Penalty:** Sân chuyên biệt chỉ để sút luân lưu.
-- **Sân Tập Luyện:** Mở 24/24, không tính giờ, anh em vào tha hồ múa lửa.
+> **Xem hướng dẫn chi tiết về tính năng và danh sách lệnh trong game tại:**  
+> 🌐 [https://huongdanhethongclan.netlify.app/](https://huongdanhethongclan.netlify.app/)
 
 ---
 
-# 🚀 HƯỚNG DẪN CẮM SERVER 24/7 (TRÊN VPS UBUNTU)
+## Yêu cầu hệ thống
 
-Code này viết riêng để treo trên máy chủ VPS (Ubuntu). Để kết nối các tệp `app.js` chạy code chính `codehaxballfinal.js`, anh em làm theo các bước dân dã sau:
+- **Node.js**: Phiên bản 18 LTS trở lên (khuyên dùng Node.js 20 LTS).
+- **Hệ điều hành**: Linux (Ubuntu, Debian...), Windows hoặc macOS.
 
-### Bước 1: Chuẩn bị "đồ nghề" (NodeJS)
+---
 
-Anh em mở terminal của VPS lên và gõ lần lượt các lệnh này để tải NodeJS (Bản 18 hoặc 20 nhé):
+## Hướng dẫn cài đặt và sử dụng
 
-```bash
-# Cập nhật VPS cho mới mẻ
-sudo apt update && sudo apt upgrade -y
+### Bước 1: Tải mã nguồn
 
-# Tải NodeJS bản 20
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# Kiểm tra xem cài xong chưa (ra phiên bản là OK)
-node -v
-```
-
-### Bước 2: Tải Source Code & Cài Thư Viện
-
-1. Gom hết code của anh em (cần nhất là 2 file `app.js` và `codehaxballfinal.js`) ném vào 1 thư mục bất kỳ trên VPS, ví dụ đặt ở `/root/haxball-server`.
-2. Truy cập vào thư mục đó:
+Mở terminal / cmd và tải mã nguồn về máy hoặc VPS:
 
 ```bash
-cd /root/haxball-server
+git clone https://github.com/luongtrk/haxball-host-with-clan-system.git
+cd haxball-host-with-clan-system
 ```
 
-3. Cài 2 gói thư viện này để code chạy được:
+### Bước 2: Cài đặt thư viện
+
+Chạy lệnh sau để cài 2 gói thư viện bắt buộc:
 
 ```bash
 npm install haxball.js node-localstorage
 ```
 
-### Bước 3: Đi xin "Chìa khoá" (Token) để mở phòng
+### Bước 3: Lấy Token mở phòng
 
-1. Vào trang: https://www.haxball.com/headlesstoken
-2. Vượt mã Captcha, copy đoạn mã Token loằng ngoằng nó hiện ra.
-3. Mở file `app.js` ra sửa (gõ `nano app.js`).
-4. Tìm dòng `const TOKEN = "thr1.AAAA...";` và dán Token mới của anh em đè lên.
-5. Xong thì bấm `Ctrl + O` (chữ O nhé) -> `Enter` để lưu, rồi `Ctrl + X` để thoát ra.
+1. Truy cập trang lấy token chính thức: [https://www.haxball.com/headlesstoken](https://www.haxball.com/headlesstoken)
+2. Vượt mã captcha và copy chuỗi mã Token hiện ra.
+3. Mở file `app.js`, tìm dòng:
+   ```javascript
+   const TOKEN = ""; //<--- Điền Token vào đây
+   ```
+   Dán mã Token vừa copy vào giữa cặp dấu ngoặc kép.
 
-### Bước 4: Khởi chạy Server (Treo vĩnh viễn)
+_(Lưu ý: Headless token chỉ có tác dụng trong vài chục phút, mỗi lần chạy lại phòng bạn cần lấy Token mới)._
 
-**Cách 1: Chạy nháp xem có lỗi không**
+### Bước 4: Cấu hình phòng (Tùy chọn)
+
+Mở file `codehaxballfinal.js` để chỉnh sửa các cài đặt theo ý muốn. Code đã chia sẵn các biến cấu hình rất rõ ràng:
+
+#### 1. Cài đặt phòng cơ bản
+- `ROOM_NAME`: Tên phòng hiển thị trên danh sách server Haxball.
+- `SUPER_ADMIN_AUTHS`: Điền Auth key của bạn vào mảng (ví dụ: `["auth_cua_ban"]`) để nhận quyền Super Admin cao nhất (miễn nhiễm kick/ban, toàn quyền dùng lệnh quản trị).
+- `PUBLIC`: Đặt `true` để mở phòng công khai cho mọi người cùng thấy, hoặc `false` nếu muốn làm phòng kín (chỉ vào bằng link).
+- `playerName`: Tên hiển thị của bot host trong phòng (mặc định: `"BLV Niko Bellic"`).
+- `maxPlayers`: Giới hạn số người chơi tối đa có thể vào phòng (mặc định: 30 người).
+
+#### 2. Thể thức thi đấu & Chế độ chơi
+- `MODE`: Chọn chế độ chia đội chính:
+  - `"pick"`: Hai đội trưởng lần lượt chọn người vào đội.
+  - `"rand"`: Tự động chia người ngẫu nhiên và cân bằng theo điểm Rank Elo.
+- `MAX_PLAYERS`: Số người thi đấu mỗi đội (mặc định là `5` tương ứng map 5v5; có thể chỉnh thành `3` nếu bạn muốn làm phòng 3v3).
+- `TIME_LIMIT`: Thời gian tối đa của một trận đấu, tính theo phút (mặc định: `4` phút).
+- `SCORE_LIMIT`: Số bàn thắng chạm trần để thắng trận (mặc định: `4` bàn).
+
+#### 3. Thời gian chờ & Chống treo máy (AFK)
+- `ACTIVITY_TIMEOUT`: Số giây đứng im trong sân trước khi bị tính là AFK và tự động đưa ra làm Khán giả (mặc định: `10` giây).
+- `AFK_TIMEOUT`: Thời gian treo máy tối đa ở hàng ghế Khán giả trước khi bị kick khỏi phòng (mặc định: `10 * 60` tức 10 phút).
+- `FIRST_PICK_TIMEOUT` & `PICK_TIMEOUT`: Thời gian cho đội trưởng chọn quân (lượt đầu tiên `15` giây, các lượt sau `25` giây).
+- `PENALTY_TIMEOUT`: Thời gian tối đa cho mỗi lượt sút luân lưu Penalty (mặc định: `10` giây).
+
+#### 4. Chống chửi bậy & Luật phạt
+- `BAD_WORDS`: Danh sách các từ chửi bậy, tục tĩu cần chặn (bạn có thể thêm bớt từ tùy ý).
+- `MAX_BAD_WORDS`: Số lần nói bậy tối đa trước khi bị hệ thống tự động cấm chat (mute) 10 phút (mặc định: `4` lần).
+- `MAX_WARNINGS_PER_PLAYER`: Số lần cảnh báo tối đa trước khi bị xử phạt ban khỏi phòng.
+
+#### 5. Kết nối Discord (Gửi kết quả, log chat & báo cáo)
+- `DISCORD_LINK`: Link mời vào server Discord của bạn (hiển thị khi người chơi gõ lệnh `!discord`).
+- `DISCORD_STATS_WEBHOOK`: Điền link Webhook Discord để bot tự động gửi bảng vàng thống kê trận đấu và vinh danh MVP sau mỗi trận.
+- `DISCORD_WEBHOOK`: Điền link Webhook để bot gửi tỷ số trận đấu và file video quay lại trận (nếu bật `SAVE_RECORDINGS = true`).
+- `DISCORD_REPORT_WEBHOOK` & `REPORT_TAG_USER_IDS`: Nhận tin báo cáo khi người chơi gõ `!report` để tố cáo phá game/hack, kèm ID tài khoản Discord để tag Admin nhận thông báo.
+- `DISCORD_CHAT_WEBHOOK`: Điền link Webhook để đẩy toàn bộ tin nhắn chat trong phòng game sang kênh Discord theo thời gian thực (log chat).
+- `DISCORD_BOT_TOKEN` & `DISCORD_CHANNEL_ID`: Điền Token bot Discord và ID kênh nếu bạn muốn nhận tin nhắn từ Discord gửi ngược vào phòng Haxball (chat 2 chiều).
+
+---
+
+### Bước 5: Khởi chạy phòng
+
+#### Cách 1: Chạy trực tiếp (để kiểm tra xem có lỗi không)
 
 ```bash
 node app.js
 ```
 
-Nếu màn hình báo `"✅ Code Game đã chạy qua trơn tru..."` và phun ra cái Link phòng (`https://www.haxball.com/play?c=...`) thì là ngon lành! Nhấn `Ctrl + C` để tắt.
+Khi phòng mở thành công, link vào phòng (`https://www.haxball.com/play?c=...`) sẽ hiện lên màn hình terminal. Nhấn `Ctrl + C` khi muốn tắt phòng.
 
-**Cách 2: Treo cho chạy ngầm 24/7 (Khuyên dùng mạnh)**
-Treo cách này thì anh em có tắt máy tính đi ngủ, server vẫn chạy tì tì trên VPS:
+#### Cách 2: Chạy nền 24/7 bằng PM2 (khuyên dùng khi treo trên VPS)
+
+Treo cách này thì khi bạn tắt terminal hay tắt máy tính, phòng trên VPS vẫn tiếp tục chạy:
 
 ```bash
-# Cài công cụ PM2
-sudo npm install pm2 -g
+# Cài đặt PM2
+npm install pm2 -g
 
-# Đẩy phòng Haxball vào chạy ngầm (đặt tên là Haxball-Room)
-pm2 start app.js --name "Haxball-Room"
+# Đưa phòng vào chạy ngầm (đặt tên là haxball-room)
+pm2 start app.js --name "haxball-room"
 
-# Lưu cấu hình để lỡ VPS có sập nguồn bật lại thì phòng tự lên
+# Lưu lại để VPS tự động mở lại phòng nếu máy chủ bị khởi động lại
 pm2 save
 pm2 startup
 ```
 
-**📌 Vài lệnh PM2 dắt túi cho anh em:**
-
-```bash
-- Lấy Link phòng (hoặc soi lỗi xem thằng nào phá): `pm2 logs Haxball-Room`
-- Dừng phòng: `pm2 stop Haxball-Room`
-- Chạy lại phòng: `pm2 restart Haxball-Room`
-
-```
+**Các lệnh PM2 thường dùng:**
+- Xem link phòng và nhật ký hoạt động: `pm2 logs haxball-room`
+- Chạy lại phòng: `pm2 restart haxball-room`
+- Tắt phòng: `pm2 stop haxball-room`
+- Xem trạng thái phòng: `pm2 status`
