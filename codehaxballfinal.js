@@ -1,5 +1,3 @@
-const SUPER_ADMIN_PASSWORD = "noibuonchientranh";
-const ADMIN_PASSWORD = "traitimquacam";
 const SUPER_ADMIN_AUTHS = [""];
 const MODE = "pick";
 const ROOM_NAME = `⚽𝘼𝙪𝙩𝙤 𝙍𝙤𝙤𝙢 (RANK & CLAN) | LỎ NHẤT VN`;
@@ -1763,9 +1761,9 @@ function clanFunc(value, player) {
 
   if (!value || value.trim() === "") {
     let msg = `🛡️ HỆ THỐNG CLAN (Gõ !huongdan để xem chi tiết trên Web):\n` +
-      `🌎 Chung: !clan list | info <Tag> | top | members | join | leave | propose | togglecolor\n` +
-      `👑 Quản lý: !clan requests | accept | kick | promote | demote | transfer\n` +
-      `🎨 Tùy chỉnh (>=5 TV): !clan rival | unrival | setcolor | rename | seticon | retag`;
+      `🌎 Chung: !clan list | info <Tag> | top | members | join | cancel | leave | propose | togglecolor\n` +
+      `👑 Quản lý: !clan requests | accept | decline | kick | promote | demote | transfer | disband\n` +
+      `🎨 Tùy chỉnh (>=5 TV): !clan rivals | rival | unrival | setcolor | rename | seticon | retag`;
 
     if (isAdmin) {
       msg += `\n👮 Admin: !clan proposals | approve | reject | create | delete | setleader`;
@@ -1981,9 +1979,10 @@ function clanFunc(value, player) {
     let listStr = clanRanking.map((item, index) => {
       let c = item.data;
       let displayTag = c.icon ? `${c.icon}${item.tag}` : item.tag;
+      let maxMembers = (item.lvl >= 5) ? 30 : (item.lvl === 4) ? 22 : (item.lvl === 3) ? 18 : (item.lvl === 2) ? 14 : 10;
       let powerStr = item.isValid ? `Lv.${item.lvl} | 🏆 Elo: ${item.elo} | ⚔️ Win ${item.winRate}%` : `(Cần >= 5 TV)`;
       let rankMedal = item.isValid ? (index === 0 ? "🥇 " : index === 1 ? "🥈 " : index === 2 ? "🥉 " : `[#${index + 1}] `) : `[-] `;
-      return `${rankMedal}[${displayTag}] ${c.name || item.tag} - ${c.members.length} TV | ${powerStr}`;
+      return `${rankMedal}[${displayTag}] ${c.name || item.tag} - ${c.members.length}/${maxMembers} TV | ${powerStr}`;
     }).join("\n");
 
     room.sendAnnouncement(`🏆 BẢNG XẾP HẠNG CLAN SERVER:\n${listStr}`, player.id, 0x00FFFF, "small-bold", 1);
@@ -2005,12 +2004,16 @@ function clanFunc(value, player) {
     let s = c.stats || { games: 0, wins: 0, goals: 0 };
     let winRate = s.games > 0 ? Math.round((s.wins / s.games) * 100) : 0;
 
+    let nextExp = (lvl === 1) ? 1000 : (lvl === 2) ? 2500 : (lvl === 3) ? 5000 : (lvl === 4) ? 8000 : 8000;
+    let expStr = (lvl >= 5) ? `${exp} EXP (MAX CẤP)` : `${exp}/${nextExp} EXP`;
+    let maxMembers = (lvl >= 5) ? 30 : (lvl === 4) ? 22 : (lvl === 3) ? 18 : (lvl === 2) ? 14 : 10;
+
     let eloStr = (c.members.length >= 5) ? `🏆 ${elo}` : `Cần >= 5 Thành viên`;
     let statsStr = `⚔️ Trận: ${s.games} | 🏅 Thắng: ${s.wins} (${winRate}%) | ⚽ Ghi bàn: ${s.goals}`;
     let rivalStr = (c.rivals && c.rivals.length > 0) ? c.rivals.join(", ") : "Không có";
     let trophiesStr = (c.trophies && c.trophies.length > 0) ? c.trophies.join(", ") : "Chưa có";
 
-    room.sendAnnouncement(`🛡️ THÔNG TIN CLAN [${paramUpper}] - ${c.name || paramUpper}:\n- Leader: 👑 ${leaderName}\n- Cấp độ: Lv.${lvl} (EXP: ${exp})\n- Sức Mạnh (Elo): ${eloStr}\n- Thống Kê: ${statsStr}\n- Tủ Cúp: ${trophiesStr}\n- Kẻ Thù: ${rivalStr}\n- Icon: ${iconDisplay} | Màu Role: ${hexColor}\n- Tổng TV: ${c.members.length} | Phó Leader: ${c.coleaders.length}`, player.id, 0x00FFFF, "small-bold", 1);
+    room.sendAnnouncement(`🛡️ THÔNG TIN CLAN [${paramUpper}] - ${c.name || paramUpper}:\n- Leader: 👑 ${leaderName}\n- Cấp độ: Lv.${lvl} [${expStr}]\n- Sức Mạnh (Elo): ${eloStr}\n- Thống Kê: ${statsStr}\n- Tủ Cúp: ${trophiesStr}\n- Kẻ Thù: ${rivalStr}\n- Icon: ${iconDisplay} | Màu Role: ${hexColor}\n- Thành viên: ${c.members.length}/${maxMembers} TV | Phó Leader: ${c.coleaders.length}`, player.id, 0x00FFFF, "small-bold", 1);
     return false;
   }
 
@@ -2051,7 +2054,9 @@ function clanFunc(value, player) {
       if (!a.startsWith("🔰") && b.startsWith("🔰")) return 1;
       return 0;
     });
-    room.sendAnnouncement(`👥 THÀNH VIÊN CLAN [${targetClanTag}] (${c.members.length} người):\n` + memberList.join("  |  "), player.id, 0x00FFFF, "small-bold", 1);
+    let lvl = c.level || 1;
+    let maxMembers = (lvl >= 5) ? 30 : (lvl === 4) ? 22 : (lvl === 3) ? 18 : (lvl === 2) ? 14 : 10;
+    room.sendAnnouncement(`👥 THÀNH VIÊN CLAN [${targetClanTag}] (${c.members.length}/${maxMembers} người):\n` + memberList.join("  |  "), player.id, 0x00FFFF, "small-bold", 1);
     return false;
   }
 
@@ -2059,9 +2064,37 @@ function clanFunc(value, player) {
     if (stats.clan) { room.sendAnnouncement(`❌ Bạn đã ở trong Clan [${stats.clan}] rồi!`, player.id, 0xFF4444); return false; }
     if (!clans[paramUpper]) { room.sendAnnouncement("❌ Clan không tồn tại!", player.id, 0xFF4444); return false; }
     if (clans[paramUpper].requests.includes(auth)) { room.sendAnnouncement("❌ Bạn đã gửi yêu cầu rồi, hãy đợi duyệt!", player.id, 0xFF4444); return false; }
-    clans[paramUpper].requests.push(auth);
+
+    let targetClan = clans[paramUpper];
+    let lvl = targetClan.level || 1;
+    let maxMembers = (lvl >= 5) ? 30 : (lvl === 4) ? 22 : (lvl === 3) ? 18 : (lvl === 2) ? 14 : 10;
+    if (targetClan.members.length >= maxMembers) {
+      room.sendAnnouncement(`❌ Clan [${paramUpper}] hiện đã đầy thành viên (${targetClan.members.length}/${maxMembers} TV)!`, player.id, 0xFF4444, "bold", 1);
+      return false;
+    }
+
+    targetClan.requests.push(auth);
     saveClans();
-    room.sendAnnouncement(`✅ Đã gửi yêu cầu gia nhập Clan [${paramUpper}].`, player.id, 0x00FF00, "bold", 1);
+    room.sendAnnouncement(`✅ Đã gửi yêu cầu gia nhập Clan [${paramUpper}]. Gõ '!clan cancel ${paramUpper}' nếu muốn rút lại đơn.`, player.id, 0x00FF00, "bold", 1);
+    return false;
+  }
+
+  if (cmd === "cancel") {
+    let targetClanTag = paramUpper;
+    let canceledClans = [];
+    for (let t in clans) {
+      if (targetClanTag && t !== targetClanTag) continue;
+      if (clans[t].requests && clans[t].requests.includes(auth)) {
+        clans[t].requests = clans[t].requests.filter(a => a !== auth);
+        canceledClans.push(t);
+      }
+    }
+    if (canceledClans.length > 0) {
+      saveClans();
+      room.sendAnnouncement(`✅ Đã hủy yêu cầu gia nhập Clan [${canceledClans.join(", ")}].`, player.id, 0x00FF00, "bold", 1);
+    } else {
+      room.sendAnnouncement("❌ Bạn không có yêu cầu gia nhập nào đang chờ duyệt!", player.id, 0xFF4444);
+    }
     return false;
   }
 
@@ -2070,7 +2103,17 @@ function clanFunc(value, player) {
 
     if (!myClanTag) { room.sendAnnouncement("❌ Bạn chưa tham gia Clan nào!", player.id, 0xFF4444); return false; }
     if (clans[myClanTag].leader === auth) {
-      room.sendAnnouncement("❌ Leader không thể rời đi! Hãy dùng lệnh '!clan transfer @Tên' để nhường chức trước khi rời.", player.id, 0xFF4444); return false;
+      if (clans[myClanTag].members.length <= 1) {
+        delete clans[myClanTag];
+        stats.clan = null;
+        delete stats.auth;
+        localStorage.setItem(auth, JSON.stringify(stats));
+        saveClans();
+        room.sendAnnouncement(`👋 Bạn là người cuối cùng nên Clan [${myClanTag}] đã tự động giải tán!`, player.id, 0xFFA500, "bold", 1);
+        return false;
+      }
+      room.sendAnnouncement("❌ Leader không thể rời đi khi còn thành viên! Hãy dùng lệnh '!clan transfer @Tên' hoặc '!clan disband confirm' để giải tán.", player.id, 0xFF4444);
+      return false;
     }
     clans[myClanTag].members = clans[myClanTag].members.filter(a => a !== auth);
     clans[myClanTag].coleaders = clans[myClanTag].coleaders.filter(a => a !== auth);
@@ -2108,6 +2151,46 @@ function clanFunc(value, player) {
   let isLeader = myClan && (myClan.leader === auth);
   let isCoLeader = myClan && (myClan.coleaders && myClan.coleaders.includes(auth));
   let hasPerm = isLeader || isCoLeader;
+
+  if (cmd === "rivals" || cmd === "rivalrequests") {
+    let targetClanTag = paramUpper || myClanTag;
+    if (!targetClanTag || !clans[targetClanTag]) {
+      room.sendAnnouncement("❌ Vui lòng nhập Tag Clan hoặc gia nhập 1 Clan để xem!", player.id, 0xFF4444);
+      return false;
+    }
+    let c = clans[targetClanTag];
+    let rivalList = (c.rivals && c.rivals.length > 0) ? c.rivals.map(t => `- [${t}] ${clans[t] ? clans[t].name : t}`).join("\n") : "Chưa có kẻ thù nào.";
+    let reqList = (c.rivalRequests && c.rivalRequests.length > 0) ? c.rivalRequests.map(t => `- [${t}] ${clans[t] ? clans[t].name : t}`).join("\n") : "Không có chiến thư nào đang chờ duyệt.";
+
+    room.sendAnnouncement(`⚔️ TÌNH TRẠNG KẺ THÙ CLAN [${targetClanTag}]:\n🔥 Kẻ thù truyền kiếp (X2 Elo Clan War):\n${rivalList}\n📜 Chiến thư gửi tới (Dùng '!clan rival <Tag>' để nhận):\n${reqList}`, player.id, 0x00FFFF, "small-bold", 1);
+    return false;
+  }
+
+  if (cmd === "disband") {
+    if (!isLeader) { room.sendAnnouncement("❌ Chỉ Leader mới có quyền giải tán Clan!", player.id, 0xFF4444); return false; }
+
+    if (myClan.members.length > 1 && param.toLowerCase() !== "confirm") {
+      room.sendAnnouncement(`⚠️ CẢNH BÁO: Clan [${myClanTag}] hiện có ${myClan.members.length} thành viên! Để giải tán toàn bộ dữ liệu Clan, hãy gõ: !clan disband confirm`, player.id, 0xFFCC00, "bold", 2);
+      return false;
+    }
+
+    for (let memberAuth of myClan.members) {
+      let memberStats = getStats(memberAuth);
+      memberStats.clan = null;
+      delete memberStats.auth;
+      localStorage.setItem(memberAuth, JSON.stringify(memberStats));
+    }
+
+    for (let t in clans) {
+      if (clans[t].rivals) clans[t].rivals = clans[t].rivals.filter(r => r !== myClanTag);
+      if (clans[t].rivalRequests) clans[t].rivalRequests = clans[t].rivalRequests.filter(r => r !== myClanTag);
+    }
+
+    delete clans[myClanTag];
+    saveClans();
+    room.sendAnnouncement(`💥 LEADER ĐÃ GIẢI TÁN CLAN: Clan [${myClanTag}] chính thức ngừng hoạt động!`, null, 0xFF4444, "bold", 2);
+    return false;
+  }
 
   if (cmd === "rival") {
     if (!isLeader) { room.sendAnnouncement("❌ Chỉ Leader mới có quyền Tuyên Chiến!", player.id, 0xFF4444); return false; }
@@ -2240,7 +2323,7 @@ function clanFunc(value, player) {
     return false;
   }
 
-  if (["requests", "accept", "kick"].includes(cmd) && !hasPerm) {
+  if (["requests", "accept", "decline", "deny", "kick"].includes(cmd) && !hasPerm) {
     room.sendAnnouncement("❌ Chỉ Leader và Co-Leader mới có quyền này!", player.id, 0xFF4444); return false;
   }
   if (["promote", "demote", "transfer"].includes(cmd) && !isLeader) {
@@ -2251,29 +2334,42 @@ function clanFunc(value, player) {
     let reqs = myClan.requests;
     if (reqs.length === 0) { room.sendAnnouncement("Không có ai xin vào Clan lúc này.", player.id, 0xFFA500); return false; }
 
-    let onlineReqs = [];
+    let reqList = [];
     let pList = room.getPlayerList();
     for (let rAuth of reqs) {
       let p = pList.find(pl => getAuth(pl.id) === rAuth);
-      if (p) onlineReqs.push((typeof getTag === "function") ? getTag(p.name) : `@${p.name.replace(/ /g, "_")}`);
+      if (p) {
+        reqList.push(`🟢 ${(typeof getTag === "function") ? getTag(p.name) : `@${p.name.replace(/ /g, "_")}`}`);
+      } else {
+        let st = getStats(rAuth);
+        reqList.push(`⚪ @${st.name ? st.name.replace(/ /g, "_") : "Unknown"} (Offline)`);
+      }
     }
 
-    room.sendAnnouncement(`📝 YÊU CẦU GIA NHẬP (Đang online):\n` + (onlineReqs.length ? onlineReqs.join("\n") : "Có người xin vào nhưng họ đang Offline."), player.id, 0x00FFFF, "small-bold", 1);
+    room.sendAnnouncement(`📝 YÊU CẦU GIA NHẬP (${reqs.length} người):\n` + reqList.join("\n") + `\n👉 Gõ '!clan accept @Tên' để nhận hoặc '!clan decline @Tên' để từ chối.`, player.id, 0x00FFFF, "small-bold", 1);
     return false;
   }
-  if (["accept", "kick", "promote", "demote", "transfer"].includes(cmd)) {
-    let targetName = param.replace(/^@/, "").trim().replace(/_/g, " ");
-    if (!targetName) {
+
+  if (["accept", "decline", "deny", "kick", "promote", "demote", "transfer"].includes(cmd)) {
+    let rawTarget = param.replace(/^@/, "").trim();
+    if (!rawTarget) {
       room.sendAnnouncement(`❌ Cú pháp sai! Vui lòng nhập tên. VD: !clan ${cmd} @Tên_Nguoi_Choi`, player.id, 0xFF4444);
       return false;
     }
 
     let targetAuth = null;
     let targetStats = null;
-    let actualName = targetName;
+    let actualName = rawTarget;
 
-    // 1. TÌM KIẾM ONLINE (Quét người đang trong phòng trước để lấy tên chuẩn nếu họ đổi tên)
-    let targetPlayer = room.getPlayerList().find(p => p.id !== 0 && p.name.toLowerCase() === targetName.toLowerCase());
+    let targetNorm = rawTarget.toLowerCase();
+    let targetNormSpaced = targetNorm.replace(/_/g, " ");
+
+    // 1. TÌM KIẾM ONLINE (Quét người đang trong phòng)
+    let targetPlayer = room.getPlayerList().find(p => p.id !== 0 && (
+      p.name.toLowerCase() === targetNorm ||
+      p.name.toLowerCase() === targetNormSpaced ||
+      p.name.toLowerCase().replace(/ /g, "_") === targetNorm
+    ));
 
     if (targetPlayer) {
       targetAuth = getAuth(targetPlayer.id);
@@ -2282,28 +2378,42 @@ function clanFunc(value, player) {
     }
     // 2. TÌM KIẾM OFFLINE (Lục tìm trong Database nếu họ không onl)
     else {
-      // Gộp danh sách những người đang xin vào và những người đang là thành viên
       let involvedAuths = [...myClan.members, ...myClan.requests];
       for (let a of involvedAuths) {
         let st = getStats(a);
-        if (st && st.name && st.name.toLowerCase() === targetName.toLowerCase()) {
-          targetAuth = a;
-          targetStats = st;
-          actualName = st.name;
-          break;
+        if (st && st.name) {
+          let sName = st.name.toLowerCase();
+          if (sName === targetNorm || sName === targetNormSpaced || sName.replace(/ /g, "_") === targetNorm) {
+            targetAuth = a;
+            targetStats = st;
+            actualName = st.name;
+            break;
+          }
         }
       }
     }
 
     // 3. CHỐT KẾT QUẢ TÌM KIẾM
     if (!targetAuth) {
-      room.sendAnnouncement(`❌ Không tìm thấy "${targetName}" trong danh sách chờ duyệt hoặc thành viên Clan!`, player.id, 0xFF4444);
+      room.sendAnnouncement(`❌ Không tìm thấy "${rawTarget}" trong danh sách chờ duyệt hoặc thành viên Clan!`, player.id, 0xFF4444);
       return false;
     }
 
     if (cmd === "accept") {
       if (!myClan.requests.includes(targetAuth)) { room.sendAnnouncement("❌ Người này chưa xin vào Clan!", player.id, 0xFF4444); return false; }
-      if (targetStats.clan) { room.sendAnnouncement("❌ Người này đã vào Clan khác rồi!", player.id, 0xFF4444); return false; }
+      if (targetStats.clan) {
+        myClan.requests = myClan.requests.filter(a => a !== targetAuth);
+        saveClans();
+        room.sendAnnouncement("❌ Người này đã vào Clan khác rồi! Đã xóa khỏi danh sách chờ.", player.id, 0xFF4444);
+        return false;
+      }
+
+      let lvl = myClan.level || 1;
+      let maxMembers = (lvl >= 5) ? 30 : (lvl === 4) ? 22 : (lvl === 3) ? 18 : (lvl === 2) ? 14 : 10;
+      if (myClan.members.length >= maxMembers) {
+        room.sendAnnouncement(`❌ Clan đã đạt giới hạn thành viên tối đa (Lv.${lvl}: Tối đa ${maxMembers} TV)! Hãy cày EXP để nâng cấp Clan.`, player.id, 0xFF4444, "bold", 1);
+        return false;
+      }
 
       myClan.requests = myClan.requests.filter(a => a !== targetAuth);
       myClan.members.push(targetAuth);
@@ -2314,7 +2424,15 @@ function clanFunc(value, player) {
 
       myClan.lastActive = Date.now();
       saveClans();
-      room.sendAnnouncement(`⚔️ ${player.name} đã thu nạp ${actualName} vào Clan [${myClanTag}]!`, null, 0x00FF00, "bold", 2);
+      room.sendAnnouncement(`⚔️ ${player.name} đã thu nạp ${actualName} vào Clan [${myClanTag}] (${myClan.members.length}/${maxMembers} TV)!`, null, 0x00FF00, "bold", 2);
+    }
+
+    else if (cmd === "decline" || cmd === "deny") {
+      if (!myClan.requests.includes(targetAuth)) { room.sendAnnouncement("❌ Người này không có trong danh sách chờ duyệt!", player.id, 0xFF4444); return false; }
+
+      myClan.requests = myClan.requests.filter(a => a !== targetAuth);
+      saveClans();
+      room.sendAnnouncement(`❌ Đã từ chối đơn gia nhập của ${actualName}.`, player.id, 0xFFA500, "bold", 1);
     }
 
     else if (cmd === "kick") {
@@ -2336,6 +2454,7 @@ function clanFunc(value, player) {
     }
 
     else if (cmd === "promote") {
+      if (targetAuth === myClan.leader) { room.sendAnnouncement("❌ Người này vốn đã là Leader!", player.id, 0xFF4444); return false; }
       if (!myClan.members.includes(targetAuth)) { room.sendAnnouncement("❌ Người này không ở trong Clan!", player.id, 0xFF4444); return false; }
       if (myClan.coleaders && myClan.coleaders.includes(targetAuth)) { room.sendAnnouncement("❌ Người này đã là Co-Leader rồi!", player.id, 0xFF4444); return false; }
 
@@ -2357,12 +2476,10 @@ function clanFunc(value, player) {
       if (targetAuth === auth) { room.sendAnnouncement("❌ Bạn vốn đã là Leader rồi!", player.id, 0xFF4444); return false; }
       if (!myClan.members.includes(targetAuth)) { room.sendAnnouncement("❌ Người này không ở trong Clan của bạn!", player.id, 0xFF4444); return false; }
 
-      // Thu hồi quyền Co-Leader của người nhận (nếu có)
       if (myClan.coleaders && myClan.coleaders.includes(targetAuth)) {
         myClan.coleaders = myClan.coleaders.filter(a => a !== targetAuth);
       }
 
-      // Trao quyền
       myClan.leader = targetAuth;
       saveClans();
 
