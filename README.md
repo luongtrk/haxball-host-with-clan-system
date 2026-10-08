@@ -27,11 +27,15 @@ cd haxball-host-with-clan-system
 
 ### Bước 2: Cài đặt thư viện
 
-Chạy lệnh sau để cài 2 gói thư viện bắt buộc:
+Chạy lệnh sau để cài đặt các thư viện cần thiết:
 
 ```bash
-npm install haxball.js node-localstorage
+npm install haxball.js node-localstorage discord.js
 ```
+
+- `haxball.js`: Chạy phòng Haxball trên môi trường Node.js.
+- `node-localstorage`: Lưu trữ dữ liệu Rank, chỉ số cầu thủ và Clan trên máy chủ.
+- `discord.js`: Kết nối Bot Discord để nhận tin nhắn từ Discord gửi vào phòng game (chat 2 chiều).
 
 ### Bước 3: Lấy Token mở phòng
 
@@ -77,11 +81,16 @@ Mở file `codehaxballfinal.js` để chỉnh sửa các cài đặt theo ý mu�
 
 #### 5. Kết nối Discord (Gửi kết quả, log chat & báo cáo)
 - `DISCORD_LINK`: Link mời vào server Discord của bạn (hiển thị khi người chơi gõ lệnh `!discord`).
-- `DISCORD_STATS_WEBHOOK`: Điền link Webhook Discord để bot tự động gửi bảng vàng thống kê trận đấu và vinh danh MVP sau mỗi trận.
-- `DISCORD_WEBHOOK`: Điền link Webhook để bot gửi tỷ số trận đấu và file video quay lại trận (nếu bật `SAVE_RECORDINGS = true`).
-- `DISCORD_REPORT_WEBHOOK` & `REPORT_TAG_USER_IDS`: Nhận tin báo cáo khi người chơi gõ `!report` để tố cáo phá game/hack, kèm ID tài khoản Discord để tag Admin nhận thông báo.
-- `DISCORD_CHAT_WEBHOOK`: Điền link Webhook để đẩy toàn bộ tin nhắn chat trong phòng game sang kênh Discord theo thời gian thực (log chat).
-- `DISCORD_BOT_TOKEN` & `DISCORD_CHANNEL_ID`: Điền Token bot Discord và ID kênh nếu bạn muốn nhận tin nhắn từ Discord gửi ngược vào phòng Haxball (chat 2 chiều).
+- `DISCORD_STATS_WEBHOOK`: Link Webhook để bot tự động gửi bảng vàng thống kê trận đấu và vinh danh MVP sau mỗi trận.
+- `DISCORD_WEBHOOK`: Link Webhook để bot gửi tỷ số trận đấu và file video quay lại trận (nếu bật `SAVE_RECORDINGS = true`).
+- `DISCORD_REPORT_WEBHOOK` & `REPORT_TAG_USER_IDS`: Link Webhook nhận thông báo khi người chơi gõ `!report` để tố cáo phá game/hack, kèm danh sách ID tài khoản Discord để tag Admin nhận thông báo.
+- `DISCORD_CHAT_WEBHOOK`: Link Webhook để đẩy toàn bộ tin nhắn chat trong phòng game sang kênh Discord theo thời gian thực (log chat).
+- `DISCORD_BOT_TOKEN` & `DISCORD_CHANNEL_ID`: Token bot Discord và ID kênh để bật tính năng chat 2 chiều giữa Discord và phòng game.
+  - *Lưu ý khi dùng Bot Discord:* Cần cài thư viện `discord.js` (đã có ở Bước 2) và vào trang [Discord Developer Portal](https://discord.com/developers/applications) -> Chọn Bot của bạn -> Mục **Bot** -> Tìm phần **Privileged Gateway Intents** và bật xanh dòng **Message Content Intent** để bot đọc được tin nhắn.
+  - *Lệnh điều khiển trên kênh Discord:*
+    - Nhập bất kỳ tin nhắn nào trong kênh để gửi vào phòng game dưới dạng thông báo `[ADMIN]: Nội dung`.
+    - Gõ `!xemchat`: BẬT chế độ chuyển tiếp chat từ trong game sang kênh Discord.
+    - Gõ `!tatchat`: TẮT chế độ chuyển tiếp chat.
 
 ---
 
