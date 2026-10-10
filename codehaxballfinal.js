@@ -686,11 +686,12 @@ class Surrender {
   constructor() {
     this.votes = [new Set, new Set];
   }
-  surrender(teamId) {
+  surrender(teamId, byCaptain = false) {
     isPlaying = false;
     let scores = room.getScores();
     prevScore = `${scores.red}-${scores.blue}`;
     surrenderedTeam = teamId; // LƯU LẠI ID CỦA ĐỘI VỪA ĐẦU HÀNG
+    surrenderByCaptain = byCaptain ? teamId : 0; // Đánh dấu nếu đội trưởng tự ý đầu hàng
     handlePostGame(getOppositeTeamId(teamId));
     room.stopGame();
     room.sendAnnouncement(`🏴 Đội ${TEAM_NAMES[teamId]} đã xin chui háng`, null, 0x00FFFF, "small-italic", 0)
@@ -698,7 +699,7 @@ class Surrender {
   vote(player) {
     if (player.team == 0) return;
     if (isCaptain(player.id)) {
-      this.surrender(player.team);
+      this.surrender(player.team, true);
       return; // 🎯 VÁ LỖI: Thêm return để ngắt ngay lập tức, không in ra thông báo đếm phiếu thừa thãi nữa!
     }
 
@@ -710,7 +711,7 @@ class Surrender {
     };
     room.sendAnnouncement(`${player.name} đã bỏ phiếu chui háng cho ${TEAM_NAMES[player.team]} (${count}/${MIN_VOTES_FOR_SURRENDER})`, null, GREEN, "small", 0);
 
-    if (count >= MIN_VOTES_FOR_SURRENDER) this.surrender(player.team);
+    if (count >= MIN_VOTES_FOR_SURRENDER) this.surrender(player.team, false);
   }
   hasVoted(player) {
     if (player.team == 0) return false;
@@ -825,8 +826,8 @@ function saveClanProposals() {
 
 var prevWinner = 1;
 var surrenderedTeam = 0; // Biến lưu vết đội nào đã đầu hàng
-// Giữ lại biến này vì có thể các tính năng khác (như check cày Elo) cần dùng
-let leaversFromCurrentMatch = new Set();
+var surrenderByCaptain = 0; // Biến lưu vết nếu đội trưởng tự ý đầu hàng đơn phương
+var matchSubInTimes = {}; // Lưu thời gian vào sân của từng auth (giúp bảo vệ late sub)
 
 // ===== Anti Defender Rank Script (Bản Tàng Hình Tối Ưu & Đẩy Lùi) =====
 const MAX_CB_PLAYERS = 4; // Tối đa 4 người được lui về thủ
@@ -4116,6 +4117,11 @@ function subFunc(value, player) {
 
   // FIX LỖI 1: Cung cấp rõ team mới của người được thay vào để bot không bị nhầm là team 0
   getGameStats(inPlayer, player.team);
+  let inAuth = getAuth(inPlayer.id);
+  let curScores = room.getScores();
+  if (inAuth && curScores) {
+    matchSubInTimes[inAuth] = curScores.time;
+  }
 
   game.teams[player.team].substitutions++;
   room.sendAnnouncement(`Lượt thay người còn lại: ${MAX_SUBSTITUTIONS - game.teams[player.team].substitutions}`, player.id, YELLOW, "small-italic", 0);
@@ -4697,10 +4703,13 @@ function saveStats() {
 
   let dailyDb = JSON.parse(localStorage.getItem("daily_stats")) || {};
 
-  // 🎯 KIỂM TRA LỆNH TRUY NÃ: CÓ CHUỖI NÀO BỊ CHẶT KHÔNG?
+  let scores = room.getScores();
+  let matchTime = scores ? scores.time : 0;
+
+  // 🎯 KIỂM TRA LỆNH TRUY NÃ: CÓ CHUỖI NÀO BỊ CHẶT KHÔNG? (Cho phép tính ngay cả khi đối thủ đầu hàng)
   let bountyClaimed = false;
   let bountyVictimNames = [];
-  if (prevWinner !== 0 && surrenderedTeam === 0) {
+  if (prevWinner !== 0) {
     let losingTeam = prevWinner === 1 ? 2 : 1;
     for (const auth in game.teams[losingTeam].players) {
       let st = getStats(auth);
@@ -4750,12 +4759,10 @@ function saveStats() {
     let gkAuth = null;
     let cbAuth = null;
     if (teamEntries.length > 0) {
-      let defensiveEntries = [...teamEntries].sort((a, b) =>
+      // 🛡️ VÁ LỖI 8: Xác định Thủ môn và Trung vệ chuẩn xác theo độ sâu sân nhà (meanPosition)
+      // Không dùng stoppedShots/touches đảo lộn vị trí khiến GK bị cướp danh hiệu Clean Sheet
+      let sortedDef = [...teamEntries].sort((a, b) =>
         (teamId === 1) ? (a[1].meanPosition - b[1].meanPosition) : (b[1].meanPosition - a[1].meanPosition)
-      ).slice(0, Math.min(2, teamEntries.length));
-
-      let sortedDef = defensiveEntries.sort((a, b) =>
-        (b[1].stoppedShots - a[1].stoppedShots) || (b[1].touches - a[1].touches)
       );
       gkAuth = sortedDef.length > 0 ? sortedDef[0][0] : null;
       cbAuth = sortedDef.length > 1 ? sortedDef[1][0] : null;
@@ -4814,110 +4821,119 @@ function saveStats() {
         else { bonusMsg = " (🛡️ Điểm Base CB: +3.0)"; }
       }
 
-      let isEligible = (stadium.name !== "5v5" && stadium.name !== "penalty") || top5Auths.includes(auth);
+      let timePlayed = matchTime - (matchSubInTimes[auth] || 0);
+      let isLateSub = (timePlayed < 60 && matchTime >= 120);
+
+      // 🛡️ VÁ LỖI 7: Cầu thủ đá chính có đóng góp (chạm bóng >= 5 hoặc ghi bàn/kiến tạo) không bị đẩy ra ngoài Top 5
+      let isEligible = (stadium.name !== "5v5" && stadium.name !== "penalty") || top5Auths.includes(auth) || (report.touches >= 5) || (report.goals > 0 || report.assists > 0);
       let playerClanValid = item.clan && clans[item.clan] && clans[item.clan].members.length >= 5;
 
-      if (surrenderedTeam !== 0) {
-        if (teamId == prevWinner) {
-          if (isEligible) {
-            item.wins++;
-            item.winstreak++;
-            pointsEarned = 2; performanceMsg = `Đội đối phương đã đầu hàng. (Thắng +2★)`; msgColor = 0x5DB899;
+      if (teamId == prevWinner) {
+        // ===================== ĐỘI THẮNG =====================
+        if (isEligible) {
+          item.wins++;
+          item.winstreak++;
 
-            if (isClanWar && item.clan === teamClans[teamId]) { pointsEarned += 2; performanceMsg += ` ⚔️ (+2★ Clan War)`; }
-            else if (playerClanValid) { pointsEarned += 1; performanceMsg += ` 🛡️ (+1★ Lương Clan)`; }
-
-            if (item.winstreak >= 3) { pointsEarned += 1; performanceMsg += ` 🔥 (+1★ Chuỗi x${item.winstreak})`; }
-            if (bountyClaimed) { pointsEarned += 2; performanceMsg += ` 🎯 (+2★ Tiền Truy Nã)`; }
-
-            item.points += pointsEarned;
+          if (surrenderedTeam !== 0) {
+            // Thắng do đối phương đầu hàng
+            if (matchRating >= 10) { pointsEarned = 3; performanceMsg = `Thắng áp đảo đối thủ phải hàng. (+3★)`; msgColor = 0x00FF00; }
+            else { pointsEarned = 2; performanceMsg = `Đội đối phương đã đầu hàng. (+2★)`; msgColor = 0x5DB899; }
           } else {
-            pointsEarned = 0; performanceMsg = `Ngoài Top 5 (Không được cộng sao và chuỗi)`; msgColor = 0xAAAAAA;
-          }
-        } else {
-          // ☠️ LUẬT ĐẦU HÀNG: PHẠT NẶNG TOP 5, THA CHO NGƯỜI NGOÀI TOP 5
-          if (prevWinner !== 0) item.winstreak = 0;
-
-          if (isEligible) {
-            let penalty = 0;
-            if (auth === getAuth(captains[teamId])) {
-              penalty = 4; // Đội trưởng bị trừ tới 4 sao
-              performanceMsg = `Đội trưởng hèn nhát quyết định đầu hàng. (-4★)`;
-              msgColor = 0xFF0000;
-            } else {
-              penalty = 2;
-              performanceMsg = `Đội của bạn đã đầu hàng. (-2★)`;
-              msgColor = 0xFF4444;
-            }
-
-            let pointsToDeduct = Math.min(penalty, item.points);
-            item.points -= pointsToDeduct;
-            pointsEarned -= pointsToDeduct;
-          } else {
-            // TRẢ VỀ CŨ: An toàn cho người ngoài Top 5
-            pointsEarned = 0;
-            performanceMsg = `Ngoài Top 5 (Không bị trừ sao)`;
-            msgColor = 0xAAAAAA;
-          }
-        }
-      } else {
-        if (teamId == prevWinner) {
-          if (isEligible) {
-            item.wins++;
-            item.winstreak++;
+            // Thắng thông thường
             if (matchRating >= 10) { pointsEarned = 3; performanceMsg = `Màn trình diễn xuất sắc. (Thắng +3★)`; msgColor = 0x00FF00; }
             else if (matchRating >= 7) { pointsEarned = 2; performanceMsg = `Màn trình diễn tốt. (Thắng +2★)`; msgColor = 0x5DB899; }
             else if (matchRating >= 2) { pointsEarned = 1; performanceMsg = `Màn trình diễn tròn vai. (Thắng +1★)`; msgColor = 0xF1CC81; }
-            else { pointsEarned = 0; performanceMsg = `Màn trình diễn dưới sức. (+0★)`; msgColor = 0xFF4444; }
-
-            if (isClanWar && item.clan === teamClans[teamId]) { pointsEarned += 2; performanceMsg += ` ⚔️ (+2★ Clan War)`; }
-            else if (playerClanValid) { pointsEarned += 1; performanceMsg += ` 🛡️ (+1★ Lương Clan)`; }
-
-            if (item.winstreak >= 3) { pointsEarned += 1; performanceMsg += ` 🔥 (+1★ Chuỗi x${item.winstreak})`; }
-            if (bountyClaimed) { pointsEarned += 2; performanceMsg += ` 🎯 (+2★ Tiền Truy Nã)`; }
-
-            item.points += pointsEarned;
-          } else {
-            pointsEarned = 0; performanceMsg = `Ngoài Top 5 (Không được cộng sao và chuỗi)`; msgColor = 0xAAAAAA;
+            else if (opponentScore <= 1 && (auth === gkAuth || auth === cbAuth || report.touches >= 2)) {
+              pointsEarned = 1; performanceMsg = `Giữ vững phòng tuyến chiến thắng. (Thắng +1★)`; msgColor = 0xF1CC81; }
+            else {
+              pointsEarned = 0; performanceMsg = `Màn trình diễn dưới sức. (+0★)`; msgColor = 0xFF4444;
+            }
           }
-        } else {
-          // ☠️ LUẬT THUA TRẬN: THIẾT QUÂN LUẬT CHO TOP 5
-          if (prevWinner !== 0) item.winstreak = 0;
 
-          if (isEligible) {
-            let penalty = 0;
-            if (auth == motmAuth) {
-              penalty = 0;
-              performanceMsg = `Nỗ lực thi đấu bất chấp kết quả. (-0★)`;
-              msgColor = 0x00FFFF;
-            } else {
-              // Điểm đánh giá gắt gao hơn cho nhóm thi đấu chính thức
+          if (isClanWar && item.clan === teamClans[teamId]) { pointsEarned += 2; performanceMsg += ` ⚔️ (+2★ Clan War)`; }
+          else if (playerClanValid) { pointsEarned += 1; performanceMsg += ` 🛡️ (+1★ Lương Clan)`; }
+
+          if (item.winstreak >= 3) { pointsEarned += 1; performanceMsg += ` 🔥 (+1★ Chuỗi x${item.winstreak})`; }
+          if (bountyClaimed) { pointsEarned += 2; performanceMsg += ` 🎯 (+2★ Tiền Truy Nã)`; }
+
+          item.points += pointsEarned;
+        } else {
+          pointsEarned = 0;
+          performanceMsg = `Ngoài Top 5 (Không được cộng sao và chuỗi)`;
+          msgColor = 0xAAAAAA;
+        }
+      } else {
+        // ===================== ĐỘI THUA =====================
+        if (surrenderedTeam !== 0) {
+          // Thua do đầu hàng
+          if (prevWinner !== 0) item.winstreak = 0;
+          let penalty = 0;
+          if (surrenderByCaptain === teamId && auth === getAuth(captains[teamId])) {
+            penalty = 4;
+            performanceMsg = `Đội trưởng tự ý đầu hàng. (-4★)`;
+            msgColor = 0xFF0000;
+          } else if (surrenderByCaptain === teamId) {
+            penalty = 1;
+            performanceMsg = `Đội trưởng đã đầu hàng. (-1★)`;
+            msgColor = 0xF1CC81;
+          } else {
+            penalty = 2;
+            performanceMsg = `Đội của bạn đã biểu quyết đầu hàng. (-2★)`;
+            msgColor = 0xFF4444;
+          }
+          let pointsToDeduct = Math.min(penalty, item.points);
+          item.points -= pointsToDeduct;
+          pointsEarned -= pointsToDeduct;
+        } else {
+          // Thua trận thông thường
+          let penalty = 0;
+
+          if (isLateSub) {
+            penalty = 0;
+            performanceMsg = `Vào sân thay người muộn. (Miễn trừ -0★)`;
+            msgColor = 0xAAAAAA;
+          } else if (auth == motmAuth) {
+            penalty = 0;
+            performanceMsg = `Nỗ lực thi đấu bất chấp kết quả. (-0★)`;
+            msgColor = 0x00FFFF;
+          } else {
+            let isDefense = (auth === gkAuth || auth === cbAuth);
+            if (isDefense) {
               if (matchRating >= 7.0) { penalty = 1; performanceMsg = `Thất bại đáng tiếc. (-1★)`; msgColor = 0xF1CC81; }
               else if (matchRating >= 4.5) { penalty = 2; performanceMsg = `Thiếu hiệu quả trong trận đấu. (-2★)`; msgColor = 0xFF8C00; }
               else { penalty = 3; performanceMsg = `Màn trình diễn cực kỳ tệ hại. (-3★)`; msgColor = 0xFF0000; }
+            } else {
+              if (matchRating >= 3.5 || (report.touches >= 20 && report.passes >= 2)) {
+                penalty = 1; performanceMsg = `Tuyến trên nỗ lực thi đấu. (-1★)`; msgColor = 0xF1CC81;
+              } else if (matchRating >= 1.5 || report.touches >= 10) {
+                penalty = 2; performanceMsg = `Thiếu hiệu quả trong trận đấu. (-2★)`; msgColor = 0xFF8C00; }
+              else {
+                penalty = 3; performanceMsg = `Màn trình diễn cực kỳ tệ hại. (-3★)`; msgColor = 0xFF0000;
+              }
             }
-
-            let pointsToDeduct = Math.min(penalty, item.points);
-            item.points -= pointsToDeduct;
-            pointsEarned -= pointsToDeduct;
-          } else {
-            // TRẢ VỀ CŨ: Người ngoài Top 5 không bị vạ lây
-            pointsEarned = 0;
-            performanceMsg = `Ngoài Top 5 (Không bị trừ sao)`;
-            msgColor = 0xAAAAAA;
           }
-        };
+
+          if (!isLateSub) {
+            if (prevWinner !== 0) item.winstreak = 0;
+          }
+
+          let pointsToDeduct = Math.min(penalty, item.points);
+          item.points -= pointsToDeduct;
+          pointsEarned -= pointsToDeduct;
+        }
       }
 
+      // 🛡️ VÁ LỖI 6 & 9: Xử lý MOTM & Sói Cô Độc (Được nhận dù đối thủ đầu hàng, và xét playerClanValid)
       if (auth == motmAuth) {
         item.motms++;
-        if (teamId == prevWinner && surrenderedTeam === 0 && isEligible) {
+        if (teamId == prevWinner && isEligible) {
           item.points += 1; pointsEarned += 1; performanceMsg += " 🏅 (+1★ MOTM)";
-          if (!item.clan) {
+          if (!playerClanValid) {
             item.points += 2; pointsEarned += 2; performanceMsg += " 🐺 (+2★ Sói Cô Độc)";
           }
+        } else {
+          performanceMsg += " 🏅 (Danh hiệu MOTM)";
         }
-        else if (surrenderedTeam === 0) { performanceMsg += " 🏅 (Danh hiệu MOTM)"; }
       };
 
       let playerInRoom = room.getPlayerList().find(p => p.id !== 0 && getAuth(p.id) === auth);
@@ -5102,7 +5118,7 @@ function reportStats() {
   let motm = motmData[1].name;
 
   let bountyClaimed = false;
-  if (prevWinner !== 0 && surrenderedTeam === 0) {
+  if (prevWinner !== 0) {
     let losingTeam = prevWinner === 1 ? 2 : 1;
     for (const auth in game.teams[losingTeam].players) {
       let st = getStats(auth);
@@ -5151,12 +5167,8 @@ function reportStats() {
       let gAuth = null;
       let cAuth = null;
       if (tEntries.length > 0) {
-        let defEntries = [...tEntries].sort((a, b) =>
+        let sortedDef = [...tEntries].sort((a, b) =>
           (i === 1) ? (a[1].meanPosition - b[1].meanPosition) : (b[1].meanPosition - a[1].meanPosition)
-        ).slice(0, Math.min(2, tEntries.length));
-
-        let sortedDef = defEntries.sort((a, b) =>
-          (b[1].stoppedShots - a[1].stoppedShots) || (b[1].touches - a[1].touches)
         );
         gAuth = sortedDef.length > 0 ? sortedDef[0][0] : null;
         cAuth = sortedDef.length > 1 ? sortedDef[1][0] : null;
@@ -5218,12 +5230,8 @@ function reportStats() {
       let gkAuth = null;
       let cbAuth = null;
       if (teamEntries.length > 0) {
-        let defensiveEntries = [...teamEntries].sort((a, b) =>
+        let sortedDef = [...teamEntries].sort((a, b) =>
           (teamId === 1) ? (a[1].meanPosition - b[1].meanPosition) : (b[1].meanPosition - a[1].meanPosition)
-        ).slice(0, Math.min(2, teamEntries.length));
-
-        let sortedDef = defensiveEntries.sort((a, b) =>
-          (b[1].stoppedShots - a[1].stoppedShots) || (b[1].touches - a[1].touches)
         );
         gkAuth = sortedDef.length > 0 ? sortedDef[0][0] : null;
         cbAuth = sortedDef.length > 1 ? sortedDef[1][0] : null;
@@ -5248,60 +5256,72 @@ function reportStats() {
         else { bonusStr = " (🛡️+3.0)"; }
       }
 
-      let isEligible = (stadium.name !== "5v5" && stadium.name !== "penalty") || top5PerTeam[teamId].includes(auth);
+      let timePlayed = time - (matchSubInTimes[auth] || 0);
+      let isLateSub = (timePlayed < 60 && time >= 120);
+      let isEligible = (stadium.name !== "5v5" && stadium.name !== "penalty") || top5PerTeam[teamId].includes(auth) || (player.touches >= 5) || (player.goals > 0 || player.assists > 0);
       let playerClanValid = item.clan && clans[item.clan] && clans[item.clan].members.length >= 5;
       let clanIconReward = "";
 
       let hypotheticalWinstreak = item.winstreak || 0;
 
-      if (isEligible) {
-        if (surrenderedTeam !== 0) {
-          if (teamId == prevWinner) {
-            hypotheticalWinstreak++;
-            pointsEarned = 2;
-            if (isClanWar && item.clan === teamClans[teamId]) { pointsEarned += 2; clanIconReward += " ⚔️"; }
-            else if (playerClanValid) { pointsEarned += 1; clanIconReward += " 🛡️"; }
-
-            if (hypotheticalWinstreak >= 3) { pointsEarned += 1; clanIconReward += " 🔥"; }
-            if (bountyClaimed) { pointsEarned += 2; clanIconReward += " 🎯"; }
+      if (teamId == prevWinner) {
+        if (isEligible) {
+          hypotheticalWinstreak++;
+          if (surrenderedTeam !== 0) {
+            if (matchRating >= 10) pointsEarned = 3;
+            else pointsEarned = 2;
           } else {
-            // ☠️ ĐỒNG BỘ: Đội trưởng hàng -4, Thành viên -2
-            let penalty = (auth === getAuth(captains[teamId])) ? 4 : 2;
-            pointsEarned -= Math.min(penalty, item.points);
-          }
-        } else {
-          if (teamId == prevWinner) {
-            hypotheticalWinstreak++;
             if (matchRating >= 10) pointsEarned = 3;
             else if (matchRating >= 7) pointsEarned = 2;
             else if (matchRating >= 2) pointsEarned = 1;
+            else if (opponentScore <= 1 && (auth === gkAuth || auth === cbAuth || player.touches >= 2)) pointsEarned = 1;
             else pointsEarned = 0;
+          }
 
-            if (isClanWar && item.clan === teamClans[teamId]) { pointsEarned += 2; clanIconReward += " ⚔️"; }
-            else if (playerClanValid) { pointsEarned += 1; clanIconReward += " 🛡️"; }
+          if (isClanWar && item.clan === teamClans[teamId]) { pointsEarned += 2; clanIconReward += " ⚔️"; }
+          else if (playerClanValid) { pointsEarned += 1; clanIconReward += " 🛡️"; }
 
-            if (hypotheticalWinstreak >= 3) { pointsEarned += 1; clanIconReward += " 🔥"; }
-            if (bountyClaimed) { pointsEarned += 2; clanIconReward += " 🎯"; }
+          if (hypotheticalWinstreak >= 3) { pointsEarned += 1; clanIconReward += " 🔥"; }
+          if (bountyClaimed) { pointsEarned += 2; clanIconReward += " 🎯"; }
+        } else {
+          pointsEarned = 0;
+        }
+      } else {
+        if (surrenderedTeam !== 0) {
+          let penalty = 0;
+          if (surrenderByCaptain === teamId && auth === getAuth(captains[teamId])) {
+            penalty = 4;
+          } else if (surrenderByCaptain === teamId) {
+            penalty = 1;
           } else {
-            // ☠️ ĐỒNG BỘ: Thiết quân luật mới (Gắt gao hơn, bỏ giảm án)
-            let penalty = 0;
-            if (auth == motmAuth) { penalty = 0; }
-            else {
+            penalty = 2;
+          }
+          pointsEarned -= Math.min(penalty, item.points);
+        } else {
+          let penalty = 0;
+          if (isLateSub) {
+            penalty = 0;
+          } else if (auth == motmAuth) {
+            penalty = 0;
+          } else {
+            let isDefense = (auth === gkAuth || auth === cbAuth);
+            if (isDefense) {
               if (matchRating >= 7.0) penalty = 1;
               else if (matchRating >= 4.5) penalty = 2;
               else penalty = 3;
+            } else {
+              if (matchRating >= 3.5 || (player.touches >= 20 && player.passes >= 2)) penalty = 1;
+              else if (matchRating >= 1.5 || player.touches >= 10) penalty = 2;
+              else penalty = 3;
             }
-            // Đã xóa bỏ hoàn toàn các dòng "if (goalDifference === 1) penalty--", v.v...
-            pointsEarned -= Math.min(penalty, item.points);
-          };
+          }
+          pointsEarned -= Math.min(penalty, item.points);
         }
-        if (surrenderedTeam === 0 && auth == motmAuth && teamId == prevWinner) {
-          pointsEarned += 1; clanIconReward += " 🏅";
-          if (!item.clan) { pointsEarned += 2; clanIconReward += " 🐺"; }
-        }
-      } else {
-        // ĐỒNG BỘ: Ngoài Top 5 vẫn được an toàn (0 sao)
-        pointsEarned = 0;
+      }
+
+      if (auth == motmAuth && teamId == prevWinner && isEligible) {
+        pointsEarned += 1; clanIconReward += " 🏅";
+        if (!playerClanValid) { pointsEarned += 2; clanIconReward += " 🐺"; }
       }
 
       let finalPoints = item.points + pointsEarned;
@@ -6168,9 +6188,6 @@ function startPickMode() {
   requestPick();
 }
 async function pickPlayers() {
-  // 🔴 [FIX BUG] Xóa sạch danh sách đào tẩu của trận cũ khi bắt đầu đợt pick mới
-  leaversFromCurrentMatch.clear();
-
   let players = getNonAfkPlayers();
 
   let currentMaxPlayers = MAX_PLAYERS;
@@ -6281,6 +6298,9 @@ function reset() {
   game.reset();
   surrenderVoter.reset();
   predictions = {};
+  surrenderedTeam = 0;
+  surrenderByCaptain = 0;
+  matchSubInTimes = {};
 }
 
 function handlePostGame(winner) {
@@ -6317,6 +6337,7 @@ function handlePostGame(winner) {
       (i === 1) ? (a[1].meanPosition - b[1].meanPosition) : (b[1].meanPosition - a[1].meanPosition)
     );
     let gkAuth = teamEntries.length > 0 ? teamEntries[0][0] : null;
+    let cbAuth = teamEntries.length > 1 ? teamEntries[1][0] : null;
 
     for (const auth in game.teams[i].players) {
       let pStats = game.teams[i].players[auth];
@@ -6326,10 +6347,32 @@ function handlePostGame(winner) {
         if (opponentScore === 0) matchRating += 6.0;
         else if (opponentScore === 1) matchRating += 3.5;
         else if (opponentScore === 2) matchRating += 2.0;
+      } else if (auth === cbAuth) {
+        if (opponentScore === 0) matchRating += 4.0;
+        else if (opponentScore === 1) matchRating += 2.0;
+        else if (opponentScore === 2) matchRating += 1.0;
       }
 
-      if (auth === gkAuth) continue;
+      if (auth === gkAuth || auth === cbAuth) continue;
       if (stadium.name === "penalty") continue;
+
+      let timePlayed = matchTime - (matchSubInTimes[auth] || 0);
+      let isLateSub = (timePlayed < 60 && matchTime >= 120);
+
+      // 🛡️ VÁ LỖI 1: KHÔNG XÓA CẦU THỦ ĐỘI THUA ĐỂ TRÁNH TRỐN PHẠT / GIỮ CHUỖI
+      // Nếu đội thua, cầu thủ thi đấu thiếu tích cực vẫn PHẢI GIỮ LẠI để chịu phạt trừ sao & reset winstreak!
+      // Chỉ xóa nếu là người vào sân thay người quá muộn (late sub)
+      if (i !== winner) {
+        if (isLateSub) {
+          delete game.teams[i].players[auth];
+          let pInRoom = room.getPlayerList().find(p => p.id !== 0 && getAuth(p.id) === auth);
+          if (pInRoom) filteredPlayersToNotify.push({ id: pInRoom.id, reason: `vào sân muộn (${Math.round(timePlayed)}s)` });
+        }
+        continue;
+      }
+
+      // 🛡️ VÁ LỖI 2: ĐỘI THẮNG: KHÔNG XÓA HẬU VỆ KHI ĐỘI GIỮ SẠCH LƯỚI / LỌT ÍT BÀN
+      if (opponentScore <= 1 && pStats.touches >= 1) continue;
 
       let isTooLate = (pStats.touches < reqTouchesL1 && pStats.goals === 0 && pStats.assists === 0 && pStats.stoppedShots === 0);
       let isUseless = (pStats.touches < reqTouchesL2 && matchRating < 0.5);
@@ -6552,6 +6595,10 @@ room.onPlayerTeamChange = async function (changedPlayer, byPlayer) {
 
     // Ghi nhận sự tham gia của cầu thủ để cộng sao lúc hết trận (Không bấm giờ)
     getGameStats(changedPlayer);
+    let pAuth = getAuth(changedPlayer.id);
+    if (pAuth && matchSubInTimes[pAuth] === undefined && scores) {
+      matchSubInTimes[pAuth] = scores.time;
+    }
 
     room.sendAnnouncement("Bạn đã được thay vào sân", changedPlayer.id, BLUE, "small", 2);
 
@@ -6828,6 +6875,8 @@ room.onGameStart = function (byPlayer) {
   isPicking = false;
   isGameOver = false;
   surrenderedTeam = 0;
+  surrenderByCaptain = 0;
+  matchSubInTimes = {};
   postGameHandled = false;
   clearTimeout(timeouts.toResume);
   pausedBy = 0;
